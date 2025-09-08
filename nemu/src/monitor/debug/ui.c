@@ -49,7 +49,12 @@ static int cmd_si(char *args){
 	return 0;
 }
 
-static int cmd_info_r(char *args){
+static int cmd_info(char *args){
+	char t;
+	if(scanf("%c",&t)==EOF){
+		return 0;
+	}
+	else if(t=='r'){
 	printf("eax : %d\n",cpu.eax);
 	printf("ecx : %d\n",cpu.ecx);
 	printf("edx : %d\n",cpu.edx);
@@ -58,6 +63,7 @@ static int cmd_info_r(char *args){
 	printf("ebp : %d\n",cpu.ebp);
 	printf("esi : %d\n",cpu.esi);
 	printf("edi : %d\n",cpu.edi);
+	}
 	return 0;
 }
 static struct {
@@ -71,7 +77,7 @@ static struct {
 
 	/* TODO: Add more commands */
 	{ "si","Input the n",cmd_si},
-	{"info r","Print the regs' states",cmd_info_r}
+	{"info","Print the regs' states",cmd_info}
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
