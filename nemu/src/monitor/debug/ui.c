@@ -42,10 +42,7 @@ static int cmd_help(char *args);
 static int cmd_si(char *args){
 	int n=1;
 	if(args!=NULL){
-		int t=sscanf(args,"%d",&n);
-		if(t!=1||n<=0){
-			return 0;
-		}
+		sscanf(args,"%d",&n);
 	}
 	cpu_exec(n);
 	return 0;
@@ -53,20 +50,26 @@ static int cmd_si(char *args){
 
 static int cmd_info(char *args){
 	if(args==NULL){
+		printf("Usage: info r\n");
 		return 0;
 	}
 	else if(strcmp(args,"r")==0){
-	printf("eax : 0x%08x\n",cpu.eax);
-	printf("ecx : 0x%08x\n",cpu.ecx);
-	printf("edx : 0x%08x\n",cpu.edx);
-	printf("ebx : 0x%08x\n",cpu.ebx);
-	printf("esp : 0x%08x\n",cpu.esp);
-	printf("ebp : 0x%08x\n",cpu.ebp);
-	printf("esi : 0x%08x\n",cpu.esi);
-	printf("edi : 0x%08x\n",cpu.edi);
+		printf("eax : 0x%08x\n",cpu.eax);
+		printf("ecx : 0x%08x\n",cpu.ecx);
+		printf("edx : 0x%08x\n",cpu.edx);
+		printf("ebx : 0x%08x\n",cpu.ebx);
+		printf("esp : 0x%08x\n",cpu.esp);
+		printf("ebp : 0x%08x\n",cpu.ebp);
+		printf("esi : 0x%08x\n",cpu.esi);
+		printf("edi : 0x%08x\n",cpu.edi);
 	}
 	return 0;
 }
+
+static int cmd_x(char *args){
+	
+}
+
 static struct {
 	char *name;
 	char *description;
@@ -78,7 +81,8 @@ static struct {
 
 	/* TODO: Add more commands */
 	{ "si","Input the n",cmd_si},
-	{"info","Print the regs' states",cmd_info}
+	{"info","Print the regs' states",cmd_info},
+
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
