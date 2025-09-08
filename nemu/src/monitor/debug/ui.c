@@ -39,30 +39,30 @@ static int cmd_q(char *args) {
 static int cmd_help(char *args);
 
 static int cmd_si(char *args){
-	int n;
-	if(scanf("%d",&n)!=EOF){
-		cpu_exec(n);
+	int n=1;
+	if(args!=NULL){
+		int t=sscanf(args,"%d",&n);
+		if(t!=1||n<=0){
+			return 0;
+		}
 	}
-	else{
-		cpu_exec(1);
-	}
+	cpu_exec(n);
 	return 0;
 }
 
 static int cmd_info(char *args){
-	char t;
-	if(scanf("%c",&t)==EOF){
+	if(args==NULL){
 		return 0;
 	}
-	else if(t=='r'){
-	printf("eax : %d\n",cpu.eax);
-	printf("ecx : %d\n",cpu.ecx);
-	printf("edx : %d\n",cpu.edx);
-	printf("ebx : %d\n",cpu.ebx);
-	printf("esp : %d\n",cpu.esp);
-	printf("ebp : %d\n",cpu.ebp);
-	printf("esi : %d\n",cpu.esi);
-	printf("edi : %d\n",cpu.edi);
+	else if(strcmp(args,"r")==0){
+	printf("eax : 0x%x\n",cpu.eax);
+	printf("ecx : 0x%x\n",cpu.ecx);
+	printf("edx : 0x%x\n",cpu.edx);
+	printf("ebx : 0x%x\n",cpu.ebx);
+	printf("esp : 0x%x\n",cpu.esp);
+	printf("ebp : 0x%x\n",cpu.ebp);
+	printf("esi : 0x%x\n",cpu.esi);
+	printf("edi : 0x%x\n",cpu.edi);
 	}
 	return 0;
 }
