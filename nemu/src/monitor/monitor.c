@@ -78,6 +78,7 @@ void restart() {
 	/* Perform some initialization to restart a program */
 #ifdef USE_RAMDISK
 	/* Read the file with name `argv[1]' into ramdisk. */
+	// use main memory to imitate ramdisk(硬盘)
 	init_ramdisk();
 #endif
 

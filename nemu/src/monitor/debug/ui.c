@@ -33,7 +33,7 @@ static int cmd_c(char *args) {
 }
 
 static int cmd_q(char *args) {
-	return -1;
+	return -1;//if -1 is unsined int , it's so big!
 }
 
 static int cmd_help(char *args);
@@ -41,7 +41,7 @@ static int cmd_help(char *args);
 static struct {
 	char *name;
 	char *description;
-	int (*handler) (char *);
+	int (*handler) (char *);//function pointer : arg is char* , returned value is int.
 } cmd_table [] = {
 	{ "help", "Display informations about all supported commands", cmd_help },
 	{ "c", "Continue the execution of the program", cmd_c },
