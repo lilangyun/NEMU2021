@@ -38,6 +38,16 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+static int cmd_si(char *args){
+	int n;
+	if(scanf("%d",&n)!=EOF){
+		cpu_exec(n);
+	}
+	else{
+		cpu_exec(1);
+	}
+	return 0;
+}
 static struct {
 	char *name;
 	char *description;
@@ -48,7 +58,7 @@ static struct {
 	{ "q", "Exit NEMU", cmd_q },
 
 	/* TODO: Add more commands */
-
+	{ "si","Input the n",cmd_si}
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
