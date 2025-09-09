@@ -178,8 +178,14 @@ static int find_dominant_operation(int p,int q){
 	bool flag=false,low_op=false;
 	for(i=p;i<=q;i++){
 		// 可以把括号看作一种深度，检查到左括号时深度加1，右括号时深度减1，在深度为0时检测是否有op
-		if(tokens[i].type=='(')depth++;
-		if(tokens[i].type==')')depth--;
+		if(tokens[i].type=='('){
+			depth++;
+			continue;
+		}
+		if(tokens[i].type==')'){
+			depth--;
+			continue;
+		}
 		if(depth==0){
 			switch(tokens[i].type){
 				case '+':
