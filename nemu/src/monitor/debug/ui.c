@@ -67,7 +67,17 @@ static int cmd_info(char *args){
 }
 
 static int cmd_x(char *args){
-	
+	uint32_t addr;
+	int n,i;
+	char *args1=strtok(args," ");
+	char *args2=strtok(NULL," ");
+	sscanf(args1,"%x",&addr);
+	sscanf(args2,"%d",&n);
+	for(i=0;i<n;i++){
+		uint32_t data=swaddr_read(addr+4*i, 4);
+		printf("0x%08x : 0x%08x\n",addr+4*i,data);
+	}
+	return 0;
 }
 
 static struct {
@@ -82,7 +92,7 @@ static struct {
 	/* TODO: Add more commands */
 	{ "si","Input the n",cmd_si},
 	{"info","Print the regs' states",cmd_info},
-
+	{"x","Scan memory",cmd_x}
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
