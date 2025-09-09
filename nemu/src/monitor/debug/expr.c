@@ -211,7 +211,6 @@ static int find_dominant_operation(int p,int q){
 
 // evaluate:计算表达式的函数
 static int eval(int p,int q){
-	printf("eval(%d, %d): tokens[%d].type = %d", p, q, p, tokens[p].type);
 	if(p>q){
 		assert(0);
 	}
@@ -222,11 +221,11 @@ static int eval(int p,int q){
 			return ans;
 		}
 		else{
+			printf("%s\n",tokens[p].str);
 			assert(0&&"p==q这步出错了");
 		}
 	}
 	else if(check_parentheses(p,q)==true){
-		printf("进入括号");
 		return eval(p+1,q-1);
 	}
 	else if(tokens[p].type==MINUS){
