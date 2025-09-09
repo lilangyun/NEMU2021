@@ -221,7 +221,7 @@ static int eval(int p,int q){
 			return ans;
 		}
 		else{
-			printf("nihao,i'm%s ,type: %d\n",tokens[p].str,tokens[p].type);
+			printf("nihao,i'm%s ,type: %c\n",tokens[p].str,tokens[p].type);
 			assert(0&&"p==q这步出错了");
 		}
 	}
