@@ -71,8 +71,8 @@ static int cmd_x(char *args){
 	int n,i;
 	char *args1=strtok(args," ");
 	char *args2=strtok(NULL," ");
-	sscanf(args1,"%x",&addr);
-	sscanf(args2,"%d",&n);
+	sscanf(args1,"%x",&n);
+	sscanf(args2,"%d",&addr);
 	for(i=0;i<n;i++){
 		uint32_t data=swaddr_read(addr+4*i, 4);
 		printf("0x%08x : 0x%08x\n",addr+4*i,data);
