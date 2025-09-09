@@ -12,7 +12,8 @@ enum {
 	NOTYPE = 256, EQ,
 
 	/* TODO: Add more token types */
-	TK_NUM    //十进制数
+	TK_NUM,     //十进制数
+	MINUS 		//一元负号
 };
 
 static struct rule {
@@ -32,7 +33,7 @@ static struct rule {
 	{"\\*",'*'},					//multiply
 	{"/",'/'},						//divide
 	{"==", EQ},						// equal
-	{"[1-9][0-9]*", TK_NUM}			//10进制数
+	{"[1-9][0-9]*", TK_NUM},		//10进制数
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -64,6 +65,14 @@ typedef struct token {
 Token tokens[32];
 int nr_token;
 
+static bool is_operator(int args){
+	if(args=='+'||args=='-'||args=='*'||args=='/'){
+		return true;
+	}
+	return false;
+}
+
+
 // 词法分析
 static bool make_token(char *e) {
 	int position = 0;
@@ -90,7 +99,7 @@ static bool make_token(char *e) {
 				switch(rules[i].token_type) {
 					case NOTYPE:
 						break;
-					case TK_NUM:
+					case TK_NUM:{
 						tokens[nr_token].type=TK_NUM;
 						if(substr_len>=32){
 							assert(0&&"Number is too long.");
@@ -99,15 +108,37 @@ static bool make_token(char *e) {
 						tokens[nr_token].str[substr_len]='\0';
 						nr_token++;
 						break;
-
-					case '+':
-					case '-':
-					case '*':
-					case '/':
-					case '(':
-					case ')':
+					}
+					case '+':{
 						tokens[nr_token++].type=rules[i].token_type;
 						break;
+					}
+					case '-':{
+						if(nr_token==0||tokens[nr_token-1].type=='('||is_operator(tokens[nr_token-1].type)){
+							tokens[nr_token++].type=MINUS;
+							break;
+						}
+						else{
+							tokens[nr_token++].type=rules[i].token_type;
+							break;
+						}
+					}
+					case '*':{
+						tokens[nr_token++].type=rules[i].token_type;
+						break;
+					}
+					case '/':{
+						tokens[nr_token++].type=rules[i].token_type;
+						break;
+					}
+					case '(':{
+						tokens[nr_token++].type=rules[i].token_type;
+						break;
+					}
+					case ')':{
+						tokens[nr_token++].type=rules[i].token_type;
+						break;
+					}
 					default: panic("please implement me");
 				}
 
@@ -142,25 +173,69 @@ static bool check_parentheses(int p,int q){
 	return depth==1;
 }
 
+static int find_dominant_operation(int p,int q){
+	int i,depth=0,pos;
+	bool flag=false,low_op=false;
+	for(i=p;i<=q;i++){
+		// 可以把括号看作一种深度，检查到左括号时深度加1，右括号时深度减1，在深度为0时检测是否有op
+		if(tokens[i].type=='(')depth++;
+		if(tokens[i].type==')')depth--;
+		if(depth==0){
+			switch(tokens[i].type){
+				case '+':
+				case '-': {
+					low_op=true;
+					pos=i;
+					flag=true;
+					break;
+				}
+				case '*':
+				case '/':{
+					if(!low_op){
+						pos=i;
+						flag=true;
+					}
+					break;
+				}
+			}
+		}
+	}
+	if(!flag){
+		assert(0);
+	}
+	return pos;
+}
+
+// evaluate:计算表达式的函数
 static int eval(int p,int q){
 	if(p>q){
-
+		assert(0);
 	}
 	else if(p==q){
-	
+		if(tokens[p].type==TK_NUM){
+			int ans;
+			sscanf(tokens[p].str,"%d",&ans);
+			return ans;
+		}
+		else{
+			assert(0);
+		}
 	}
 	else if(check_parentheses(p,q)==true){
 		return eval(p+1,q-1);
 	}
+	else if(tokens[p].type==MINUS){
+		return -eval(p+1,q);
+	}
 	else{
-		int op;
+		int op=find_dominant_operation(p,q);
 		int val1=eval(p,op-1);
 		int val2=eval(op+1,q);
 		switch(tokens[op].type){
-			case '+':return val1+val2;break;
-			case '-':return val1-val2;break;
-			case '*':return val1*val2;break;
-			case '/':return val1/val2;break;
+			case '+':return val1+val2;
+			case '-':return val1-val2;
+			case '*':return val1*val2;
+			case '/':return val1/val2;
 			default :assert(0&&"Op is fasle!");
 		}
 	}
@@ -175,6 +250,8 @@ uint32_t expr(char *e, bool *success) {
 	}
 
 	/* TODO: Insert codes to evaluate the expression. */
+	int result = eval(0, nr_token - 1);
+	return result;
 	panic("please implement me");
 	return 0;
 }

@@ -81,9 +81,12 @@ static int cmd_x(char *args){
 }
 
 static int cmd_p(char *args){
-	uint32_t t=expr(args);
+	bool success;
+	uint32_t t=expr(args,&success);
 	printf("%s = %d\n",args,t);
+	return 0;
 }
+
 
 static struct {
 	char *name;
