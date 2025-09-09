@@ -197,6 +197,7 @@ static int find_dominant_operation(int p,int q){
 					}
 					break;
 				}
+				default:break;
 			}
 		}
 	}
