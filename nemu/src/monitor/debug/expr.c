@@ -174,7 +174,7 @@ static bool check_parentheses(int p,int q){
 }
 
 static int find_dominant_operation(int p,int q){
-	int i,depth=0,pos,min_priority=3;
+	int i,depth=0,pos=-1,min_priority=3;
 	for(i=p;i<=q;i++){
 		// 可以把括号看作一种深度，检查到左括号时深度加1，右括号时深度减1，在深度为0时检测是否有op
 		if(tokens[i].type=='('){
