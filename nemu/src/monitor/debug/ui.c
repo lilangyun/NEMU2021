@@ -80,6 +80,11 @@ static int cmd_x(char *args){
 	return 0;
 }
 
+static int cmd_p(char *args){
+	uint32_t t=expr(args);
+	printf("%s = %d\n",args,t);
+}
+
 static struct {
 	char *name;
 	char *description;
@@ -92,7 +97,8 @@ static struct {
 	/* TODO: Add more commands */
 	{ "si","Input the n",cmd_si},
 	{"info","Print the regs' states",cmd_info},
-	{"x","Scan memory",cmd_x}
+	{"x","Scan memory",cmd_x},
+	{"p","Figure out the value of expression",cmd_p}
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))

@@ -6,11 +6,13 @@
 #include <sys/types.h>
 #include <regex.h>
 
+#include<string.h>
+
 enum {
-	NOTYPE = 256, EQ
+	NOTYPE = 256, EQ,
 
 	/* TODO: Add more token types */
-	
+	TK_NUM    //十进制数
 };
 
 static struct rule {
@@ -23,11 +25,14 @@ static struct rule {
 	 */
 
 	{" +",	NOTYPE},				// spaces
+	{"\\(",'('},					//left
+	{"\\)",')'},					//right
 	{"\\+", '+'},					// plus
 	{"-",'-'},						//sub
 	{"\\*",'*'},					//multiply
 	{"/",'/'},						//divide
-	{"==", EQ}						// equal
+	{"==", EQ},						// equal
+	{"[1-9][0-9]*", TK_NUM}			//10进制数
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -59,6 +64,7 @@ typedef struct token {
 Token tokens[32];
 int nr_token;
 
+// 词法分析
 static bool make_token(char *e) {
 	int position = 0;
 	int i;
@@ -82,6 +88,26 @@ static bool make_token(char *e) {
 				 */
 
 				switch(rules[i].token_type) {
+					case NOTYPE:
+						break;
+					case TK_NUM:
+						tokens[nr_token].type=TK_NUM;
+						if(substr_len>=32){
+							assert(0&&"Number is too long.");
+						}
+						strncpy(tokens[nr_token].str,substr_start,substr_len);
+						tokens[nr_token].str[substr_len]='\0';
+						nr_token++;
+						break;
+
+					case '+':
+					case '-':
+					case '*':
+					case '/':
+					case '(':
+					case ')':
+						tokens[nr_token++].type=rules[i].token_type;
+						break;
 					default: panic("please implement me");
 				}
 
@@ -98,6 +124,50 @@ static bool make_token(char *e) {
 	return true; 
 }
 
+static bool check_parentheses(int p,int q){
+	int i,depth=1;
+	if(tokens[p].type=='('&&tokens[q].type==')'){
+		for(i=p+1;i<q;i++){
+			if(tokens[i].type=='('){
+				depth++;
+			}
+			else if(tokens[i].type==')'){
+				depth--;
+				if(depth==0){
+					return false;
+				}
+			}
+		}
+	}
+	return depth==1;
+}
+
+static int eval(int p,int q){
+	if(p>q){
+
+	}
+	else if(p==q){
+	
+	}
+	else if(check_parentheses(p,q)==true){
+		return eval(p+1,q-1);
+	}
+	else{
+		int op;
+		int val1=eval(p,op-1);
+		int val2=eval(op+1,q);
+		switch(tokens[op].type){
+			case '+':return val1+val2;break;
+			case '-':return val1-val2;break;
+			case '*':return val1*val2;break;
+			case '/':return val1/val2;break;
+			default :assert(0&&"Op is fasle!");
+		}
+	}
+}
+
+
+// 接口函数，可以在ui.c的cmd_p命令中调用，实现表达式求值
 uint32_t expr(char *e, bool *success) {
 	if(!make_token(e)) {
 		*success = false;
