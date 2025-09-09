@@ -10,7 +10,7 @@ enum {
 	NOTYPE = 256, EQ
 
 	/* TODO: Add more token types */
-
+	
 };
 
 static struct rule {
@@ -24,6 +24,9 @@ static struct rule {
 
 	{" +",	NOTYPE},				// spaces
 	{"\\+", '+'},					// plus
+	{"-",'-'},						//sub
+	{"\\*",'*'},					//multiply
+	{"/",'/'},						//divide
 	{"==", EQ}						// equal
 };
 
