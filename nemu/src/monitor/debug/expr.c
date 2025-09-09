@@ -226,6 +226,7 @@ static int eval(int p,int q){
 		}
 	}
 	else if(check_parentheses(p,q)==true){
+		printf("hello\n");
 		return eval(p+1,q-1);
 	}
 	else if(tokens[p].type==MINUS){
