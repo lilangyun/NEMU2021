@@ -211,6 +211,7 @@ static int find_dominant_operation(int p,int q){
 
 // evaluate:计算表达式的函数
 static int eval(int p,int q){
+	printf("eval(%d, %d): tokens[%d].type = %d", p, q, p, tokens[p].type);
 	if(p>q){
 		assert(0);
 	}
