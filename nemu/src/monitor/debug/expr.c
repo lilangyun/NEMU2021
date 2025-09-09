@@ -221,7 +221,7 @@ static int eval(int p,int q){
 			return ans;
 		}
 		else{
-			assert(0);
+			assert(0&&"p==q这步出错了");
 		}
 	}
 	else if(check_parentheses(p,q)==true){
