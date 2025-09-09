@@ -174,8 +174,7 @@ static bool check_parentheses(int p,int q){
 }
 
 static int find_dominant_operation(int p,int q){
-	int i,depth=0,pos;
-	bool flag=false,low_op=false;
+	int i,depth=0,pos,min_priority=3;
 	for(i=p;i<=q;i++){
 		// 可以把括号看作一种深度，检查到左括号时深度加1，右括号时深度减1，在深度为0时检测是否有op
 		if(tokens[i].type=='('){
@@ -187,41 +186,25 @@ static int find_dominant_operation(int p,int q){
 			continue;
 		}
 		if(depth==0){
+			int current_priority;
 			switch(tokens[i].type){
-				case '+':{
-					low_op=true;
-					pos=i;
-					flag=true;
-					break;
-				}
+				case '+':
 				case '-': {
-					low_op=true;
-					pos=i;
-					flag=true;
+					current_priority=1;
 					break;
 				}
-				case '*':{
-					if(!low_op){
-						pos=i;
-						flag=true;
-					}
-					break;
-				}
+				case '*':
 				case '/':{
-					if(!low_op){
-						pos=i;
-						flag=true;
-					}
+					current_priority=2;
 					break;
 				}
-				default:{
-					break;
-				}
+				default:continue;
+			}
+			if(current_priority<=min_priority){
+				min_priority=current_priority;
+				pos=i;
 			}
 		}
-	}
-	if(!flag){
-		assert(0);
 	}
 	return pos;
 }
