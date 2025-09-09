@@ -13,7 +13,10 @@ enum {
 
 	/* TODO: Add more token types */
 	TK_NUM,     //十进制数
-	MINUS 		//一元负号
+	HEX_NUM,	//十六进制数
+	MINUS, 		//一元负号
+	DEREF		//解引用符号*
+
 };
 
 static struct rule {
@@ -34,6 +37,7 @@ static struct rule {
 	{"/",'/'},						//divide
 	{"==", EQ},						// equal
 	{"[1-9][0-9]*", TK_NUM},		//10进制数
+	{"0[xX][0-9a-fA-F]+",HEX_NUM}	//16进制数
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
