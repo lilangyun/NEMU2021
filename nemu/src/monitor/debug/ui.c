@@ -82,7 +82,7 @@ static int cmd_x(char *args){
 
 static int cmd_p(char *args){
 	bool success;
-	int t=expr(args,&success);
+	uint32_t t=expr(args,&success);
 	printf("%s = %d\n",args,t);
 	return 0;
 }
