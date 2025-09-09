@@ -188,14 +188,25 @@ static int find_dominant_operation(int p,int q){
 		}
 		if(depth==0){
 			switch(tokens[i].type){
-				case '+':
+				case '+':{
+					low_op=true;
+					pos=i;
+					flag=true;
+					break;
+				}
 				case '-': {
 					low_op=true;
 					pos=i;
 					flag=true;
 					break;
 				}
-				case '*':
+				case '*':{
+					if(!low_op){
+						pos=i;
+						flag=true;
+					}
+					break;
+				}
 				case '/':{
 					if(!low_op){
 						pos=i;
@@ -203,7 +214,9 @@ static int find_dominant_operation(int p,int q){
 					}
 					break;
 				}
-				default:break;
+				default:{
+					break;
+				}
 			}
 		}
 	}
