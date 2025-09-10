@@ -62,6 +62,7 @@ static int cmd_info(char *args){
 		printf("ebp : 0x%08x\n",cpu.ebp);
 		printf("esi : 0x%08x\n",cpu.esi);
 		printf("edi : 0x%08x\n",cpu.edi);
+		printf("eip : 0x%08x\n",cpu.eip);
 	}
 	return 0;
 }
