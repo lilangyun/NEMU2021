@@ -51,11 +51,11 @@ static struct rule {
 
 	{"[1-9][0-9]*", DEC_NUM},		//10进制数
 	{"0[xX][0-9a-fA-F]+",HEX_NUM},	//16进制数
-	{"\\$[a-zA-Z]+",REG}					//register
+	{"\\$[a-zA-Z]+",REG}			//register
 };
 
 
-// 规则数
+// 规则的数量
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
 
 static regex_t re[NR_REGEX];
@@ -295,23 +295,23 @@ static int find_dominant_operation(int p,int q){
 }
 
 // evaluate:计算表达式的函数
-static int eval(int p,int q){
+static uint32_t eval(int p,int q){
 	if(p>q){
 		assert(0&&"p>q:You are false.");
 	}
 	else if(p==q){
 		if(tokens[p].type==DEC_NUM){
-			int ans;
+			uint32_t ans;
 			sscanf(tokens[p].str,"%d",&ans);
 			return ans;
 		}
 		else if(tokens[p].type==HEX_NUM){
-			int ans;
+			uint32_t ans;
 			sscanf(tokens[p].str,"%x",&ans);
 			return ans;
 		}
 		else if(tokens[p].type==REG){
-			int ans;
+			uint32_t ans;
 			if(strcmp(tokens[p].str,"eax")==0){
 				ans=cpu.eax;
 			}
@@ -342,7 +342,7 @@ static int eval(int p,int q){
 			return ans;
 		}
 		else{
-			printf("nihao,i'm%s ,type: %c\n",tokens[p].str,tokens[p].type);
+			printf("nihao,i'm %s ,type: %c\n",tokens[p].str,tokens[p].type);
 			assert(0&&"p==q is false");
 		}
 	}
@@ -354,7 +354,7 @@ static int eval(int p,int q){
 	}
 	else if(tokens[p].type==DEREF){
 		//这里要用内存读取
-		int addr=eval(p-1,q);
+		uint32_t addr=eval(p-1,q);
 		uint32_t data=swaddr_read(addr,4);
 		return data;
 	}
@@ -363,8 +363,8 @@ static int eval(int p,int q){
 	}
 	else{
 		int op=find_dominant_operation(p,q);
-		int val1=eval(p,op-1);
-		int val2=eval(op+1,q);
+		uint32_t val1=eval(p,op-1);
+		uint32_t val2=eval(op+1,q);
 		switch(tokens[op].type){
 			case '+':return val1+val2;
 			case '-':return val1-val2;
@@ -388,7 +388,7 @@ uint32_t expr(char *e, bool *success) {
 	}
 
 	/* TODO: Insert codes to evaluate the expression. */
-	int result = eval(0,nr_token-1);
+	uint32_t result = eval(0,nr_token-1);
 	return result;
 	panic("please implement me");
 	return 0;
