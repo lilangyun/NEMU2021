@@ -29,12 +29,12 @@ char* rl_gets() {
 }
 
 static int cmd_c(char *args) {
-	cpu_exec(-1);
+	cpu_exec(-1);//if -1 is unsined int , it's so big!
 	return 0;
 }
 
 static int cmd_q(char *args) {
-	return -1;//if -1 is unsined int , it's so big!
+	return -1;
 }
 
 static int cmd_help(char *args);
@@ -88,6 +88,10 @@ static int cmd_p(char *args){
 	return 0;
 }
 
+static int cmd_w(char *args){
+	function1(args);
+	return 0;
+}
 
 static struct {
 	char *name;
@@ -102,7 +106,8 @@ static struct {
 	{ "si","Input the n",cmd_si},
 	{"info","Print the regs' states",cmd_info},
 	{"x","Scan memory",cmd_x},
-	{"p","Figure out the value of expression",cmd_p}
+	{"p","Figure out the value of expression",cmd_p},
+	{"w","Set up the watchpoint",cmd_w}
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
@@ -142,7 +147,7 @@ void ui_mainloop() {
 		/* treat the remaining string as the arguments,
 		 * which may need further parsing
 		 */
-		char *args = cmd + strlen(cmd) + 1;
+		char *args = cmd + strlen(cmd) + 1;	//这步有点看不太懂
 		if(args >= str_end) {
 			args = NULL;
 		}
@@ -153,9 +158,9 @@ void ui_mainloop() {
 #endif
 
 		int i;
-		for(i = 0; i < NR_CMD; i ++) {
+		for(i = 0; i < NR_CMD; i ++) {	//遍历所有命令，寻找匹配项
 			if(strcmp(cmd, cmd_table[i].name) == 0) {
-				if(cmd_table[i].handler(args) < 0) { return; }
+				if(cmd_table[i].handler(args) < 0) { return; }	//目前就只有q指令返回-1满足要求
 				break;
 			}
 		}
