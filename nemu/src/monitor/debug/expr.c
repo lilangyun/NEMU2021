@@ -358,7 +358,7 @@ static uint32_t eval(int p,int q){
 	}
 	else if(tokens[p].type==DEREF){
 		//这里要用内存读取
-		uint32_t addr=eval(p-1,q);
+		uint32_t addr=eval(p+1,q);
 		uint32_t data=swaddr_read(addr,4);
 		return data;
 	}
