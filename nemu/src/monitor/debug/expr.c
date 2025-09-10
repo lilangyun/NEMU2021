@@ -52,7 +52,7 @@ static struct rule {
 	{"\\|",'|'},
 	{"&",'&'},
 	{"!",'!'},
-	{"^",'^'},
+	{"\\^",'^'},
 
 	{"[1-9][0-9]*", DEC_NUM},		//10进制数
 	{"0[xX][0-9a-fA-F]+",HEX_NUM},	//16进制数
@@ -164,7 +164,7 @@ static bool make_token(char *e) {
 						tokens[nr_token++].type=rules[i].token_type;
 						break;
 					}
-					default: panic("please implement meoooo");
+					default: panic("please implement me");
 				}
 
 				break;
