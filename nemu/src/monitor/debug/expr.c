@@ -270,6 +270,7 @@ static int find_dominant_operation(int p,int q){
 	return pos;
 }
 
+int flag=1;
 // evaluate:计算表达式的函数
 static uint32_t eval(int p,int q){
 	if(p>q){

@@ -64,6 +64,14 @@ static int cmd_info(char *args){
 		printf("edi : 0x%08x\n",cpu.edi);
 		printf("eip : 0x%08x\n",cpu.eip);
 	}
+	else if(strcmp(args,"w")==0){
+		WP*wp=new_wp();
+		while(wp->next!=NULL){
+			wp=wp->next;
+			printf("Hint watchpoint %d at address 0x%x\n",wp->NO,cpu.eip);
+		}
+		free_wp(wp);
+	}
 	return 0;
 }
 
