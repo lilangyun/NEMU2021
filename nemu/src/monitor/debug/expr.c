@@ -9,14 +9,15 @@
 #include<string.h>
 
 enum {
-	NOTYPE = 256, EQ,
+	NOTYPE = 256, EQ,NEQ,
 
 	/* TODO: Add more token types */
-	TK_NUM,     //十进制数
+	DEC_NUM,     //十进制数
 	HEX_NUM,	//十六进制数
+	REG,		//register
 	MINUS, 		//一元负号
-	DEREF		//解引用符号*
-
+	DEREF,		//解引用符号*
+	LE,GE,OR,AND
 };
 
 static struct rule {
@@ -31,15 +32,35 @@ static struct rule {
 	{" +",	NOTYPE},				// spaces
 	{"\\(",'('},					//left
 	{"\\)",')'},					//right
+
 	{"\\+", '+'},					// plus
 	{"-",'-'},						//sub
 	{"\\*",'*'},					//multiply
 	{"/",'/'},						//divide
-	{"==", EQ},						// equal
-	{"[1-9][0-9]*", TK_NUM},		//10进制数
-	{"0[xX][0-9a-fA-F]+",HEX_NUM}	//16进制数
+
+	{"\\|\\|",OR},
+	{"&&",AND},
+	{"~",'~'},
+
+	{"==", EQ},						//equal
+	{"!=",NEQ},						//not equal
+	{"<",'<'},						//less than sign
+	{">",'>'},						//greater than sign
+	{"<=",LE},						//less than or equal
+	{">=",GE},						//greater than or equal
+
+	{"\\|",'|'},
+	{"&",'&'},
+	{"!",'!'},
+	{"^",'^'},
+
+	{"[1-9][0-9]*", DEC_NUM},		//10进制数
+	{"0[xX][0-9a-fA-F]+",HEX_NUM},	//16进制数
+	{"$[a-fA-F]+",REG}					//register
 };
 
+
+// 规则数
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
 
 static regex_t re[NR_REGEX];
@@ -103,8 +124,8 @@ static bool make_token(char *e) {
 				switch(rules[i].token_type) {
 					case NOTYPE:
 						break;
-					case TK_NUM:{
-						tokens[nr_token].type=TK_NUM;
+					case DEC_NUM:{
+						tokens[nr_token].type=DEC_NUM;
 						if(substr_len>=32){
 							assert(0&&"Number is too long.");
 						}
@@ -220,7 +241,7 @@ static int eval(int p,int q){
 		assert(0);
 	}
 	else if(p==q){
-		if(tokens[p].type==TK_NUM){
+		if(tokens[p].type==DEC_NUM){
 			int ans;
 			sscanf(tokens[p].str,"%d",&ans);
 			return ans;
