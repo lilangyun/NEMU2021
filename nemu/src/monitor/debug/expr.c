@@ -164,7 +164,7 @@ static bool make_token(char *e) {
 						tokens[nr_token++].type=rules[i].token_type;
 						break;
 					}
-					default: panic("please implement me");
+					default: panic("please implement meoooo");
 				}
 
 				break;
@@ -281,9 +281,9 @@ uint32_t expr(char *e, bool *success) {
 	}
 
 	/* TODO: Insert codes to evaluate the expression. */
-	int result = eval(0, nr_token - 1);
+	int result = eval(0,nr_token-1);
 	return result;
-	panic("please implement meoooo");
+	panic("please implement me");
 	return 0;
 }
 
