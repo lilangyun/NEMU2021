@@ -17,7 +17,7 @@ enum {
 	REG,		//register
 	MINUS, 		//一元负号
 	DEREF,		//解引用符号*
-	LE,GE,OR,AND
+	OR,AND		//LE,GE暂且不需要
 };
 
 static struct rule {
@@ -40,19 +40,14 @@ static struct rule {
 
 	{"\\|\\|",OR},
 	{"&&",AND},
-	{"~",'~'},
 
 	{"==", EQ},						//equal
 	{"!=",NEQ},						//not equal
 	{"<",'<'},						//less than sign
 	{">",'>'},						//greater than sign
-	{"<=",LE},						//less than or equal
-	{">=",GE},						//greater than or equal
-
-	{"\\|",'|'},
-	{"&",'&'},
+	//{"<=",LE},						less than or equal
+	//{">=",GE},						greater than or equal
 	{"!",'!'},
-	{"\\^",'^'},
 
 	{"[1-9][0-9]*", DEC_NUM},		//10进制数
 	{"0[xX][0-9a-fA-F]+",HEX_NUM},	//16进制数
@@ -91,12 +86,44 @@ Token tokens[32];
 int nr_token;
 
 static bool is_operator(int args){
-	if(args=='+'||args=='-'||args=='*'||args=='/'){
-		return true;
+	switch(args){
+		case '+':
+		case '-':
+		case '*':
+		case '/':
+		case EQ:
+		case NEQ:
+		case AND:
+		case OR:
+		case '!':
+		case DEREF:return true;
+		default:return false;
 	}
-	return false;
 }
 
+// 判断二元运算符
+// static bool is_one_operator(int args){
+// 	switch(args){
+// 		case '+':
+// 		case '-':
+// 		case '*':
+// 		case '/':
+// 		case EQ:
+// 		case NEQ:
+// 		case AND:
+// 		case OR:return true;
+// 		default:return false;
+// 	}
+// }
+
+// 判断一元运算符
+// static bool is_two_operator(int args){
+// 	switch(args){
+// 		case '!':
+// 		case DEREF:return true;
+// 		default:return false;
+// 	}
+// }
 
 // 词法分析
 static bool make_token(char *e) {
@@ -127,10 +154,30 @@ static bool make_token(char *e) {
 					case DEC_NUM:{
 						tokens[nr_token].type=DEC_NUM;
 						if(substr_len>=32){
-							assert(0&&"Number is too long.");
+							assert(0&&"DEC_Number is too long.");
 						}
 						strncpy(tokens[nr_token].str,substr_start,substr_len);
 						tokens[nr_token].str[substr_len]='\0';
+						nr_token++;
+						break;
+					}
+					case HEX_NUM:{
+						tokens[nr_token].type=HEX_NUM;
+						if(substr_len>=32){
+							assert(0&&"HEX_Number is too long.");
+						}
+						strncpy(tokens[nr_token].str,substr_start+2,substr_len-2);
+						tokens[nr_token].str[substr_len-2]='\0';
+						nr_token++;
+						break;
+					}
+					case REG:{
+						tokens[nr_token].type=REG;
+						if(substr_len>=32){
+							assert(0&&"REG is too long.");
+						}
+						strncpy(tokens[nr_token].str,substr_start+1,substr_len-1);
+						tokens[nr_token].str[substr_len-1]='\0';
 						nr_token++;
 						break;
 					}
@@ -140,7 +187,7 @@ static bool make_token(char *e) {
 					}
 					case '-':{
 						if(nr_token==0||tokens[nr_token-1].type=='('||is_operator(tokens[nr_token-1].type)){
-							tokens[nr_token++].type=MINUS;
+							tokens[nr_token++].type=MINUS;		//负号
 							break;
 						}
 						else{
@@ -149,17 +196,22 @@ static bool make_token(char *e) {
 						}
 					}
 					case '*':{
-						tokens[nr_token++].type=rules[i].token_type;
-						break;
+						if(nr_token==0||tokens[nr_token-1].type=='('||is_operator(tokens[nr_token-1].type)){
+							tokens[nr_token++].type=DEREF;		//解引用符号
+							break;
+						}
+						else{
+							tokens[nr_token++].type=rules[i].token_type;
+							break;
+						}
 					}
-					case '/':{
-						tokens[nr_token++].type=rules[i].token_type;
-						break;
-					}
-					case '(':{
-						tokens[nr_token++].type=rules[i].token_type;
-						break;
-					}
+					case '/':
+					case EQ:
+					case NEQ:
+					case '!':
+					case AND:
+					case OR:
+					case '(':
 					case ')':{
 						tokens[nr_token++].type=rules[i].token_type;
 						break;
@@ -214,6 +266,13 @@ static int find_dominant_operation(int p,int q){
 		if(depth==0){
 			int current_priority;
 			switch(tokens[i].type){
+				case OR:
+				case AND:
+				case EQ:
+				case NEQ:{
+					current_priority=0;
+					break;
+				}
 				case '+':
 				case '-': {
 					current_priority=1;
@@ -238,7 +297,7 @@ static int find_dominant_operation(int p,int q){
 // evaluate:计算表达式的函数
 static int eval(int p,int q){
 	if(p>q){
-		assert(0);
+		assert(0&&"p>q:You are false.");
 	}
 	else if(p==q){
 		if(tokens[p].type==DEC_NUM){
@@ -246,17 +305,61 @@ static int eval(int p,int q){
 			sscanf(tokens[p].str,"%d",&ans);
 			return ans;
 		}
+		else if(tokens[p].type==HEX_NUM){
+			int ans;
+			sscanf(tokens[p].str,"%x",&ans);
+			return ans;
+		}
+		else if(tokens[p].type==REG){
+			int ans;
+			if(strcmp(tokens[p].str,"eax")==0){
+				ans=cpu.eax;
+			}
+			else if(strcmp(tokens[p].str,"ecx")==0){
+				ans=cpu.ecx;
+			}
+			else if(strcmp(tokens[p].str,"edx")==0){
+				ans=cpu.edx;
+			}
+			else if(strcmp(tokens[p].str,"ebx")==0){
+				ans=cpu.ebx;
+			}
+			else if(strcmp(tokens[p].str,"esp")==0){
+				ans=cpu.esp;
+			}
+			else if(strcmp(tokens[p].str,"ebp")==0){
+				ans=cpu.ebp;
+			}
+			else if(strcmp(tokens[p].str,"esi")==0){
+				ans=cpu.esi;
+			}
+			else if(strcmp(tokens[p].str,"edi")==0){
+				ans=cpu.edi;
+			}
+			else{
+				assert(0&&"The reg doesn't exist in the register_list");
+			}
+			return ans;
+		}
 		else{
 			printf("nihao,i'm%s ,type: %c\n",tokens[p].str,tokens[p].type);
-			assert(0&&"p==q这步出错了");
+			assert(0&&"p==q is false");
 		}
 	}
 	else if(check_parentheses(p,q)==true){
-		printf("hello\n");
 		return eval(p+1,q-1);
 	}
 	else if(tokens[p].type==MINUS){
 		return -eval(p+1,q);
+	}
+	else if(tokens[p].type==DEREF){
+		//这里要用内存读取
+		int addr=eval(p-1,q);
+		uint32_t data=swaddr_read(addr,4);
+		return data;
+	}
+	else if(tokens[p].type=='!'){
+		return !eval(p+1,q);
 	}
 	else{
 		int op=find_dominant_operation(p,q);
@@ -267,6 +370,10 @@ static int eval(int p,int q){
 			case '-':return val1-val2;
 			case '*':return val1*val2;
 			case '/':return val1/val2;
+			case EQ:return val1==val2;
+			case NEQ:return val1!=val2;
+			case OR:return val1||val2;
+			case AND:return val1&&val2;
 			default :assert(0&&"Op is fasle!");
 		}
 	}
