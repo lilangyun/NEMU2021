@@ -51,7 +51,7 @@ static struct rule {
 
 	{"[1-9][0-9]*", DEC_NUM},		//10进制数
 	{"0[xX][0-9a-fA-F]+",HEX_NUM},	//16进制数
-	{"$[a-fA-F]+",REG}					//register
+	{"$[a-zA-Z]+",REG}					//register
 };
 
 
