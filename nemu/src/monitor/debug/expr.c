@@ -43,8 +43,8 @@ static struct rule {
 
 	{"==", EQ},						//equal
 	{"!=",NEQ},						//not equal
-	{"<",'<'},						//less than sign
-	{">",'>'},						//greater than sign
+	// {"<",'<'},						//less than sign
+	// {">",'>'},						//greater than sign
 	//{"<=",LE},						less than or equal
 	//{">=",GE},						greater than or equal
 	{"!",'!'},
@@ -100,30 +100,6 @@ static bool is_operator(int args){
 		default:return false;
 	}
 }
-
-// 判断二元运算符
-// static bool is_one_operator(int args){
-// 	switch(args){
-// 		case '+':
-// 		case '-':
-// 		case '*':
-// 		case '/':
-// 		case EQ:
-// 		case NEQ:
-// 		case AND:
-// 		case OR:return true;
-// 		default:return false;
-// 	}
-// }
-
-// 判断一元运算符
-// static bool is_two_operator(int args){
-// 	switch(args){
-// 		case '!':
-// 		case DEREF:return true;
-// 		default:return false;
-// 	}
-// }
 
 // 词法分析
 static bool make_token(char *e) {
