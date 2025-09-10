@@ -336,6 +336,9 @@ static uint32_t eval(int p,int q){
 			else if(strcmp(tokens[p].str,"edi")==0){
 				ans=cpu.edi;
 			}
+			else if(strcmp(tokens[p].str,"eip")==0){
+				ans=cpu.eip;
+			}
 			else{
 				assert(0&&"The reg doesn't exist in the register_list");
 			}
