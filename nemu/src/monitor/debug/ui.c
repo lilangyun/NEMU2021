@@ -70,7 +70,6 @@ static int cmd_info(char *args){
 			wp=wp->next;
 			printf("Hint watchpoint %d at address 0x%x\n",wp->NO,cpu.eip);
 		}
-		free_wp(wp);
 	}
 	return 0;
 }
@@ -101,6 +100,25 @@ static int cmd_w(char *args){
 	return 0;
 }
 
+static int cmd_d(char *args){
+	int n;
+	bool flag=false;
+	sscanf(args,"%d",&n);
+	WP*wp=new_wp();
+	while(wp->next!=NULL){
+		wp=wp->next;
+		if(wp->NO==n){
+			free_wp(wp);
+			flag=true;
+			break;
+		}
+	}
+	if(!flag){
+		assert(0&&"watchpoint没有这个序号!!");
+	}
+	return 0;
+}
+
 static struct {
 	char *name;
 	char *description;
@@ -115,7 +133,8 @@ static struct {
 	{"info","Print the regs' states",cmd_info},
 	{"x","Scan memory",cmd_x},
 	{"p","Figure out the value of expression",cmd_p},
-	{"w","Set up the watchpoint",cmd_w}
+	{"w","Set up the watchpoint",cmd_w},
+	{"d","Delete the watchpoint",cmd_d}
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))

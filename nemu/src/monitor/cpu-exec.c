@@ -88,7 +88,6 @@ void cpu_exec(volatile uint32_t n) {
 				return ;
 			}
 		}
-		free_wp(wp);
 
 #ifdef HAS_DEVICE
 		extern void device_update();
