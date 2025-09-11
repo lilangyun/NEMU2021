@@ -68,7 +68,7 @@ void free_wp(WP* wp){	//the args (WP*wp) will return to free_
 // 这个函数要说再见了，直接写多个新函数*/
 void set_wp_expr(char *args){
 	WP*wp=new_wp();
-	bool success;
+	bool success=true;
 	wp->expr=args;
 	wp->v1=expr(args, &success);
 	if(!success){
