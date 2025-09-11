@@ -83,8 +83,9 @@ static int cmd_x(char *args){
 	sscanf(args2,"%x",&addr);
 	for(i=0;i<n;i++){
 		uint32_t data=swaddr_read(addr+4*i, 4);
-		printf("0x%08x : 0x%08x\n",addr+4*i,data);
+		printf("0x%08x ",data);
 	}
+	printf("\n");
 	return 0;
 }
 
