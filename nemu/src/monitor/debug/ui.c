@@ -50,27 +50,21 @@ static int cmd_si(char *args){
 
 static int cmd_info(char *args){
 	if(args==NULL){
-		printf("Usage: info r\n");
+		printf("Usage: info r!");
 		return 0;
 	}
 	else if(strcmp(args,"r")==0){
-		printf("eax : 0x%08x\n",cpu.eax);
-		printf("ecx : 0x%08x\n",cpu.ecx);
-		printf("edx : 0x%08x\n",cpu.edx);
-		printf("ebx : 0x%08x\n",cpu.ebx);
-		printf("esp : 0x%08x\n",cpu.esp);
-		printf("ebp : 0x%08x\n",cpu.ebp);
-		printf("esi : 0x%08x\n",cpu.esi);
-		printf("edi : 0x%08x\n",cpu.edi);
-		printf("eip : 0x%08x\n",cpu.eip);
+		printf("$eax (0x%08x) ",cpu.eax);
+		printf("$ecx (0x%08x) ",cpu.ecx);
+		printf("$edx (0x%08x) ",cpu.edx);
+		printf("$ebx (0x%08x) ",cpu.ebx);
+		printf("$esp (0x%08x) ",cpu.esp);
+		printf("$ebp (0x%08x) ",cpu.ebp);
+		printf("$esi (0x%08x) ",cpu.esi);
+		printf("$edi (0x%08x) ",cpu.edi);
+		printf("$eip (0x%08x) ",cpu.eip);
 	}
-	else if(strcmp(args,"w")==0){
-		WP*wp=new_wp();
-		while(wp->next!=NULL){
-			wp=wp->next;
-			printf("Hint watchpoint %d at address 0x%x\n",wp->NO,cpu.eip);
-		}
-	}
+	printf("\n");
 	return 0;
 }
 
@@ -83,6 +77,7 @@ static int cmd_x(char *args){
 	sscanf(args2,"%x",&addr);
 	for(i=0;i<n;i++){
 		uint32_t data=swaddr_read(addr+4*i, 4);
+		// printf("0x%08x : 0x%08x\n",data);	不符合样例格式
 		printf("0x%08x ",data);
 	}
 	printf("\n");
