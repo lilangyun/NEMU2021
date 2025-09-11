@@ -96,7 +96,7 @@ static int cmd_p(char *args){
 }
 
 static int cmd_w(char *args){
-	function1(args);
+	// function1(args);
 	return 0;
 }
 
