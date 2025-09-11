@@ -6,11 +6,18 @@
 #include <sys/types.h>
 #include <regex.h>
 
+#include<string.h>
+
 enum {
-	NOTYPE = 256, EQ
+	NOTYPE = 256, EQ,NEQ,
 
 	/* TODO: Add more token types */
-
+	DEC_NUM,     //十进制数
+	HEX_NUM,	//十六进制数
+	REG,		//register
+	MINUS, 		//一元负号
+	DEREF,		//解引用符号*
+	OR,AND		//LE,GE暂且不需要
 };
 
 static struct rule {
@@ -23,10 +30,32 @@ static struct rule {
 	 */
 
 	{" +",	NOTYPE},				// spaces
+	{"\\(",'('},					//left
+	{"\\)",')'},					//right
+
 	{"\\+", '+'},					// plus
-	{"==", EQ}						// equal
+	{"-",'-'},						//sub
+	{"\\*",'*'},					//multiply
+	{"/",'/'},						//divide
+
+	{"\\|\\|",OR},
+	{"&&",AND},
+
+	{"==", EQ},						//equal
+	{"!=",NEQ},						//not equal
+	// {"<",'<'},						//less than sign
+	// {">",'>'},						//greater than sign
+	//{"<=",LE},						less than or equal
+	//{">=",GE},						greater than or equal
+	{"!",'!'},
+
+	{"[1-9][0-9]*", DEC_NUM},		//10进制数
+	{"0[xX][0-9a-fA-F]+",HEX_NUM},	//16进制数
+	{"\\$[a-zA-Z]+",REG}			//register
 };
 
+
+// 规则的数量
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
 
 static regex_t re[NR_REGEX];
@@ -56,6 +85,23 @@ typedef struct token {
 Token tokens[32];
 int nr_token;
 
+static bool is_operator(int args){
+	switch(args){
+		case '+':
+		case '-':
+		case '*':
+		case '/':
+		case EQ:
+		case NEQ:
+		case AND:
+		case OR:
+		case '!':
+		case DEREF:return true;
+		default:return false;
+	}
+}
+
+// 词法分析
 static bool make_token(char *e) {
 	int position = 0;
 	int i;
@@ -79,6 +125,73 @@ static bool make_token(char *e) {
 				 */
 
 				switch(rules[i].token_type) {
+					case NOTYPE:
+						break;
+					case DEC_NUM:{
+						tokens[nr_token].type=DEC_NUM;
+						if(substr_len>=32){
+							assert(0&&"DEC_Number is too long.");
+						}
+						strncpy(tokens[nr_token].str,substr_start,substr_len);
+						tokens[nr_token].str[substr_len]='\0';
+						nr_token++;
+						break;
+					}
+					case HEX_NUM:{
+						tokens[nr_token].type=HEX_NUM;
+						if(substr_len>=32){
+							assert(0&&"HEX_Number is too long.");
+						}
+						strncpy(tokens[nr_token].str,substr_start+2,substr_len-2);
+						tokens[nr_token].str[substr_len-2]='\0';
+						nr_token++;
+						break;
+					}
+					case REG:{
+						tokens[nr_token].type=REG;
+						if(substr_len>=32){
+							assert(0&&"REG is too long.");
+						}
+						strncpy(tokens[nr_token].str,substr_start+1,substr_len-1);
+						tokens[nr_token].str[substr_len-1]='\0';
+						nr_token++;
+						break;
+					}
+					case '+':{
+						tokens[nr_token++].type=rules[i].token_type;
+						break;
+					}
+					case '-':{
+						if(nr_token==0||tokens[nr_token-1].type=='('||is_operator(tokens[nr_token-1].type)){
+							tokens[nr_token++].type=MINUS;		//负号
+							break;
+						}
+						else{
+							tokens[nr_token++].type=rules[i].token_type;
+							break;
+						}
+					}
+					case '*':{
+						if(nr_token==0||tokens[nr_token-1].type=='('||is_operator(tokens[nr_token-1].type)){
+							tokens[nr_token++].type=DEREF;		//解引用符号
+							break;
+						}
+						else{
+							tokens[nr_token++].type=rules[i].token_type;
+							break;
+						}
+					}
+					case '/':
+					case EQ:
+					case NEQ:
+					case '!':
+					case AND:
+					case OR:
+					case '(':
+					case ')':{
+						tokens[nr_token++].type=rules[i].token_type;
+						break;
+					}
 					default: panic("please implement me");
 				}
 
@@ -95,6 +208,160 @@ static bool make_token(char *e) {
 	return true; 
 }
 
+static bool check_parentheses(int p,int q){
+	int i,depth=2;
+	if(tokens[p].type=='('&&tokens[q].type==')'){
+		depth=1;
+		for(i=p+1;i<q;i++){
+			if(tokens[i].type=='('){
+				depth++;
+			}
+			else if(tokens[i].type==')'){
+				depth--;
+				if(depth==0){
+					return false;
+				}
+			}
+		}
+	}
+	return depth==1;
+}
+
+static int find_dominant_operation(int p,int q){
+	int i,depth=0,pos=-1,min_priority=3;
+	for(i=p;i<=q;i++){
+		// 可以把括号看作一种深度，检查到左括号时深度加1，右括号时深度减1，在深度为0时检测是否有op
+		if(tokens[i].type=='('){
+			depth++;
+			continue;
+		}
+		if(tokens[i].type==')'){
+			depth--;
+			continue;
+		}
+		if(depth==0){
+			int current_priority;
+			switch(tokens[i].type){
+				case OR:
+				case AND:
+				case EQ:
+				case NEQ:{
+					current_priority=0;
+					break;
+				}
+				case '+':
+				case '-': {
+					current_priority=1;
+					break;
+				}
+				case '*':
+				case '/':{
+					current_priority=2;
+					break;
+				}
+				default:continue;
+			}
+			if(current_priority<=min_priority){
+				min_priority=current_priority;
+				pos=i;
+			}
+		}
+	}
+	return pos;
+}
+
+int flag=1;
+// evaluate:计算表达式的函数
+static uint32_t eval(int p,int q){
+	if(p>q){
+		assert(0&&"p>q:You are false.");
+	}
+	else if(p==q){
+		if(tokens[p].type==DEC_NUM){
+			uint32_t ans;
+			sscanf(tokens[p].str,"%d",&ans);
+			return ans;
+		}
+		else if(tokens[p].type==HEX_NUM){
+			uint32_t ans;
+			sscanf(tokens[p].str,"%x",&ans);
+			return ans;
+		}
+		else if(tokens[p].type==REG){
+			uint32_t ans;
+			if(strcmp(tokens[p].str,"eax")==0){
+				ans=cpu.eax;
+			}
+			else if(strcmp(tokens[p].str,"ecx")==0){
+				ans=cpu.ecx;
+			}
+			else if(strcmp(tokens[p].str,"edx")==0){
+				ans=cpu.edx;
+			}
+			else if(strcmp(tokens[p].str,"ebx")==0){
+				ans=cpu.ebx;
+			}
+			else if(strcmp(tokens[p].str,"esp")==0){
+				ans=cpu.esp;
+			}
+			else if(strcmp(tokens[p].str,"ebp")==0){
+				ans=cpu.ebp;
+			}
+			else if(strcmp(tokens[p].str,"esi")==0){
+				ans=cpu.esi;
+			}
+			else if(strcmp(tokens[p].str,"edi")==0){
+				ans=cpu.edi;
+			}
+			else if(strcmp(tokens[p].str,"eip")==0){
+				ans=cpu.eip;
+			}
+			else{
+				assert(0&&"The reg doesn't exist in the register_list");
+			}
+			return ans;
+		}
+		else{
+			printf("nihao,i'm %s ,type: %c\n",tokens[p].str,tokens[p].type);
+			assert(0&&"p==q is false");
+		}
+	}
+	else if(check_parentheses(p,q)==true){
+		// Log("check_parentheses is false!!");//检查错误时使用的
+		return eval(p+1,q-1);
+	}
+	else if(tokens[p].type==MINUS){
+		return -eval(p+1,q);
+	}
+	else if(tokens[p].type==DEREF){
+		//这里要用内存读取
+		uint32_t addr=eval(p+1,q);
+		uint32_t data=swaddr_read(addr,4);
+		return data;
+	}
+	else if(tokens[p].type=='!'){
+		return !eval(p+1,q);
+	}
+	else{
+		int op=find_dominant_operation(p,q);
+		uint32_t val1=eval(p,op-1);
+		uint32_t val2=eval(op+1,q);
+		switch(tokens[op].type){
+			case '+':return val1+val2;
+			case '-':return val1-val2;
+			case '*':return val1*val2;
+			case '/':return val1/val2;
+			case EQ:return val1==val2;
+			case NEQ:return val1!=val2;
+			case OR:return val1||val2;
+			case AND:return val1&&val2;
+			default :assert(0&&"Op is fasle!");
+		}
+	}
+}
+
+
+// 接口函数，可以在ui.c的cmd_p命令中调用，实现表达式求值
 uint32_t expr(char *e, bool *success) {
 	if(!make_token(e)) {
 		*success = false;
@@ -102,6 +369,8 @@ uint32_t expr(char *e, bool *success) {
 	}
 
 	/* TODO: Insert codes to evaluate the expression. */
+	uint32_t result = eval(0,nr_token-1);
+	return result;
 	panic("please implement me");
 	return 0;
 }
