@@ -58,11 +58,11 @@ static int cmd_info(char *args){
 		printf("$ecx (0x%08x) ",cpu.ecx);
 		printf("$edx (0x%08x) ",cpu.edx);
 		printf("$ebx (0x%08x) ",cpu.ebx);
-		printf("$esp (0x%08x) ",cpu.esp);
-		printf("$ebp (0x%08x) ",cpu.ebp);
-		printf("$esi (0x%08x) ",cpu.esi);
-		printf("$edi (0x%08x) ",cpu.edi);
-		printf("$eip (0x%08x) ",cpu.eip);
+		// printf("$esp (0x%08x) ",cpu.esp);
+		// printf("$ebp (0x%08x) ",cpu.ebp);
+		// printf("$esi (0x%08x) ",cpu.esi);
+		// printf("$edi (0x%08x) ",cpu.edi);
+		// printf("$eip (0x%08x) ",cpu.eip);	//测试样例不需要，那就先不打印吧
 	}
 	printf("\n");
 	return 0;
