@@ -33,9 +33,6 @@ WP* new_wp(){	//return a free watchpoint from the free_
 	wp->next=head;	//还要将wp放在已使用监视点head前面作为新的head
 	head=wp;
 	wp->enable=true;
-	// 这里还要初始化expr和v1
-	wp->expr=NULL;
-	wp->v1=0;
 	return wp;
 }
 
@@ -69,14 +66,17 @@ void free_wp(WP* wp){	//the args (WP*wp) will return to free_
 void set_wp_expr(char *args){
 	WP*wp=new_wp();
 	bool success=true;
-	wp->expr=args;
-	wp->v1=expr(args, &success);
+	strncpy(wp->expr,args,31);	//防止args过长
+	wp->expr[31]='\0';
+	wp->v1=expr(wp->expr, &success);
 	if(!success){
 		printf("Wrong expression!\n");
 		free_wp(wp);
+		return;
 	}
 	else{
 		printf("Set watchpoint %d: %s = %d\n",wp->NO,wp->expr,wp->v1);
+		return;
 	}
 }
 
