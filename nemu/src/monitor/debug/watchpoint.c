@@ -81,7 +81,7 @@ void set_wp_expr(char *args){
 }
 
 bool check_wp_changed(WP* wp){
-	bool success;
+	bool success=true;
 	uint32_t v2=expr(wp->expr,&success);
 	if(!success){
 		printf("Wrong expression!\n");
