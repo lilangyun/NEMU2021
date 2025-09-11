@@ -24,6 +24,7 @@ void init_wp_pool() {
 WP* new_wp(){	//return a free watchpoint from the free_	
 	if(free_==NULL){
 		printf("No free watchpoint!!");
+		return NULL;
 		assert(0&&"free_ is spare,it's busy!");
 	}
 	WP* wp=free_;
@@ -49,11 +50,25 @@ void free_wp(WP* wp){	//the args (WP*wp) will return to free_
 	free_=wp;
 }
 
-// 实现监视表达式是否发生变化的功能，需要调用expr.c中的求值函数，同时也是一个接口函数，供ui.c调用
+/* 实现监视表达式是否发生变化的功能，需要调用expr.c中的求值函数，同时也是一个接口函数，供ui.c调用
 // 这时我意识到我应该要去给Wp添加：表达式，首次表达式求出来的值，执行cpu_exec后的值
-void function1(char *args){
+// void function1(char *args){
+// 	WP*wp=new_wp();
+// 	bool success;
+// 	wp->expr=args;
+// 	wp->v1=expr(args, &success);
+// }
+// 这个函数要说再见了，直接写两个新函数*/
+void set_wp_expr(char *args){
 	WP*wp=new_wp();
 	bool success;
 	wp->expr=args;
 	wp->v1=expr(args, &success);
+	if(!success){
+		printf("Wrong expression!\n");
+		free_wp(wp);
+	}
+	else{
+		printf("Set watchpoint %d: %s = %d\n",wp->NO,wp->expr,wp->v1);
+	}
 }

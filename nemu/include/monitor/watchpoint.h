@@ -10,9 +10,10 @@ typedef struct watchpoint {
 	/* TODO: Add more members if necessary */
 	char *expr;
 	uint32_t v1;
+	bool enable;
 
 } WP;
 WP* new_wp();
 void free_wp(WP* wp);
-void function1(char *);
+// void function1(char *);		//这里可能要修改，因为我做的接口其实不很好，是在wp文件外去对“池”进行访问的
 #endif
