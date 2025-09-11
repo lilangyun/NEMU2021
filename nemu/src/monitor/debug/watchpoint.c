@@ -106,3 +106,12 @@ bool check_all_wp_changed(){
 	}
 	return false;
 }
+
+void info_wp(){
+	WP*wp=head;
+	while(wp!=NULL){
+		printf("watchpoint %d: %s = %d\n",wp->NO,wp->expr,wp->v1);
+		wp=wp->next;
+	}
+	return;
+}
