@@ -327,7 +327,7 @@ static uint32_t eval(int p,int q){
 		}
 	}
 	else if(check_parentheses(p,q)==true){
-		Log("check_parentheses is false!!");
+		// Log("check_parentheses is false!!");//检查错误时使用的
 		return eval(p+1,q-1);
 	}
 	else if(tokens[p].type==MINUS){
