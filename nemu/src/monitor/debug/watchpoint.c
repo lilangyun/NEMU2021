@@ -1,4 +1,5 @@
 #include "monitor/watchpoint.h"
+#include "nemu.h"
 #include "monitor/expr.h"
 
 #define NR_WP 32	//watchpoint池的总大小：32，还可以自行调整
@@ -31,6 +32,10 @@ WP* new_wp(){	//return a free watchpoint from the free_
 	free_=wp->next;
 	wp->next=head;	//还要将wp放在已使用监视点head前面作为新的head
 	head=wp;
+	wp->enable=true;
+	// 这里还要初始化expr和v1
+	wp->expr=NULL;
+	wp->v1=0;
 	return wp;
 }
 
@@ -48,6 +53,8 @@ void free_wp(WP* wp){	//the args (WP*wp) will return to free_
 	}
 	wp->next=free_;
 	free_=wp;
+	wp->enable=false;
+	return;
 }
 
 /* 实现监视表达式是否发生变化的功能，需要调用expr.c中的求值函数，同时也是一个接口函数，供ui.c调用
@@ -58,7 +65,7 @@ void free_wp(WP* wp){	//the args (WP*wp) will return to free_
 // 	wp->expr=args;
 // 	wp->v1=expr(args, &success);
 // }
-// 这个函数要说再见了，直接写两个新函数*/
+// 这个函数要说再见了，直接写多个新函数*/
 void set_wp_expr(char *args){
 	WP*wp=new_wp();
 	bool success;
@@ -71,4 +78,31 @@ void set_wp_expr(char *args){
 	else{
 		printf("Set watchpoint %d: %s = %d\n",wp->NO,wp->expr,wp->v1);
 	}
+}
+
+bool check_wp_changed(WP* wp){
+	bool success;
+	uint32_t v2=expr(wp->expr,&success);
+	if(!success){
+		printf("Wrong expression!\n");
+		return false;
+	}
+	if(wp->v1!=v2){
+		printf("Hint watchpoint %d at address 0x%x\n",wp->NO,cpu.eip);
+		wp->v1=v2;	//更新v1
+		return true;
+	}
+	return false;
+}
+
+bool check_all_wp_changed(){
+	int i;
+	for(i=0;i<NR_WP;i++){
+		if(wp_pool[i].enable==true){
+			if(check_wp_changed(&wp_pool[i])){
+				return true;
+			}
+		}
+	}
+	return false;
 }
