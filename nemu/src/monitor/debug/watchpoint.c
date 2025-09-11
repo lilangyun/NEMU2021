@@ -88,7 +88,7 @@ bool check_wp_changed(WP* wp){
 		return false;
 	}
 	if(wp->v1!=v2){
-		printf("Hint watchpoint %d at address 0x%x\n",wp->NO,cpu.eip);
+		printf("Hint watchpoint %d at address 0x%08x\n",wp->NO,cpu.eip);
 		wp->v1=v2;	//更新v1
 		return true;
 	}
