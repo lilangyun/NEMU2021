@@ -63,14 +63,14 @@ static int cmd_info(char *args){
 		// printf("$esi (0x%08x) ",cpu.esi);
 		// printf("$edi (0x%08x) ",cpu.edi);
 		// printf("$eip (0x%08x) ",cpu.eip);	//测试样例不需要，那就先不打印吧
+		printf("\n");
 	}
 	else if(strcmp(args,"w")==0){
 		info_wp();
 	}
 	else{
-		printf("Usage: info r/w!");
+		printf("Usage: info r/w!\n");
 	}
-	printf("\n");
 	return 0;
 }
 
