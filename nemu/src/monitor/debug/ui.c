@@ -105,20 +105,8 @@ static int cmd_w(char *args){
 
 static int cmd_d(char *args){
 	int n;
-	bool flag=false;
 	sscanf(args,"%d",&n);
-	WP*wp=new_wp();
-	while(wp->next!=NULL){
-		wp=wp->next;
-		if(wp->NO==n){
-			free_wp(wp);
-			flag=true;
-			break;
-		}
-	}
-	if(!flag){
-		assert(0&&"watchpoint没有这个序号!!");
-	}
+	delete_wp(n);
 	return 0;
 }
 
