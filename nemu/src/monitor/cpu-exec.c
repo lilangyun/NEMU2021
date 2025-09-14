@@ -61,6 +61,11 @@ void cpu_exec(volatile uint32_t n) {
 
 		/* Execute one instruction, including instruction fetch,
 		 * instruction decode, and the actual execution. */
+		 //取值、译码、执行
+		 //exec函数返回指令长度
+		 //cpu.eip是指令指针寄存器
+		 //执行完一条指令后，eip要加上指令长度，指向下一条指令
+		 //exec函数在cpu/exec.c中
 		int instr_len = exec(cpu.eip);
 
 		cpu.eip += instr_len;
