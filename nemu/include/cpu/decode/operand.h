@@ -22,6 +22,6 @@ typedef struct {
 	uint32_t opcode;
 	bool is_operand_size_16; //原来在这里
 	Operand src, dest, src2;
-} Operands;
+} Operands;//每个指令所对应的操作数的结构体定义
 
 #endif
