@@ -2,7 +2,7 @@
 #include "cpu/decode/decode.h"
 
 /* shared by all helper function */
-Operands ops_decoded;
+Operands ops_decoded;//operands结构体【operand.h】
 
 #define DATA_BYTE 1
 #include "decode-template.h"
