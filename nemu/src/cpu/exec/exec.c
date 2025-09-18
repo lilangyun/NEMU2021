@@ -114,7 +114,7 @@ helper_fun opcode_table [256] = {
 /* 0x44 */	inv, inc_r_v, inc_r_v, inc_r_v,
 /* 0x48 */	dec_r_v, dec_r_v, dec_r_v, dec_r_v,
 /* 0x4c */	inv, dec_r_v, dec_r_v, dec_r_v,
-/* 0x50 */	inv, inv, inv, inv,//push指令的opcode为50
+/* 0x50 */	push_si_l, inv, inv, inv,//push指令的opcode为50
 /* 0x54 */	inv, inv, inv, inv,
 /* 0x58 */	inv, inv, inv, inv,
 /* 0x5c */	inv, inv, inv, inv, 
