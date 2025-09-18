@@ -114,7 +114,7 @@ helper_fun opcode_table [256] = {
 /* 0x44 */	inv, inc_r_v, inc_r_v, inc_r_v,
 /* 0x48 */	dec_r_v, dec_r_v, dec_r_v, dec_r_v,
 /* 0x4c */	inv, dec_r_v, dec_r_v, dec_r_v,
-/* 0x50 */	inv, inv, inv, inv,
+/* 0x50 */	inv, inv, inv, inv,//push指令的opcode为50
 /* 0x54 */	inv, inv, inv, inv,
 /* 0x58 */	inv, inv, inv, inv,
 /* 0x5c */	inv, inv, inv, inv, 
@@ -152,7 +152,7 @@ helper_fun opcode_table [256] = {
 /* 0xdc */	inv, inv, inv, inv,
 /* 0xe0 */	inv, inv, inv, inv,
 /* 0xe4 */	inv, inv, inv, inv,
-/* 0xe8 */	inv, jmp_si_l, inv, jmp_si_b,
+/* 0xe8 */	call_si_l, jmp_si_l, inv, jmp_si_b,//0xE8是call指令的操作数，我仿照jmp指令添加进table中
 /* 0xec */	inv, inv, inv, inv,
 /* 0xf0 */	inv, inv, repnz, rep,
 /* 0xf4 */	inv, inv, group3_b, group3_v,
