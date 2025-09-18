@@ -4,6 +4,7 @@
 make_helper(push_si_b);
 make_helper(push_si_l);
 
-make_helper(push_rm_l);
+// 根据obj/testcase/mov-c.txt文件，需要实现的是push r32
+make_helper(push_r_l);
 
 #endif
