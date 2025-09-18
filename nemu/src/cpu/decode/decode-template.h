@@ -34,7 +34,7 @@ make_helper(concat(decode_si_, SUFFIX)) {
 	 */
 	panic("please implement me");
 	// 看这里意思是我需要做点什么了hhh
-	op_src->simm=instr_fetch(cpu.eip,DATA_BYTE);
+	op_src->simm=instr_fetch(eip,DATA_BYTE);
 	op_src->val = op_src->simm;
 
 #ifdef DEBUG
