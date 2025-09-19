@@ -12,6 +12,7 @@ make_helper(concat(cmp_i_a_, SUFFIX)) {
     // AF:我理解是低四位的cf
     cpu.eflags.AF=(op_src2->val&0x0000000f)<(op_src->val&0x0000000f);
     // OF:判断是否溢出[只需要判断是否在范围内是不是就行？显然无法成立]
+    cpu.eflags.OF = (((op_src2->val ^ op_src->val) & (op_src2->val ^ result)) >> (DATA_BYTE * 8 - 1)) & 0x1;
     return 1+DATA_BYTE;
 
 }
