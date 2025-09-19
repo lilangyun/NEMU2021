@@ -9,6 +9,7 @@ static void do_execute() {
     // 关键在于我需要先识别出是需要在esp中写入哪个寄存器的值，这涉及到取值+译码
     // 此时我意识到为什么要先做call指令，因为直接写入cpu.eip的值才是最简单的
     MEM_W(cpu.esp,op_src->val);
+    print_asm("push $reg");
 }
 // 我应该做一个make_helper在其内部实现do_execute就结束
 
