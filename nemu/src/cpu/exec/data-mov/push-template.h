@@ -10,7 +10,7 @@ static void do_execute() {
     // 此时我意识到为什么要先做call指令，因为直接写入cpu.eip的值才是最简单的
     op_dest->type = OP_TYPE_MEM;
 	op_dest->addr=cpu.esp;
-
+    op_dest->size=DATA_BYTE;
     OPERAND_W(op_dest, op_src->val);
     print_asm("push r32");//像jmp一样打印一下吧，表示调用函数的位置
 }
