@@ -15,7 +15,7 @@ static void do_execute() {
 // 译码函数
 //在此处神奇地发现，我将call-template.h函数更改后，suffix已经传入
 make_helper(concat(call_si_, SUFFIX)) {
-	concat(decode_i_, SUFFIX)(eip+1);//提取操作数
+	concat(decode_si_, SUFFIX)(eip+1);//提取操作数
 	do_execute();
 	return 5;
 }
