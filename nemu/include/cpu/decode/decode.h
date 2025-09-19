@@ -21,6 +21,10 @@ make_helper(decode_i2rm_l);
 make_helper(decode_i2a_b);
 make_helper(decode_i2a_w);
 make_helper(decode_i2a_l);
+// 我亲手添加
+make_helper(decode_i_a_b);
+make_helper(decode_i_a_w);
+make_helper(decode_i_a_l);
 make_helper(decode_i2r_b);
 make_helper(decode_i2r_w);
 make_helper(decode_i2r_l);
