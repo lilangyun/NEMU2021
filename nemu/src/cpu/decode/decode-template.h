@@ -94,7 +94,10 @@ make_helper(concat(decode_r2rm_, SUFFIX)) {
 make_helper(concat(decode_rm2r_, SUFFIX)) {
 	return decode_rm_internal(eip, op_src, op_dest);
 }
-
+// 我将在这里人为地添加为test指令应运而生的译码函数
+make_helper(concat(decode_rm_r_, SUFFIX)) {
+	return decode_rm_internal(eip, op_src, op_src2);
+}
 
 /* AL <- Ib
  * eAX <- Iv
