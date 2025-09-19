@@ -2,10 +2,12 @@
 
 #define instr test
 
-// 通用执行过程
-static void do_execute() {
-    
+make_helper(concat(test_rm_r_, SUFFIX)) {
+	int len=concat(decode_rm_r_, SUFFIX)(eip+1);
+	op_dest->val=op_src->val&op_src2->val;
+	cpu.eflags.CF=0;
+    cpu.eflags.DF=0;
+    update_eflags_pf_zf_sf(op_dest->val);
+	return len+1;
 }
-// 译码函数
-make_instr_helper(rm2r)
 #include "cpu/exec/template-end.h"
