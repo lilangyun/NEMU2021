@@ -18,7 +18,7 @@ static void do_execute() {
 
 make_helper(concat(push_r_, SUFFIX)) {
 	concat(decode_r_, SUFFIX)(eip);
-	snprintf(op_dest->str, OP_STR_SIZE, "%s", REG_NAME(R_ESP));
+	
 	do_execute();
 	return 1;
 }
