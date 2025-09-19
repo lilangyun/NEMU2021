@@ -2,29 +2,21 @@
 
 #define instr call
 
-// // 通用执行过程
-// static void do_execute() {
-//     // 返回地址入栈
-//     cpu.esp-=DATA_BYTE;
-//     swaddr_write(cpu.esp,4,cpu.eip+1+DATA_BYTE);//在这里，我犯了误区，事实上，我应该保存下一个指令的地址
-//     // 调用函数
-//     cpu.eip += op_src->val;//直接复制jmp中指令即可，但是竟然有差异
-//     // 好像到这里就结束了
-//     print_asm("call %x", cpu.eip);//像jmp一样打印一下吧，表示调用函数的位置
-// }
-// // 译码函数
-// //在此处神奇地发现，我将call-template.h函数更改后，suffix已经传入
-// make_helper(concat(call_i_, SUFFIX)) {
-// 	concat(decode_i_, SUFFIX)(eip+1);//提取操作数
-// 	do_execute();
-// 	return DATA_BYTE+1;
-// }
-make_helper(concat(call_i_, SUFFIX)){
-    int len = concat(decode_i_, SUFFIX) (eip + 1);
-	reg_l(R_ESP) -= DATA_BYTE;      
-	swaddr_write(reg_l(R_ESP), 4, cpu.eip + (len + 1));
-	print_asm("call 0x%x", cpu.eip + 1 + len + op_src->val);
-	cpu.eip += op_src->val;
-	return len + 1;
+// 通用执行过程
+static void do_execute() {
+    // 返回地址入栈
+    cpu.esp-=DATA_BYTE;
+    swaddr_write(cpu.esp,4,cpu.eip+1+DATA_BYTE);//在这里，我犯了误区，事实上，我应该保存下一个指令的地址
+    // 调用函数
+    cpu.eip += op_src->val;//直接复制jmp中指令即可，但是竟然有差异
+    // 好像到这里就结束了
+    print_asm("call %x", cpu.eip);//像jmp一样打印一下吧，表示调用函数的位置
+}
+// 译码函数
+//在此处神奇地发现，我将call-template.h函数更改后，suffix已经传入
+make_helper(concat(call_i_, SUFFIX)) {
+	concat(decode_i_, SUFFIX)(eip+1);//提取操作数
+	do_execute();
+	return DATA_BYTE+1;
 }
 #include "cpu/exec/template-end.h"
