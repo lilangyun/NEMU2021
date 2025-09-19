@@ -13,11 +13,7 @@ static void do_execute() {
     print_asm("call %x", cpu.eip);//像jmp一样打印一下吧，表示调用函数的位置
 }
 // 译码函数
-//在此处神奇地发现，我将call-template.h函数更改后，suffix已经传入
+make_instr_helper(si)//在此处神奇地发现，我将call-template.h函数更改后，suffix已经传入
 
-make_helper(concat(call_si_, SUFFIX)) {
-	do_execute();
-	return 0;
-}
 
 #include "cpu/exec/template-end.h"
