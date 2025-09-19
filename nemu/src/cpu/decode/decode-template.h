@@ -6,6 +6,7 @@
 #define decode_rm_internal concat3(decode_rm_, SUFFIX, _internal)
 #define decode_i concat(decode_i_, SUFFIX)
 #define decode_a concat(decode_a_, SUFFIX)
+#define decode_s concat(decode_s_, SUFFIX)
 #define decode_r2rm concat(decode_r2rm_, SUFFIX)
 
 /* Ib, Iv */
@@ -57,6 +58,7 @@ static int concat(decode_a_, SUFFIX) (swaddr_t eip, Operand *op) {
 }
 
 /* eXX: eAX, eCX, eDX, eBX, eSP, eBP, eSI, eDI */
+// 不得不感叹一句封装的真好
 static int concat3(decode_r_, SUFFIX, _internal) (swaddr_t eip, Operand *op) {
 	op->type = OP_TYPE_REG;
 	op->reg = ops_decoded.opcode & 0x7;
@@ -124,7 +126,7 @@ make_helper(concat(decode_i2rm_, SUFFIX)) {
  * eXX <- Iv 
  */
 make_helper(concat(decode_i2r_, SUFFIX)) {
-	decode_r_internal(eip, op_dest);
+	decode_r_internal(eip, op_dest);//先进行r译码，说明decode_r确实是opcode中含寄存器的译码方式
 	return decode_i(eip);
 }
 
