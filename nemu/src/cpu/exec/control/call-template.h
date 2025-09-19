@@ -17,6 +17,6 @@ static void do_execute() {
 make_helper(concat(call_si_, SUFFIX)) {
 	concat(decode_si_, SUFFIX)(eip+1);//提取操作数
 	do_execute();
-	return 5;
+	return DATA_BYTE;
 }
 #include "cpu/exec/template-end.h"
