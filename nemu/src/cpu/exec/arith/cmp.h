@@ -2,8 +2,8 @@
 #define __CMP_H__
 
 // 所有helper函数的声明
-make_helper(cmp_i_a_v);
-make_helper(cmp_i_a_b);
+make_helper(cmp_i2a_v);
+make_helper(cmp_i2a_b);
 
 
 #endif
