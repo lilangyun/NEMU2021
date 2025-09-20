@@ -8,6 +8,6 @@ make_helper(concat(je_si_, SUFFIX)) {
     if(flag){
         return 1+len+op_src->val;
     }
-	return 1+len;
+	return 1+len+op_src->val;
 }
 #include "cpu/exec/template-end.h"
