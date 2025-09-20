@@ -3,11 +3,11 @@
 #define instr je
 
 make_helper(concat(je_si_, SUFFIX)) {
-	concat(decode_si_, SUFFIX)(eip+1);
+	int len=concat(decode_si_, SUFFIX)(eip+1);
 	bool flag=cpu.eflags.ZF;
     if(flag){
-        return 1+DATA_BYTE+op_src->val;
+        return 1+len+op_src->val;
     }
-	return 1+DATA_BYTE;
+	return 1+len;
 }
 #include "cpu/exec/template-end.h"
