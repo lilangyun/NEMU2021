@@ -3,7 +3,7 @@
 #define instr cmp
 
 make_helper(concat(cmp_i2rm_, SUFFIX)) {
-	int len=concat(decode_i2rm_, SUFFIX)(eip);
+	int len=concat(decode_i2rm_, SUFFIX)(eip+1);
 	uint32_t result=op_dest->val-op_src->val;
     update_eflags_pf_zf_sf(result);
     // we need to finish the judge of CF,AF,OF
