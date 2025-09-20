@@ -2,7 +2,7 @@
 
 #define instr cmp
 
-make_helper(concat(cmp_si2rm_, SUFFIX)) {
+make_helper(concat(cmp_i2rm_, SUFFIX)) {
 	int len=concat(decode_i2rm_, SUFFIX)(eip+1);
 	DATA_TYPE result=op_dest->val-op_src->val;
     update_eflags_pf_zf_sf(result);
