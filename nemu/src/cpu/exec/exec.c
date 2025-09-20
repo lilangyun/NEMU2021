@@ -20,12 +20,12 @@ static make_helper(_2byte_esc);
 /* 0x80 */
 make_group(group1_b,
 	inv, inv, inv, inv, 
-	and_i2rm_b, inv, cmp_i2rm_b, inv)
+	and_i2rm_b, inv, inv, cmp_i2rm_b)
 
 /* 0x81 */
 make_group(group1_v,
 	inv, inv, inv, inv, 
-	and_i2rm_v, sub_i2rm_v, cmp_i2rm_v, inv)//与ppt中/digit知识联起来了
+	and_i2rm_v, sub_i2rm_v, inv, cmp_i2rm_v)//与ppt中/digit知识联起来了
 
 /* 0x83 */
 make_group(group1_sx_v,
