@@ -5,9 +5,10 @@
 make_helper(concat(je_i_, SUFFIX)) {
 	int len=concat(decode_i_, SUFFIX)(eip+1);
 	bool flag=cpu.eflags.ZF;
+    cpu.eip+=1+len;
     if(flag){
-        return 1+len+op_src->val;
+        return op_src->val;
     }
-	return 1+len;
+	return 0;
 }
 #include "cpu/exec/template-end.h"
