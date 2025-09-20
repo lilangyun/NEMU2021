@@ -15,4 +15,4 @@
 /* for instruction encoding overloading */
 
 // 所有helper_v函数的定义
-make_helper_v(cmp_i2a)
+make_helper_v(cmp_i2rm)

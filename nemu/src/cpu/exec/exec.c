@@ -25,7 +25,7 @@ make_group(group1_b,
 /* 0x81 */
 make_group(group1_v,
 	inv, inv, inv, inv, 
-	and_i2rm_v, sub_i2rm_v, inv, inv)
+	and_i2rm_v, sub_i2rm_v, cmp_i2rm_v, inv)//与ppt中/digit知识联起来了
 
 /* 0x83 */
 make_group(group1_sx_v,
@@ -109,7 +109,7 @@ helper_fun opcode_table [256] = {
 /* 0x30 */	inv, xor_r2rm_v, inv, inv,
 /* 0x34 */	inv, inv, inv, inv,
 /* 0x38 */	inv, inv, inv, inv,
-/* 0x3c */	cmp_i2a_b, cmp_i2a_v, inv, inv,
+/* 0x3c */	inv, inv, inv, inv,
 /* 0x40 */	inc_r_v, inc_r_v, inc_r_v, inc_r_v,
 /* 0x44 */	inv, inc_r_v, inc_r_v, inc_r_v,
 /* 0x48 */	dec_r_v, dec_r_v, dec_r_v, dec_r_v,
