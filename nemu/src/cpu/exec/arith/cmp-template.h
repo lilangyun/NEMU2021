@@ -13,7 +13,7 @@ make_helper(concat(cmp_i2rm_, SUFFIX)) {
     cpu.eflags.AF=(op_dest->val&0x0000000f)<(op_src2->val&0x0000000f);
     // OF:判断是否溢出[只需要判断是否在范围内是不是就行？显然无法成立]
     cpu.eflags.OF = (((op_dest->val ^ op_src2->val) & (op_dest->val ^ result)) >> (DATA_BYTE * 8 - 1)) & 0x1;
-    printf("cmp: op_dest=0x%x, op_src=0x%x, result=0x%x, ZF=%d\n", op_dest->val, op_src2->val, result, cpu.eflags.ZF);
+    printf("cmp: op_dest=0x%x, op_src2=0x%x, result=0x%x, ZF=%d\n", op_dest->val, op_src2->val, result, cpu.eflags.ZF);
     return len+1;
 
 }
