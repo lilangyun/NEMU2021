@@ -4,7 +4,7 @@
 
 make_helper(concat(cmp_i2rm_, SUFFIX)) {
 	int len=concat(decode_i2rm_, SUFFIX)(eip+1);
-	uint32_t result=op_dest->val-op_src->val;
+	DATA_TYPE result=op_dest->val-op_src->val;
     update_eflags_pf_zf_sf(result);
     // we need to finish the judge of CF,AF,OF
     // CF:是否需要向高字节结尾或者向高字节进位（结合ds后的个人理解）
