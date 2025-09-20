@@ -107,11 +107,6 @@ make_helper(concat(decode_i2a_, SUFFIX)) {
 	return decode_i(eip);
 }
 
-// 我将写一份decode_i_a_suffix
-make_helper(concat(decode_i_a_, SUFFIX)) {
-	decode_a(eip, op_src2);
-	return decode_i(eip);
-}
 
 /* Gv <- EvIb
  * Gv <- EvIv
