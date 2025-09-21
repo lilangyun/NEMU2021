@@ -16,3 +16,4 @@
 
 // 所有helper_v函数的定义
 make_helper_v(cmp_i2rm)
+make_helper_v(cmp_r2rm)
