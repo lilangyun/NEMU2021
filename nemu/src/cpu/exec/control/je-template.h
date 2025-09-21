@@ -7,8 +7,8 @@ make_helper(concat(je_i_, SUFFIX)) {
 	bool flag=cpu.eflags.ZF;
     cpu.eip+=1+len;
     if(flag){
+        print_asm(str(instr) " $0x%x", cpu.eip + 1 + DATA_BYTE);
         return op_src->val;
-        print_asm("je %x", cpu.eip);
     }
 	return 0;
 }
