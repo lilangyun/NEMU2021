@@ -12,8 +12,8 @@
 #include "add-template.h"
 #undef DATA_BYTE
 
-make_helper_v(add_i2a)
-make_helper_v(add_i2rm)
-make_helper_v(add_r2rm)
-make_helper_v(add_rm2r)
+/* for instruction encoding overloading */
+
+// 所有helper函数的定义
 make_helper_v(add_si2rm)
+make_helper_v(add_i2rm)
