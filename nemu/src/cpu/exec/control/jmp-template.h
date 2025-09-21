@@ -14,7 +14,7 @@ make_instr_helper(si)
 make_helper(jmp_rm_l) {
 	int len = decode_rm_l(eip + 1);
 	cpu.eip = op_src->val - (len + 1);
-	print_asm(str(instr) "   *%s", op_src->str);
+	print_asm(str(instr) "      *%s", op_src->str);
 	return len + 1;
 }
 #endif
