@@ -5,7 +5,6 @@
 // 所有helper函数的定义模板
 
 static void do_execute() {
-	concat(decode_i2rm_, SUFFIX)(cpu.eip+1);
 	uint64_t result=(uint64_t)op_dest->val+(uint64_t)op_src->val;
 	OPERAND_W(op_dest,result);
     update_eflags_pf_zf_sf(result);
