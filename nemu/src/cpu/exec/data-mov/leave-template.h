@@ -5,7 +5,7 @@ make_helper(concat(leave_, SUFFIX)) {
     cpu.esp=cpu.ebp;
     cpu.ebp=cpu.esp;
     cpu.esp+=DATA_BYTE;
-	print_asm("leave" str(SUFFIX));
+	print_asm("leave");
 	return 1;
 }
 #endif
