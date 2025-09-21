@@ -9,6 +9,7 @@ static void do_execute () {
     else{
         op_src->val=0;
     }
+    print_asm_template1();
 }
 
 make_instr_helper(rm)
