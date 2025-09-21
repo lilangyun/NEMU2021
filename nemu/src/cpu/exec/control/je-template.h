@@ -8,7 +8,7 @@ make_helper(concat(je_i_, SUFFIX)) {
     cpu.eip+=1+len;
     if(flag){
         return op_src->val;
-        print_asm(str(instr) " %x", cpu.eip);
+        print_asm("je %x", cpu.eip);
     }
 	return 0;
 }
