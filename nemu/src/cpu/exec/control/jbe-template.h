@@ -11,6 +11,6 @@ static void do_execute() {
 	print_asm(str(instr) "  $0x%x", cpu.eip + 1 + DATA_BYTE);//+1是操作码;+databyte是立即数
 }
 
-make_instr_helper(i)
+make_instr_helper(si)
 
 #include "cpu/exec/template-end.h"
