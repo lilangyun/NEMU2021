@@ -15,4 +15,3 @@
 /* for instruction encoding overloading */
 
 // 所有helper函数的定义
-make_helper_v(add_i2rm)
