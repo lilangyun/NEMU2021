@@ -3,12 +3,7 @@
 #define instr setne
 
 static void do_execute () {
-	if(cpu.eflags.ZF==0){
-        op_src->val=1;
-    }
-    else{
-        op_src->val=0;
-    }
+	OPERAND_W(op_src,cpu.eflags.ZF==0);
     print_asm_template1();
 }
 
