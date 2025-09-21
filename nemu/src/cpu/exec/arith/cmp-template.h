@@ -13,7 +13,7 @@ make_helper(concat(cmp_i2rm_, SUFFIX)) {
     cpu.eflags.AF=(op_dest->val&0x0000000f)<(op_src->val&0x0000000f);
     // OF:判断是否溢出[只需要判断是否在范围内是不是就行？显然无法成立]
     cpu.eflags.OF = (((op_dest->val ^ op_src->val) & (op_dest->val ^ result)) >> (DATA_BYTE * 8 - 1)) & 0x1;
-    print_asm("cmp    %s,%s", op_dest->str, op_src->str);
+    print_asm("cmp  %s,%s", op_dest->str, op_src->str);
     return len+1;
 
 }
