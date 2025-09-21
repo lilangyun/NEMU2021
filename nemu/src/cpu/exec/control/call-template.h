@@ -10,7 +10,7 @@ static void do_execute() {
     // 调用函数
     cpu.eip += op_src->val;//直接复制jmp中指令即可，但是竟然有差异
     // 好像到这里就结束了
-    print_asm("call %x", cpu.eip+1+DATA_BYTE);//像jmp一样打印一下吧，表示调用函数的位置
+    print_asm("call 0x%x", cpu.eip+1+DATA_BYTE);//像jmp一样打印一下吧，表示调用函数的位置
 }
 // 译码函数
 //在此处神奇地发现，我将call-template.h函数更改后，suffix已经传入
