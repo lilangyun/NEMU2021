@@ -8,6 +8,7 @@ make_helper(concat(test_rm_r_, SUFFIX)) {
 	cpu.eflags.CF=0;
     cpu.eflags.DF=0;
     update_eflags_pf_zf_sf(temp);
+	print_asm("test %s, %s", op_src->str, op_src2->str);
 	return len+1;
 }
 #include "cpu/exec/template-end.h"
