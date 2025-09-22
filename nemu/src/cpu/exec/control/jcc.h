@@ -6,3 +6,4 @@
 #include "jcc/jl.h"
 #include "jcc/jg.h"
 #include "jcc/ja.h"
+#include "jcc/js.h"
