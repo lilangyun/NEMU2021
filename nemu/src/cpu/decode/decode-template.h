@@ -98,6 +98,7 @@ make_helper(concat(decode_rm2r_, SUFFIX)) {
 make_helper(concat(decode_rm_r_, SUFFIX)) {
 	return decode_rm_internal(eip, op_src, op_src2);
 }
+// 可惜在结果面前，我无能为力
 
 /* AL <- Ib
  * eAX <- Iv
