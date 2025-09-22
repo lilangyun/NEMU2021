@@ -74,9 +74,9 @@ static void load_entry() {
 	fclose(fp);
 }
 
-// static void init_eflags(){
-// 	cpu.eflags.val=0x00000002;
-// }
+static void init_eflags(){
+	cpu.eflags.val=0x00000002;
+}
 
 void restart() {
 	/* Perform some initialization to restart a program */
@@ -95,6 +95,6 @@ void restart() {
 	/* Initialize DRAM. */
 	init_ddr3();
 
-	// /*We need to initial the Eflags*/
-	// init_eflags();
+	/*We need to initial the Eflags*/
+	init_eflags();
 }
