@@ -7,3 +7,4 @@
 #include "jcc/jg.h"
 #include "jcc/ja.h"
 #include "jcc/js.h"
+#include "jcc/jns.h"
