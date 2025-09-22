@@ -28,6 +28,7 @@
 #include "control/jle.h"
 #include "control/jge.h"
 #include "control/jl.h"
+#include "control/jg.h"
 #include "control/call.h"
 #include "control/ret.h"
 
