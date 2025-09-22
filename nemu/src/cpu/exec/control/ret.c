@@ -11,5 +11,6 @@ make_helper(ret){
 make_helper(ret_i_w){
     cpu.eip=swaddr_read(cpu.esp,4)-3;
     cpu.esp+=4+(uint16_t)decode_i_w(cpu.esp+1);
+    print_asm_template1();
     return 3;
 }
