@@ -13,4 +13,4 @@
 #undef DATA_BYTE
 
 make_helper_v(push_rm)
-make_helper_v(push_si)
+make_helper_v(push_i)
