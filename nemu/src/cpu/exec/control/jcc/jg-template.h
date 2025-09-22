@@ -4,7 +4,7 @@
 
 static void do_execute() {
     if(cpu.eflags.ZF==0&&(cpu.eflags.SF==cpu.eflags.OF)){
-        cpu.eip+=op_src->val;
+        cpu.eip+=op_src->simm;
     }
     print_asm_template1();
 }
