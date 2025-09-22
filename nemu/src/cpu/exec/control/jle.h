@@ -3,6 +3,6 @@
 
 // 所有helper函数的声明
 make_helper(jle_si_b);
-
+make_helper(jle_si_v);
 
 #endif
