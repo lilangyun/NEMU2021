@@ -11,5 +11,6 @@ static void do_execute() {
 // 我应该做一个make_helper在其内部实现do_execute就结束
 
 make_instr_helper(r);
+make_instr_helper(rm);
 
 #include "cpu/exec/template-end.h"
