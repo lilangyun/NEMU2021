@@ -3,7 +3,7 @@
 #define instr je
 
 static void do_execute() {
-    if(cpu.eflags.ZF==1){
+    if(cpu.eflags.ZF!=0){
         cpu.eip+=op_src->val;
     }
     print_asm_template1();
