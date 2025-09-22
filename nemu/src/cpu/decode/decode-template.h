@@ -22,7 +22,6 @@ make_helper(concat(decode_i_, SUFFIX)) {
 	return DATA_BYTE;
 }
 
-#if DATA_BYTE == 1 || DATA_BYTE == 4
 /* sign immediate */
 make_helper(concat(decode_si_, SUFFIX)) {
 	op_src->type = OP_TYPE_IMM;
@@ -43,7 +42,6 @@ make_helper(concat(decode_si_, SUFFIX)) {
 #endif
 	return DATA_BYTE;
 }
-#endif
 
 /* eAX */
 static int concat(decode_a_, SUFFIX) (swaddr_t eip, Operand *op) {
@@ -98,7 +96,6 @@ make_helper(concat(decode_rm2r_, SUFFIX)) {
 make_helper(concat(decode_rm_r_, SUFFIX)) {
 	return decode_rm_internal(eip, op_src, op_src2);
 }
-// 可惜在结果面前，我无能为力
 
 /* AL <- Ib
  * eAX <- Iv
