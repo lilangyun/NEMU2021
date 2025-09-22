@@ -53,7 +53,7 @@ clean: clean-cpp
 
 ##### some convinient rules #####
 
-USERPROG := obj/testcase/select-sort
+USERPROG := obj/testcase/sub-longlong
 ENTRY := $(USERPROG)
 
 entry: $(ENTRY)
