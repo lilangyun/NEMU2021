@@ -22,13 +22,7 @@
 #include "arith/cmp.h"
 
 #include "control/jmp.h"
-#include "control/je.h"
-#include "control/jbe.h"
-#include "control/jne.h"
-#include "control/jle.h"
-#include "control/jge.h"
-#include "control/jl.h"
-#include "control/jg.h"
+#include "control/jcc.h"
 #include "control/call.h"
 #include "control/ret.h"
 
