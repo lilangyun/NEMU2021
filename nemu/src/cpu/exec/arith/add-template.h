@@ -5,7 +5,7 @@
 // 所有helper函数的定义模板
 
 static void do_execute() {
-	DATA_TYPE result = op_dest->val + op_src->val + cpu.eflags.CF;
+	DATA_TYPE result = op_dest->val + op_src->val;
 	OPERAND_W(op_dest, result);
 
 	/* TODO: Update EFLAGS. */
