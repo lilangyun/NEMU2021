@@ -69,7 +69,7 @@ make_group(group3_b,
 
 /* 0xf7 */
 make_group(group3_v,
-	inv, inv, not_rm_v, neg_rm_v, 
+	test_i2rm_v, inv, not_rm_v, neg_rm_v, 
 	mul_rm_v, imul_rm2a_v, div_rm_v, idiv_rm_v)
 
 /* 0xfe */
@@ -222,7 +222,7 @@ helper_fun _2byte_opcode_table [256] = {
 /* 0xe8 */	inv, inv, inv, inv,
 /* 0xec */	inv, inv, inv, inv,
 /* 0xf0 */	inv, inv, inv, inv,
-/* 0xf4 */	inv, inv, inv, test_i2rm_v,
+/* 0xf4 */	inv, inv, inv, inv,
 /* 0xf8 */	inv, inv, inv, inv,
 /* 0xfc */	inv, inv, inv, inv
 };
