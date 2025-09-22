@@ -3,7 +3,7 @@
 #define instr jne
 
 static void do_execute(){
-	print_asm("jne %x",cpu.eip + 1 + DATA_BYTE + op_src->val);
+	print_asm("jne %x",cpu.eip + 1 + DATA_BYTE + op_src->simm);
 	if(cpu.eflags.ZF == 0) cpu.eip += op_src->simm;
 }
 
