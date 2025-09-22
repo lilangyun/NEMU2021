@@ -15,4 +15,5 @@
 /* for instruction encoding overloading */
 
 // 所有helper函数的定义
-make_helper_v(test_rm_r)
+make_helper_v(test_i2rm)
+make_helper_v(test_r2rm)
