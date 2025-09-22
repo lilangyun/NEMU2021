@@ -1,12 +1,12 @@
 #include "cpu/exec/helper.h"
 
-// #define DATA_BYTE 1
-// #include "call-template.h"
-// #undef DATA_BYTE
+#define DATA_BYTE 1
+#include "call-template.h"
+#undef DATA_BYTE
 
-// #define DATA_BYTE 2
-// #include "call-template.h"
-// #undef DATA_BYTE
+#define DATA_BYTE 2
+#include "call-template.h"
+#undef DATA_BYTE
 // 我们目前暂且先只实现call rel32
 
 #define DATA_BYTE 4

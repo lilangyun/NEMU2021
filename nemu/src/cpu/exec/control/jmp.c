@@ -4,9 +4,10 @@
 #include "jmp-template.h"
 #undef DATA_BYTE
 
-#define DATA_BYTE 4
+#define DATA_BYTE 2
 #include "jmp-template.h"
 #undef DATA_BYTE
 
-
-// 没有make_helper_v函数
+#define DATA_BYTE 4
+#include "jmp-template.h"
+#undef DATA_BYTE

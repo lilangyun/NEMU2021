@@ -10,8 +10,7 @@ static void do_execute(){
 	cpu.eflags.OF = MSB((op_dest->val ^ op_src->val) & (op_dest->val ^ result));
     print_asm_template2();
 }
-
-#if DATA_BYTE == 2 || DATA_BYTE == 4
+#if DATA_BYTE==2||DATA_BYTE==4
 make_instr_helper(si2rm)
 #endif
 
