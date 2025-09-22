@@ -3,4 +3,6 @@
 
 make_helper(jne_si_b);
 
+make_helper(jne_si_v);
+
 #endif
