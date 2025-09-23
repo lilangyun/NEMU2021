@@ -1,8 +1,8 @@
 #include "FLOAT.h"
 
 FLOAT F_mul_F(FLOAT a, FLOAT b) {
-	nemu_assert(0);
-	return 0;
+	FLOAT ans=(a*b)/(1<<16);
+	return ans;
 }
 
 FLOAT F_div_F(FLOAT a, FLOAT b) {
@@ -23,9 +23,8 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 	 * It is OK not to use the template above, but you should figure
 	 * out another way to perform the division.
 	 */
-
-	nemu_assert(0);
-	return 0;
+	FLOAT ans=(a/b)*(1<<16);
+	return ans;
 }
 
 FLOAT f2F(float a) {
@@ -38,14 +37,17 @@ FLOAT f2F(float a) {
 	 * stack. How do you retrieve it to another variable without
 	 * performing arithmetic operations on it directly?
 	 */
-
-	nemu_assert(0);
-	return 0;
+	FLOAT ans=a*(1<<16);
+	return ans;
 }
 
 FLOAT Fabs(FLOAT a) {
-	nemu_assert(0);
-	return 0;
+	int sign=(a>>31)&0x1;
+	FLOAT ans=a;
+	if(sign){
+		ans=~a+1;
+	}
+	return ans;
 }
 
 /* Functions below are already implemented */
