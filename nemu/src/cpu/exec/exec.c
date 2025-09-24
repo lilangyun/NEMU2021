@@ -35,7 +35,7 @@ make_group(group1_sx_v,
 /* 0xc0 */
 make_group(group2_i_b,
 	inv, inv, inv, inv, 
-	inv, inv, inv, inv)
+	inv, shr_rm_imm_b, inv, sar_rm_imm_b)
 
 /* 0xc1 */
 make_group(group2_i_v,
@@ -55,7 +55,7 @@ make_group(group2_1_v,
 /* 0xd2 */
 make_group(group2_cl_b,
 	inv, inv, inv, inv, 
-	inv, inv, inv, inv)
+	inv, inv, inv, sar_rm_cl_b)
 
 /* 0xd3 */
 make_group(group2_cl_v,
@@ -65,7 +65,7 @@ make_group(group2_cl_v,
 /* 0xf6 */
 make_group(group3_b,
 	test_i2rm_b, inv, inv, inv, 
-	inv, inv, inv, inv)
+	inv, inv, inv, idiv_rm_b)
 
 /* 0xf7 */
 make_group(group3_v,
