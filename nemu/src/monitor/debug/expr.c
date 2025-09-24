@@ -96,6 +96,7 @@ static bool is_operator(int args){
 		case AND:
 		case OR:
 		case '!':
+		case MINUS:
 		case DEREF:return true;
 		default:return false;
 	}
@@ -330,9 +331,6 @@ static uint32_t eval(int p,int q){
 		// Log("check_parentheses is false!!");//检查错误时使用的
 		return eval(p+1,q-1);
 	}
-	else if(tokens[p].type==MINUS){
-		return -eval(p+1,q);
-	}
 	else if(tokens[p].type==DEREF){
 		//这里要用内存读取
 		uint32_t addr=eval(p+1,q);
@@ -344,7 +342,13 @@ static uint32_t eval(int p,int q){
 	}
 	else{
 		int op=find_dominant_operation(p,q);
-		uint32_t val1=eval(p,op-1);
+		uint32_t val1;
+		if(tokens[p].type==MINUS){
+			val1=-eval(p,op-1);
+		}
+		else{
+			val1=eval(p,op-1);
+		}
 		uint32_t val2=eval(op+1,q);
 		switch(tokens[op].type){
 			case '+':return val1+val2;
