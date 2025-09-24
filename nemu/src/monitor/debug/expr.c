@@ -162,7 +162,7 @@ static bool make_token(char *e) {
 						break;
 					}
 					case '-':{
-						if(tokens[nr_token-1].type=='('||is_operator(tokens[nr_token-1].type)){
+						if(nr_token==0||tokens[nr_token-1].type=='('||is_operator(tokens[nr_token-1].type)){
 							tokens[nr_token++].type=MINUS;		//负号
 							break;
 						}
