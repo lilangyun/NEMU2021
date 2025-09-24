@@ -19,5 +19,7 @@ make_helper(concat(call_si_, SUFFIX)) {
 	do_execute();
 	return DATA_BYTE+1;
 }
+#if DATA_BYTE==2||DATA_BYTE==4
 make_instr_helper(rm)
+#endif
 #include "cpu/exec/template-end.h"
