@@ -16,6 +16,7 @@ enum {
 	HEX_NUM,	//十六进制数
 	REG,		//register
 	MINUS, 		//一元负号
+	MINUS_,		//位于0位置处的负号，我们特殊处理一下
 	DEREF,		//解引用符号*
 	OR,AND		//LE,GE暂且不需要
 };
@@ -165,6 +166,9 @@ static bool make_token(char *e) {
 						if(nr_token==0||tokens[nr_token-1].type=='('||is_operator(tokens[nr_token-1].type)){
 							tokens[nr_token++].type=MINUS;		//负号
 							break;
+						}
+						else if(nr_token==0&&tokens[nr_token-1].type!='('){
+							tokens[nr_token++].type=MINUS_;
 						}
 						else{
 							tokens[nr_token++].type=rules[i].token_type;
