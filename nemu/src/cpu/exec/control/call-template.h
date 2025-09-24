@@ -19,4 +19,5 @@ make_helper(concat(call_si_, SUFFIX)) {
 	do_execute();
 	return DATA_BYTE+1;
 }
+make_instr_helper(rm)
 #include "cpu/exec/template-end.h"
