@@ -40,6 +40,7 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 		}
 	}
 	return x * qwq;
+}
 
 FLOAT f2F(float a) {
 	/* You should figure out how to convert `a' into FLOAT without
