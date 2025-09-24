@@ -5,7 +5,7 @@
 // 通用执行过程
 static void do_execute() {
     // 返回地址入栈
-    cpu.esp-=DATA_BYTE;
+    cpu.esp-=4;
     swaddr_write(cpu.esp,4,cpu.eip+1+DATA_BYTE);//在这里，我犯了误区，事实上，我应该保存下一个指令的地址
     // 调用函数
     cpu.eip += op_src->simm;//直接复制jmp中指令即可，但是竟然有差异
