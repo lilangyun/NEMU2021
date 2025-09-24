@@ -344,6 +344,7 @@ static uint32_t eval(int p,int q){
 		int op=find_dominant_operation(p,q);
 		uint32_t val1;
 		if(tokens[p].type==MINUS){
+			op=find_dominant_operation(p+1,q);
 			val1=-eval(p,op-1);
 		}
 		else{
