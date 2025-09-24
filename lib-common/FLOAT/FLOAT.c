@@ -24,9 +24,9 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 	 * out another way to perform the division.
 	 */
 	// 符号(直接在整数部分处理的话，可能有1的误差)：
-	int qwq = 1;
-	if(a < 0) { qwq *= -1; a = -a; }
-	if(b < 0) { qwq *= -1; b = -b; }
+	int s = 1;
+	if(a < 0) { s *= -1; a = -a; }
+	if(b < 0) { s *= -1; b = -b; }
 	// 整数部分：a/b
 	FLOAT x = (a / b);
 	// 小数部分：
@@ -39,7 +39,7 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 			a -= b; x++;
 		}
 	}
-	return x * qwq;
+	return x * s;
 }
 
 FLOAT f2F(float a) {
