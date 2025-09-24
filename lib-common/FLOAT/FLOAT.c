@@ -1,7 +1,7 @@
 #include "FLOAT.h"
 
 FLOAT F_mul_F(FLOAT a, FLOAT b) {
-	FLOAT ans=((long long)a*(long long)b)>>16;
+	uint64_t ans=((uint64_t)a*(uint64_t)b)>>16;
 	return ans;
 }
 
@@ -23,9 +23,23 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 	 * It is OK not to use the template above, but you should figure
 	 * out another way to perform the division.
 	 */
-	FLOAT ans=((long long)a<<16)/b;
-	return ans;
-}
+	// 符号(直接在整数部分处理的话，可能有1的误差)：
+	int qwq = 1;
+	if(a < 0) { qwq *= -1; a = -a; }
+	if(b < 0) { qwq *= -1; b = -b; }
+	// 整数部分：a/b
+	FLOAT x = (a / b);
+	// 小数部分：
+	// for 每一位小数：		x = x * 10 + 1 ? 0 : 还有
+	a = a % b;
+	int i;
+	for(i = 0; i < 16; i++){
+		a <<= 1; x <<= 1;
+		if(a >= b){	//（a<<i / b） >= 1时
+			a -= b; x++;
+		}
+	}
+	return x * qwq;
 
 FLOAT f2F(float a) {
 	/* You should figure out how to convert `a' into FLOAT without
@@ -47,10 +61,7 @@ FLOAT f2F(float a) {
 	 *在看另一位学长的代码时发现了更加简便的方式
 	 */
 	int t=*(int*)&a;	//类型双关直接获取浮点数2进制位模式
-	int sign=t>>31;	//符号位
-	if(sign){
-		t=-t;
-	}
+	int sign=t>>31;		//符号位
 	int exp=(t>>23)&0xff;	//阶码
 	int frac=t&0x7fffff;	//尾数部分
 	int ans=frac;			//返回结果
