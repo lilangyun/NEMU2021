@@ -35,7 +35,7 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 	int i;
 	for(i = 0; i < 16; i++){
 		a <<= 1; x <<= 1;
-		if(a >= b){	//（a<<i / b） >= 1时
+		while(a >= b){	//（a<<i / b） >= 1时
 			a -= b; x++;
 		}
 	}
