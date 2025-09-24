@@ -23,8 +23,8 @@ make_helper(concat(call_si_, SUFFIX)) {
 make_helper(concat(call_rm_, SUFFIX)) {
 	int len=concat(decode_rm_, SUFFIX)(eip+1);//提取操作数
 	// 返回地址入栈
-    cpu.esp-=DATA_BYTE;
-    swaddr_write(cpu.esp,4,cpu.eip+1+DATA_BYTE);//在这里，我犯了误区，事实上，我应该保存下一个指令的地址
+    cpu.esp-=4;
+    swaddr_write(cpu.esp,4,cpu.eip+1+len);//在这里，我犯了误区，事实上，我应该保存下一个指令的地址
     // 调用函数
     cpu.eip = op_src->val-1-len;//直接复制jmp中指令即可，但是竟然有差异
     // 好像到这里就结束了
