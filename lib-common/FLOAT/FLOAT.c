@@ -23,8 +23,23 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 	 * It is OK not to use the template above, but you should figure
 	 * out another way to perform the division.
 	 */
-	FLOAT ans=(a<<16)/b;
-	return ans;
+	int sign = 1;
+  if (a < 0)
+    sign = -sign, a = -a;
+  if (b < 0)
+    sign = -sign, b = -b;
+  int res = a / b;
+  a = a % b;
+  int i;
+  for (i = 0; i < 16; i++) {
+    a <<= 1;
+    res <<= 1;
+    if (a >= b) {
+      a = a - b;
+      res++;
+    }
+  }
+  return res * sign;
 }
 
 FLOAT f2F(float a) {
