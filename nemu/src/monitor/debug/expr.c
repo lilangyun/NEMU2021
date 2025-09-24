@@ -331,6 +331,22 @@ static uint32_t eval(int p,int q){
 		// Log("check_parentheses is false!!");//检查错误时使用的
 		return eval(p+1,q-1);
 	}
+	else if(tokens[p].type==MINUS){
+		int op=find_dominant_operation(p+1,q);
+		uint32_t val1=-eval(p+1,op-1);
+		uint32_t val2=eval(op+1,q);
+		switch(tokens[op].type){
+			case '+':return val1+val2;
+			case '-':return val1-val2;
+			case '*':return val1*val2;
+			case '/':return val1/val2;
+			case EQ:return val1==val2;
+			case NEQ:return val1!=val2;
+			case OR:return val1||val2;
+			case AND:return val1&&val2;
+			default :assert(0&&"Op is fasle!");
+		}
+	}
 	else if(tokens[p].type==DEREF){
 		//这里要用内存读取
 		uint32_t addr=eval(p+1,q);
@@ -342,14 +358,7 @@ static uint32_t eval(int p,int q){
 	}
 	else{
 		int op=find_dominant_operation(p,q);
-		uint32_t val1;
-		if(tokens[p].type==MINUS){
-			op=find_dominant_operation(p+1,q);
-			val1=-eval(p,op-1);
-		}
-		else{
-			val1=eval(p,op-1);
-		}
+		uint32_t val1=eval(p,op-1);
 		uint32_t val2=eval(op+1,q);
 		switch(tokens[op].type){
 			case '+':return val1+val2;
