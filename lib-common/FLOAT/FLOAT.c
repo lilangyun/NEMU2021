@@ -23,7 +23,7 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 	 * It is OK not to use the template above, but you should figure
 	 * out another way to perform the division.
 	 */
-	FLOAT ans=(a<<16)/b;
+	FLOAT ans=(a/b)<<16;
 	return ans;
 }
 
@@ -47,7 +47,7 @@ FLOAT f2F(float a) {
 	 *在看另一位学长的代码时发现了更加简便的方式
 	 */
 	int t=*(int*)&a;	//类型双关直接获取浮点数2进制位模式
-	int sign=(t>>31)&0x1;	//符号位
+	int sign=t>>31;	//符号位
 	int exp=(t>>23)&0xff;	//阶码
 	int frac=t&0x7fffff;	//尾数部分
 	int ans=frac;			//返回结果
@@ -62,7 +62,7 @@ FLOAT f2F(float a) {
 			ans=ans<<exp;
 		}
 		else if(exp<0){
-			ans=ans>>-exp;
+			ans=ans>>(-exp);
 		}
 		else{
 			ans=ans;
