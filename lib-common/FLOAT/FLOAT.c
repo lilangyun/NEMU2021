@@ -48,6 +48,9 @@ FLOAT f2F(float a) {
 	 */
 	int t=*(int*)&a;	//类型双关直接获取浮点数2进制位模式
 	int sign=t>>31;	//符号位
+	if(sign){
+		t=-t;
+	}
 	int exp=(t>>23)&0xff;	//阶码
 	int frac=t&0x7fffff;	//尾数部分
 	int ans=frac;			//返回结果
