@@ -344,14 +344,26 @@ static uint32_t eval(int p,int q){
 			case NEQ:return val1!=val2;
 			case OR:return val1||val2;
 			case AND:return val1&&val2;
-			default :assert(0&&"Op is fasle!");
+			default :assert(0&&"MINUS is fasle!");
 		}
 	}
 	else if(tokens[p].type==DEREF){
 		//这里要用内存读取
-		uint32_t addr=eval(p+1,q);
-		uint32_t data=swaddr_read(addr,4);
-		return data;
+		int op=find_dominant_operation(p+1,q);
+		uint32_t addr=eval(p+1,op-1);
+		uint32_t val1=swaddr_read(addr,4);
+		uint32_t val2=eval(op+1,q);
+		switch(tokens[op].type){
+			case '+':return val1+val2;
+			case '-':return val1-val2;
+			case '*':return val1*val2;
+			case '/':return val1/val2;
+			case EQ:return val1==val2;
+			case NEQ:return val1!=val2;
+			case OR:return val1||val2;
+			case AND:return val1&&val2;
+			default :assert(0&&"DEREF is fasle!");
+		}
 	}
 	else if(tokens[p].type=='!'){
 		return !eval(p+1,q);
