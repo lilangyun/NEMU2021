@@ -23,7 +23,7 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 	 * It is OK not to use the template above, but you should figure
 	 * out another way to perform the division.
 	 */
-	FLOAT ans=(a/b)<<16;
+	FLOAT ans=((long long)a<<16)/b;
 	return ans;
 }
 
