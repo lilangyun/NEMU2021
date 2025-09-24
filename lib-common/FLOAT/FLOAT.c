@@ -46,32 +46,18 @@ FLOAT f2F(float a) {
 	 *int t=*arr;
 	 *在看另一位学长的代码时发现了更加简便的方式
 	 */
-	int t=*(int*)&a;	//类型双关直接获取浮点数2进制位模式
-	int sign=(t>>31)&0x1;	//符号位
-	int exp=(t>>23)&0xff;	//阶码
-	int frac=t&0x7fffff;	//尾数部分
-	int ans=frac;			//返回结果
-	// 首先考虑规格化数
-	if(exp!=0){
-		//隐式的1
-		ans+=(1<<23);
-		// 这里我理解2^E中E的值其实代表了1.frac需要左移的位数【而这里减去23显然目标是为了截断】
-		// 因为接下来算出来的exp真正作用是为了右移【非常有趣的思路】
-		exp=exp-(127+23)+16;
-		if(exp>0){
-			ans=ans<<exp;
-		}
-		else if(exp<0){
-			ans=ans>>-exp;
-		}
-		else{
-			ans=ans;
-		}
-	}
-	if(sign){
-		return -ans;
-	}
-	return ans;
+	int b = *(int*)&a;
+  int sign = b >> 31;
+  int exp = (b >> 23) & 0xff;
+  int x = b & 0x7fffff;
+  if (exp != 0)
+    x += 1 << 23;
+  exp -= 150;
+  if (exp < -16)
+    x >>= -16 - exp;
+  if (exp > -16)
+    x <<= 16 + exp;
+  return sign == 0 ? x : -x;
 }
 
 FLOAT Fabs(FLOAT a) {
