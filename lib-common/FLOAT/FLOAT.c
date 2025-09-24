@@ -62,7 +62,7 @@ FLOAT f2F(float a) {
 			ans=ans<<exp;
 		}
 		else if(exp<0){
-			ans=ans>>exp;
+			ans=ans>>-exp;
 		}
 		else{
 			ans=ans;
