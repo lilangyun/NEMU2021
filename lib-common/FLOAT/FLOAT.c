@@ -55,18 +55,18 @@ FLOAT f2F(float a) {
 	if(exp!=0){
 		//隐式的1
 		ans+=(1<<23);
-		// 这里我理解2^E中E的值其实代表了1.frac需要左移的位数【而这里减去23显然目标是为了截断】
-		// 因为接下来算出来的exp真正作用是为了右移【非常有趣的思路】
-		exp=exp-(127+23)+16;
-		if(exp>0){
-			ans=ans<<exp;
-		}
-		else if(exp<0){
-			ans=ans>>(-exp);
-		}
-		else{
-			ans=ans;
-		}
+	}
+	// 这里我理解2^E中E的值其实代表了1.frac需要左移的位数【而这里减去23显然目标是为了截断】
+	// 因为接下来算出来的exp真正作用是为了右移【非常有趣的思路】
+	exp=exp-(127+23)+16;
+	if(exp>0){
+		ans=ans<<exp;
+	}
+	else if(exp<0){
+		ans=ans>>(-exp);
+	}
+	else{
+		ans=ans;
 	}
 	if(sign){
 		return -ans;
