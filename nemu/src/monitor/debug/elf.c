@@ -89,7 +89,7 @@ int var_interface(char*token_str){
 	// 第一步：找到符合条件1的表项
 	int i=0;
 	for(;i<nr_symtab_entry;i++){
-		if(symtab[i].st_info==STT_OBJECT){
+		if((symtab[i].st_info&0xf)==STT_OBJECT||(symtab[i].st_info&0xf)==STT_FUNC){
 			// 第二步：判断该表项是否符合条件2
 			int t=strcmp(token_str,strtab+symtab[i].st_name);
 			if(t==0){
