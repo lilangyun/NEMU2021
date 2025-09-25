@@ -158,7 +158,7 @@ static bool make_token(char *e) {
 							assert(0&&"REG is too long.");
 						}
 						strncpy(tokens[nr_token].str,substr_start+1,substr_len-1);
-						tokens[nr_token].str[substr_len-1]='\0';
+						tokens[nr_token].str[substr_len]='\0';
 						nr_token++;
 						break;
 					}
@@ -167,7 +167,7 @@ static bool make_token(char *e) {
 						if(substr_len>=32){
 							assert(0&&"VAR is too long.");
 						}
-						strncpy(tokens[nr_token].str,substr_start+1,substr_len-1);
+						strncpy(tokens[nr_token].str,substr_start,substr_len-1);
 						tokens[nr_token].str[substr_len-1]='\0';
 						nr_token++;
 						break;
