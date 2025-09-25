@@ -8,6 +8,8 @@
 
 #include<string.h>
 
+int var_interface(char*token_str);
+
 enum {
 	NOTYPE = 256, EQ,NEQ,
 
@@ -15,6 +17,7 @@ enum {
 	DEC_NUM,     //十进制数
 	HEX_NUM,	//十六进制数
 	REG,		//register
+	VAR,		//变量
 	MINUS, 		//一元负号
 	DEREF,		//解引用符号*
 	OR,AND		//LE,GE暂且不需要
@@ -51,7 +54,8 @@ static struct rule {
 
 	{"[1-9][0-9]*", DEC_NUM},		//10进制数
 	{"0[xX][0-9a-fA-F]+",HEX_NUM},	//16进制数
-	{"\\$[a-zA-Z]+",REG}			//register
+	{"\\$[a-zA-Z]+",REG},			//register
+	{"[a-zA-Z_][0-9a-zA-Z_]*",VAR}		//符号变量
 };
 
 
@@ -152,6 +156,16 @@ static bool make_token(char *e) {
 						tokens[nr_token].type=REG;
 						if(substr_len>=32){
 							assert(0&&"REG is too long.");
+						}
+						strncpy(tokens[nr_token].str,substr_start+1,substr_len-1);
+						tokens[nr_token].str[substr_len-1]='\0';
+						nr_token++;
+						break;
+					}
+					case VAR:{
+						tokens[nr_token].type=VAR;
+						if(substr_len>=32){
+							assert(0&&"VAR is too long.");
 						}
 						strncpy(tokens[nr_token].str,substr_start+1,substr_len-1);
 						tokens[nr_token].str[substr_len-1]='\0';
@@ -318,6 +332,13 @@ static uint32_t eval(int p,int q){
 			}
 			else{
 				assert(0&&"The reg doesn't exist in the register_list");
+			}
+			return ans;
+		}
+		else if(tokens[p].type==VAR){
+			int ans=var_interface(tokens[p].str);
+			if(ans==-1){
+				assert(0&&"VAR is false!");
 			}
 			return ans;
 		}
