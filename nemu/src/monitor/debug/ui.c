@@ -58,11 +58,11 @@ static int cmd_info(char *args){
 		printf("$ecx (0x%08x) ",cpu.ecx);
 		printf("$edx (0x%08x) ",cpu.edx);
 		printf("$ebx (0x%08x) ",cpu.ebx);
-		// printf("$esp (0x%08x) ",cpu.esp);
-		// printf("$ebp (0x%08x) ",cpu.ebp);
-		// printf("$esi (0x%08x) ",cpu.esi);
-		// printf("$edi (0x%08x) ",cpu.edi);
-		// printf("$eip (0x%08x) ",cpu.eip);	//测试样例不需要，那就先不打印吧
+		printf("$esp (0x%08x) ",cpu.esp);
+		printf("$ebp (0x%08x) ",cpu.ebp);
+		printf("$esi (0x%08x) ",cpu.esi);
+		printf("$edi (0x%08x) ",cpu.edi);
+		printf("$eip (0x%08x) ",cpu.eip);	//测试样例不需要，那就先不打印吧
 		printf("\n");
 	}
 	else if(strcmp(args,"w")==0){
@@ -105,20 +105,8 @@ static int cmd_w(char *args){
 
 static int cmd_d(char *args){
 	int n;
-	bool flag=false;
 	sscanf(args,"%d",&n);
-	WP*wp=new_wp();
-	while(wp->next!=NULL){
-		wp=wp->next;
-		if(wp->NO==n){
-			free_wp(wp);
-			flag=true;
-			break;
-		}
-	}
-	if(!flag){
-		assert(0&&"watchpoint没有这个序号!!");
-	}
+	delete_wp(n);
 	return 0;
 }
 

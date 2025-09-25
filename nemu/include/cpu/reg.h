@@ -29,8 +29,9 @@ typedef struct {
 		};
 	};
      swaddr_t eip;
-     
+    //  这里涉及到c位域的知识，于内存位置和地址有关
      union {
+		// 有趣的是：这个union（也就是eflags这个寄存器）正好占据一个字节
 		struct {
 			uint32_t CF		:1;
 			uint32_t pad0	:1;

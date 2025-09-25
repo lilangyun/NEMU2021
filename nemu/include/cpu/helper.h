@@ -6,6 +6,7 @@
 #include "cpu/eflags.h" 
 
 /* All function defined with 'make_helper' return the length of the operation. */
+// 宏展开,减少重复代码,使所有生成的函数都有一致的签名格式
 #define make_helper(name) int name(swaddr_t eip)
 
 static inline uint32_t instr_fetch(swaddr_t addr, size_t len) {
@@ -21,7 +22,7 @@ static inline int idex(swaddr_t eip, int (*decode)(swaddr_t), void (*execute) (v
 }
 
 /* shared by all helper function */
-extern Operands ops_decoded;
+extern Operands ops_decoded;//引入外部全局变量
 
 #define op_src (&ops_decoded.src)
 #define op_src2 (&ops_decoded.src2)

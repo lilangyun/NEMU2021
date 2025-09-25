@@ -7,6 +7,7 @@ static void do_execute() {
 	print_asm_template2();
 }
 
+// 所有helper函数的定义模板
 make_instr_helper(i2r)
 make_instr_helper(i2rm)
 make_instr_helper(r2rm)
