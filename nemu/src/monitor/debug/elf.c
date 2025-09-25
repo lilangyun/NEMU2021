@@ -4,14 +4,14 @@
 
 char *exec_file = NULL;
 
-static char *strtab = NULL;
-static Elf32_Sym *symtab = NULL;
+static char *strtab = NULL;	//字符串表
+static Elf32_Sym *symtab = NULL;	//符号表
 static int nr_symtab_entry;
 
 void load_elf_tables(int argc, char *argv[]) {
 	int ret;
 	Assert(argc == 2, "run NEMU with format 'nemu [program]'");
-	exec_file = argv[1];
+	exec_file = argv[1];	//可执行文件
 
 	FILE *fp = fopen(exec_file, "rb");
 	Assert(fp, "Can not open '%s'", exec_file);
@@ -21,6 +21,7 @@ void load_elf_tables(int argc, char *argv[]) {
 	assert(ret == 1);
 
 	/* The first several bytes contain the ELF header. */
+	// 程序头表
 	Elf32_Ehdr *elf = (void *)buf;
 	char magic[] = {ELFMAG0, ELFMAG1, ELFMAG2, ELFMAG3};
 
@@ -38,6 +39,8 @@ void load_elf_tables(int argc, char *argv[]) {
 
 
 	/* Load symbol table and string table for future use */
+	// 加载符号表和字符串表为未来使用
+
 
 	/* Load section header table */
 	uint32_t sh_size = elf->e_shentsize * elf->e_shnum;
@@ -81,3 +84,20 @@ void load_elf_tables(int argc, char *argv[]) {
 	fclose(fp);
 }
 
+// 关于变量的一个接口函数
+int var_interface(char*token_str){
+	// 第一步：找到符合条件1的表项
+	int i=0;
+	for(;i<nr_symtab_entry;i++){
+		if(symtab[i].st_info==STT_OBJECT){
+			// 第二步：判断该表项是否符合条件2
+			int t=strcmp(token_str,strtab+symtab[i].st_name);
+			if(t==0){
+				// 符合条件，就是要找的对象
+				return symtab[i].st_value;
+			}
+		}
+	}
+	// 如果没找到，说明程序有问题，retur-1表示错误即可
+	return -1;
+}
