@@ -80,6 +80,20 @@ void set_wp_expr(char *args){
 	}
 }
 
+void delete_wp(int n){
+	WP*wp=head;
+	while(wp!=NULL){
+		if(wp->NO==n){
+			free_wp(wp);
+			printf("Watchpoint %d deleted\n",n);
+			return;
+		}
+		wp=wp->next;
+	}
+	printf("No watchpoint %d\n",n);
+	return;
+}
+
 bool check_wp_changed(WP* wp){
 	bool success=true;
 	uint32_t v2=expr(wp->expr,&success);
@@ -109,6 +123,10 @@ bool check_all_wp_changed(){
 
 void info_wp(){
 	WP*wp=head;
+	if(wp==NULL){
+		printf("No watchpoint!\n");
+		return;
+	}
 	while(wp!=NULL){
 		printf("watchpoint %d: %s = %d\n",wp->NO,wp->expr,wp->v1);
 		wp=wp->next;

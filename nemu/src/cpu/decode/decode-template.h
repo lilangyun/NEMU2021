@@ -6,6 +6,7 @@
 #define decode_rm_internal concat3(decode_rm_, SUFFIX, _internal)
 #define decode_i concat(decode_i_, SUFFIX)
 #define decode_a concat(decode_a_, SUFFIX)
+#define decode_s concat(decode_s_, SUFFIX)
 #define decode_r2rm concat(decode_r2rm_, SUFFIX)
 
 /* Ib, Iv */
@@ -21,7 +22,6 @@ make_helper(concat(decode_i_, SUFFIX)) {
 	return DATA_BYTE;
 }
 
-#if DATA_BYTE == 1 || DATA_BYTE == 4
 /* sign immediate */
 make_helper(concat(decode_si_, SUFFIX)) {
 	op_src->type = OP_TYPE_IMM;
@@ -32,8 +32,9 @@ make_helper(concat(decode_si_, SUFFIX)) {
 	 *
 	op_src->simm = ???
 	 */
-	panic("please implement me");
-
+	// panic("please implement me");
+	// 看这里意思是我需要做点什么了hhh
+	op_src->simm=(DATA_TYPE_S)instr_fetch(eip,DATA_BYTE);
 	op_src->val = op_src->simm;
 
 #ifdef DEBUG
@@ -41,7 +42,6 @@ make_helper(concat(decode_si_, SUFFIX)) {
 #endif
 	return DATA_BYTE;
 }
-#endif
 
 /* eAX */
 static int concat(decode_a_, SUFFIX) (swaddr_t eip, Operand *op) {
@@ -56,6 +56,7 @@ static int concat(decode_a_, SUFFIX) (swaddr_t eip, Operand *op) {
 }
 
 /* eXX: eAX, eCX, eDX, eBX, eSP, eBP, eSI, eDI */
+// 不得不感叹一句封装的真好
 static int concat3(decode_r_, SUFFIX, _internal) (swaddr_t eip, Operand *op) {
 	op->type = OP_TYPE_REG;
 	op->reg = ops_decoded.opcode & 0x7;
@@ -91,7 +92,10 @@ make_helper(concat(decode_r2rm_, SUFFIX)) {
 make_helper(concat(decode_rm2r_, SUFFIX)) {
 	return decode_rm_internal(eip, op_src, op_dest);
 }
-
+// 我将在这里人为地添加为test指令应运而生的译码函数
+make_helper(concat(decode_rm_r_, SUFFIX)) {
+	return decode_rm_internal(eip, op_src, op_src2);
+}
 
 /* AL <- Ib
  * eAX <- Iv
@@ -100,6 +104,7 @@ make_helper(concat(decode_i2a_, SUFFIX)) {
 	decode_a(eip, op_dest);
 	return decode_i(eip);
 }
+
 
 /* Gv <- EvIb
  * Gv <- EvIv
@@ -123,7 +128,7 @@ make_helper(concat(decode_i2rm_, SUFFIX)) {
  * eXX <- Iv 
  */
 make_helper(concat(decode_i2r_, SUFFIX)) {
-	decode_r_internal(eip, op_dest);
+	decode_r_internal(eip, op_dest);//先进行r译码，说明decode_r确实是opcode中含寄存器的译码方式
 	return decode_i(eip);
 }
 

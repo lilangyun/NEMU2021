@@ -13,6 +13,7 @@ make_helper(decode_i_b);
 make_helper(decode_i_w);
 make_helper(decode_i_l);
 make_helper(decode_si_b);
+make_helper(decode_si_w);
 make_helper(decode_si_l);
 
 make_helper(decode_i2rm_b);
@@ -36,6 +37,11 @@ make_helper(decode_r2rm_l);
 make_helper(decode_rm2r_b);
 make_helper(decode_rm2r_w);
 make_helper(decode_rm2r_l);
+// 我亲手添加
+make_helper(decode_rm_r_b);
+make_helper(decode_rm_r_w);
+make_helper(decode_rm_r_l);
+// 我亲手添加
 make_helper(decode_rm2a_b);
 make_helper(decode_rm2a_w);
 make_helper(decode_rm2a_l);

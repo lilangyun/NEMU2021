@@ -96,6 +96,7 @@ static bool is_operator(int args){
 		case AND:
 		case OR:
 		case '!':
+		case MINUS:
 		case DEREF:return true;
 		default:return false;
 	}
@@ -270,8 +271,7 @@ static int find_dominant_operation(int p,int q){
 	return pos;
 }
 
-int flag=1;
-// evaluate:计算表达式的函数
+// evaluate:计算表达式的函数[递归求值]
 static uint32_t eval(int p,int q){
 	if(p>q){
 		assert(0&&"p>q:You are false.");
@@ -331,13 +331,46 @@ static uint32_t eval(int p,int q){
 		return eval(p+1,q-1);
 	}
 	else if(tokens[p].type==MINUS){
-		return -eval(p+1,q);
+		int op=find_dominant_operation(p+1,q);
+		if(op==-1){
+			return -eval(p+1,q);
+		}
+		uint32_t val1=-eval(p+1,op-1);
+		uint32_t val2=eval(op+1,q);
+		switch(tokens[op].type){
+			case '+':return val1+val2;
+			case '-':return val1-val2;
+			case '*':return val1*val2;
+			case '/':return val1/val2;
+			case EQ:return val1==val2;
+			case NEQ:return val1!=val2;
+			case OR:return val1||val2;
+			case AND:return val1&&val2;
+			default :assert(0&&"MINUS is fasle!");
+		}
 	}
 	else if(tokens[p].type==DEREF){
 		//这里要用内存读取
-		uint32_t addr=eval(p+1,q);
-		uint32_t data=swaddr_read(addr,4);
-		return data;
+		int op=find_dominant_operation(p+1,q);
+		if(op==-1){
+			uint32_t addr=eval(p+1,q);
+			uint32_t data=swaddr_read(addr,4);
+			return data;
+		}
+		uint32_t addr=eval(p+1,op-1);
+		uint32_t val1=swaddr_read(addr,4);
+		uint32_t val2=eval(op+1,q);
+		switch(tokens[op].type){
+			case '+':return val1+val2;
+			case '-':return val1-val2;
+			case '*':return val1*val2;
+			case '/':return val1/val2;
+			case EQ:return val1==val2;
+			case NEQ:return val1!=val2;
+			case OR:return val1||val2;
+			case AND:return val1&&val2;
+			default :assert(0&&"DEREF is fasle!");
+		}
 	}
 	else if(tokens[p].type=='!'){
 		return !eval(p+1,q);
