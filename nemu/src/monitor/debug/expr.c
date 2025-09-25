@@ -271,8 +271,7 @@ static int find_dominant_operation(int p,int q){
 	return pos;
 }
 
-int flag=1;
-// evaluate:计算表达式的函数
+// evaluate:计算表达式的函数[递归求值]
 static uint32_t eval(int p,int q){
 	if(p>q){
 		assert(0&&"p>q:You are false.");
