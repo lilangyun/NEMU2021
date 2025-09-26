@@ -29,7 +29,7 @@ void backstack(){
         }
         // 栈帧结束
         // 根据返回地址,获取函数名
-        char*func_name=GetFunctionAddr(frame.ret_addr);
+        char*func_name=GetFunctionAddr(eip);
         printf("#%d 0x%08x in %s (0x%08x 0x%08x 0x%08x 0x%08x)\n",cnt,eip,func_name,frame.args[0],frame.args[1],frame.args[2],frame.args[3]);
         eip=frame.ret_addr;
         addr=frame.prev_ebp;  //这是栈帧链中ebp的位置
