@@ -18,20 +18,22 @@ uint32_t get_ucr3();
 
 uint32_t loader() {
 	Elf32_Ehdr *elf;
-	Elf32_Phdr *ph = NULL;
+	Elf32_Phdr *ph = NULL;	//程序头表
 
-	uint8_t buf[4096];
+	uint8_t buf[4096];	//缓冲区
+	// 4096/4==1024
 
 #ifdef HAS_DEVICE
 	ide_read(buf, ELF_OFFSET_IN_DISK, 4096);
 #else
-	ramdisk_read(buf, ELF_OFFSET_IN_DISK, 4096);
+	ramdisk_read(buf, ELF_OFFSET_IN_DISK, 4096);	//读出ramdisk中的内容
 #endif
 
-	elf = (void*)buf;
+	elf = (void*)buf;	//elf文件应从虚拟地址0处开始
 
 	/* TODO: fix the magic number with the correct one */
-	const uint32_t elf_magic = 0xBadC0de;
+	// 把这个魔数修改正确
+	const uint32_t elf_magic = 0xBadC0de;	//如何修改
 	uint32_t *p_magic = (void *)buf;
 	nemu_assert(*p_magic == elf_magic);
 
@@ -44,7 +46,7 @@ uint32_t loader() {
 			/* TODO: read the content of the segment from the ELF file 
 			 * to the memory region [VirtAddr, VirtAddr + FileSiz)
 			 */
-			 
+			
 			 
 			/* TODO: zero the memory region 
 			 * [VirtAddr + FileSiz, VirtAddr + MemSiz)
