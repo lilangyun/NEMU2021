@@ -33,25 +33,31 @@ uint32_t loader() {
 
 	/* TODO: fix the magic number with the correct one */
 	// 把这个魔数修改正确
-	const uint32_t elf_magic = 0xBadC0de;	//如何修改
+	const uint32_t elf_magic = 0x7f454c46;	//如何修改?ans:在elf.h文件中竟然有关于魔数的信息！神奇
 	uint32_t *p_magic = (void *)buf;
+	//按照个人理解这里需要判断elf_magic是否等于*buf，那怎么知道buf前4字节是什么呢？ 
 	nemu_assert(*p_magic == elf_magic);
 
 	/* Load each program segment */
-	panic("please implement me");
-	for(; true; ) {
+	// panic("please implement me");
+	int i=0;
+	for(; i<elf->e_phnum; i++) {
 		/* Scan the program header table, load each segment into memory */
 		if(ph->p_type == PT_LOAD) {
 
 			/* TODO: read the content of the segment from the ELF file 
 			 * to the memory region [VirtAddr, VirtAddr + FileSiz)
 			 */
-			
-			 
+			// 从ELF文件的segment到内存区域读内容:即from起始虚拟地址to(起始虚拟地址+文件大小）
+			ramdisk_read(buf, ph->p_offset, ph->p_filesz);	//读出ramdisk中的内容
 			/* TODO: zero the memory region 
 			 * [VirtAddr + FileSiz, VirtAddr + MemSiz)
 			 */
-
+			// 清空内存区域：即from（起始虚拟地址+文件大小）to（起始虚拟地址+内存大小）
+			int i=ph->p_vaddr+ph->p_filesz;
+			for(;i<ph->p_vaddr+ph->p_memsz;i++){
+				buf[i]=0;	//清空
+			}
 
 #ifdef IA32_PAGE
 			/* Record the program break for future use. */
