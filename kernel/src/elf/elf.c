@@ -33,7 +33,7 @@ uint32_t loader() {
 
 	/* TODO: fix the magic number with the correct one */
 	// 把这个魔数修改正确
-	const uint32_t elf_magic = 0x7f454c46;	//如何修改?ans:在elf.h文件中竟然有关于魔数的信息！神奇
+	const uint32_t elf_magic = 0x464c457f;	//如何修改?ans:在elf.h文件中竟然有关于魔数的信息！神奇
 	uint32_t *p_magic = (void *)buf;
 	//按照个人理解这里需要判断elf_magic是否等于*buf，那怎么知道buf前4字节是什么呢？ 
 	nemu_assert(*p_magic == elf_magic);
@@ -41,6 +41,7 @@ uint32_t loader() {
 	/* Load each program segment */
 	// panic("please implement me");
 	int i=0;
+	ph = (void*)(buf + elf->e_phoff);
 	for(; i<elf->e_phnum; i++) {
 		/* Scan the program header table, load each segment into memory */
 		if(ph->p_type == PT_LOAD) {
