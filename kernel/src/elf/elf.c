@@ -50,7 +50,7 @@ uint32_t loader() {
 			 * to the memory region [VirtAddr, VirtAddr + FileSiz)
 			 */
 			// 从ELF文件的segment到内存区域读内容:即from起始虚拟地址to(起始虚拟地址+文件大小）
-			ramdisk_read(buf, ph->p_offset, ph->p_filesz);	//读出ramdisk中的内容
+			ramdisk_read((void*)(ph->p_vaddr), ph->p_offset, ph->p_filesz);	//读出ramdisk中的内容
 			/* TODO: zero the memory region 
 			 * [VirtAddr + FileSiz, VirtAddr + MemSiz)
 			 */
