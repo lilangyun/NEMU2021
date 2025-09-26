@@ -89,8 +89,8 @@ int var_interface(char*token_str){
 	// 第一步：找到符合条件1的表项
 	int i=0;
 	for(;i<nr_symtab_entry;i++){
-		// 在这里，又是因为找不出原因在gittee上看到了程荣学长的方法，深感奇妙
-		if((uint32_t)symtab[i].st_info==STT_OBJECT||(uint32_t)symtab[i].st_info==STT_FUNC){
+		// 在这里，又是因为找不出原因在gittee上看到了chengrong学长的方法，深感奇妙
+		if((symtab[i].st_info&0xf)==STT_OBJECT||(symtab[i].st_info&0xf)==STT_FUNC){
 			// 第二步：判断该表项是否符合条件2
 			int t=strcmp(token_str,strtab+symtab[i].st_name);
 			if(t==0){
@@ -101,4 +101,18 @@ int var_interface(char*token_str){
 	}
 	// 如果没找到，说明程序有问题，retur-1表示错误即可
 	return -1;
+}
+
+// 判断函数地址
+void GetFunctionAddr(swaddr_t addr,char*func_name){
+	int i=0;
+	for(;i<nr_symtab_entry;i++){
+		// 表项是否是函数类型
+		if((symtab[i].st_info&0xf)==STT_FUNC){
+			// 是否位于这个函数栈帧内
+			if(addr>=symtab[i].st_value&&addr<=symtab[i].st_value+symtab[i].st_size){
+				strcpy(func_name,strtab+symtab[i].st_name);
+			}
+		}
+	}
 }

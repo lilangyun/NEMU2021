@@ -545,7 +545,7 @@ typedef struct
 
 
 /* How to extract and insert information held in the st_info field.  */
-
+// 竟然在这里能看到如何提取的字眼，感到很神奇
 #define ELF32_ST_BIND(val)		(((unsigned char) (val)) >> 4)
 #define ELF32_ST_TYPE(val)		((val) & 0xf)
 #define ELF32_ST_INFO(bind, type)	(((bind) << 4) + ((type) & 0xf))
