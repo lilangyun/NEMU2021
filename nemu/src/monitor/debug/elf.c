@@ -104,15 +104,16 @@ int var_interface(char*token_str){
 }
 
 // 判断函数地址
-void GetFunctionAddr(swaddr_t addr,char*func_name){
+char* GetFunctionAddr(swaddr_t addr){
 	int i=0;
 	for(;i<nr_symtab_entry;i++){
 		// 表项是否是函数类型
 		if((symtab[i].st_info&0xf)==STT_FUNC){
 			// 是否位于这个函数栈帧内
 			if(addr>=symtab[i].st_value&&addr<=symtab[i].st_value+symtab[i].st_size){
-				strcpy(func_name,strtab+symtab[i].st_name);
+				return strtab+symtab[i].st_name;
 			}
 		}
 	}
+	return "No func found";
 }
