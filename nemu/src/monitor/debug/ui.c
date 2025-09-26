@@ -116,6 +116,10 @@ static int cmd_bt(char*args){
 	return 0;
 }
 
+static int cmd_b(char*args){
+	return 0;
+}
+
 static struct {
 	char *name;
 	char *description;
@@ -132,7 +136,8 @@ static struct {
 	{"p","Figure out the value of expression",cmd_p},
 	{"w","Set up the watchpoint",cmd_w},
 	{"d","Delete the watchpoint",cmd_d},
-	{"bt","Print the PartOfStack",cmd_bt}
+	{"bt","Print the PartOfStack",cmd_bt},
+	{"b","Set the breakpoint",cmd_b}
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
