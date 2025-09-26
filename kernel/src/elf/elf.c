@@ -45,17 +45,18 @@ uint32_t loader() {
 	for(; i<elf->e_phnum; i++,ph++) {
 		/* Scan the program header table, load each segment into memory */
 		if(ph->p_type == PT_LOAD) {
+			ph -> p_vaddr = mm_malloc(ph -> p_vaddr, ph -> p_memsz);
 
 			/* TODO: read the content of the segment from the ELF file 
 			 * to the memory region [VirtAddr, VirtAddr + FileSiz)
 			 */
 			// 从ELF文件的segment到内存区域读内容:即from起始虚拟地址to(起始虚拟地址+文件大小）
-			ramdisk_read((void*)(ph->p_vaddr), ph->p_offset, ph->p_filesz);	//读出ramdisk中的内容
+			ramdisk_read((void*)ph->p_vaddr, ph->p_offset, ph->p_filesz);	//读出ramdisk中的内容
 			/* TODO: zero the memory region 
 			 * [VirtAddr + FileSiz, VirtAddr + MemSiz)
 			 */
 			// 清空内存区域：即from（起始虚拟地址+文件大小）to（起始虚拟地址+内存大小）
-			memset ((void *)(ph->p_vaddr+ph->p_filesz), 0, ph->p_memsz - ph->p_filesz);
+			memset ((void *)(ph->p_vaddr+ph->p_filesz), 0, ph->p_memsz-ph->p_filesz);
 
 #ifdef IA32_PAGE
 			/* Record the program break for future use. */
