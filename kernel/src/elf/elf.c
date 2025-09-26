@@ -55,10 +55,7 @@ uint32_t loader() {
 			 * [VirtAddr + FileSiz, VirtAddr + MemSiz)
 			 */
 			// 清空内存区域：即from（起始虚拟地址+文件大小）to（起始虚拟地址+内存大小）
-			int i=ph->p_vaddr+ph->p_filesz;
-			for(;i<ph->p_vaddr+ph->p_memsz;i++){
-				buf[i]=0;	//清空
-			}
+			memset ((void *)(ph->p_vaddr+ph->p_filesz), 0, ph->p_memsz - ph->p_filesz);
 
 #ifdef IA32_PAGE
 			/* Record the program break for future use. */
