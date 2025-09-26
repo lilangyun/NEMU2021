@@ -9,6 +9,7 @@
 #include <readline/history.h>
 
 void cpu_exec(uint32_t);
+void backstack();
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 char* rl_gets() {
@@ -110,6 +111,11 @@ static int cmd_d(char *args){
 	return 0;
 }
 
+static int cmd_bt(char*args){
+	backstack();
+	return 0;
+}
+
 static struct {
 	char *name;
 	char *description;
@@ -125,7 +131,8 @@ static struct {
 	{"x","Scan memory",cmd_x},
 	{"p","Figure out the value of expression",cmd_p},
 	{"w","Set up the watchpoint",cmd_w},
-	{"d","Delete the watchpoint",cmd_d}
+	{"d","Delete the watchpoint",cmd_d},
+	{"bt","Print the PartOfStack",cmd_bt}
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
