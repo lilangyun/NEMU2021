@@ -32,7 +32,7 @@ void backstack(){
         char*func_name="No fun found";
         GetFunctionAddr(frame.ret_addr, func_name);
         printf("#%d 0x%08x in %s (0x%08x 0x%08x 0x%08x 0x%08x)\n",cnt,eip,func_name,frame.args[0],frame.args[1],frame.args[2],frame.args[3]);
-        swaddr_t addr=cpu.ebp;  //这是栈帧链中ebp的位置
+        addr=cpu.ebp;  //这是栈帧链中ebp的位置
         eip=swaddr_read(addr+4,4);
         cnt++;
     }
