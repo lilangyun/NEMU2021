@@ -15,11 +15,11 @@
 
 typedef union {
 	struct {
-		uint32_t col	: COL_WIDTH;
-		uint32_t row	: ROW_WIDTH;
-		uint32_t bank	: BANK_WIDTH;
-		uint32_t rank	: RANK_WIDTH;
-	};
+		uint32_t col	: COL_WIDTH;	//2^10=1024说明有1024行
+		uint32_t row	: ROW_WIDTH;	//同理，有1024列
+		uint32_t bank	: BANK_WIDTH;	//8个bank
+		uint32_t rank	: RANK_WIDTH;	//16个rank
+	};//27位地址+剩下5位空
 	uint32_t addr;
 } dram_addr;
 
@@ -29,16 +29,16 @@ typedef union {
 #define NR_BANK (1 << BANK_WIDTH)
 #define NR_RANK (1 << RANK_WIDTH)
 
-#define HW_MEM_SIZE (1 << (COL_WIDTH + ROW_WIDTH + BANK_WIDTH + RANK_WIDTH))
+#define HW_MEM_SIZE (1 << (COL_WIDTH + ROW_WIDTH + BANK_WIDTH + RANK_WIDTH))	//内存大小：2^27B
 
-uint8_t dram[NR_RANK][NR_BANK][NR_ROW][NR_COL];
+uint8_t dram[NR_RANK][NR_BANK][NR_ROW][NR_COL];	//其中的每个元素表示某字节地址
 uint8_t *hw_mem = (void *)dram;
 
 typedef struct {
 	uint8_t buf[NR_COL];
 	int32_t row_idx;
 	bool valid;
-} RB;
+} RB;	//行缓冲区
 
 RB rowbufs[NR_RANK][NR_BANK];
 
@@ -49,13 +49,13 @@ void init_ddr3() {
 			rowbufs[i][j].valid = false;
 		}
 	}
-}
+}//初始化行缓冲区,valid为false表示缓冲区还未占用
 
 static void ddr3_read(hwaddr_t addr, void *data) {
 	Assert(addr < HW_MEM_SIZE, "physical address %x is outside of the physical memory!", addr);
 
 	dram_addr temp;
-	temp.addr = addr & ~BURST_MASK;
+	temp.addr = addr & ~BURST_MASK;	//BURST读取
 	uint32_t rank = temp.rank;
 	uint32_t bank = temp.bank;
 	uint32_t row = temp.row;
@@ -65,11 +65,11 @@ static void ddr3_read(hwaddr_t addr, void *data) {
 		/* read a row into row buffer */
 		memcpy(rowbufs[rank][bank].buf, dram[rank][bank][row], NR_COL);
 		rowbufs[rank][bank].row_idx = row;
-		rowbufs[rank][bank].valid = true;
+		rowbufs[rank][bank].valid = true;	//表示该行缓冲区已占用
 	}
 
 	/* burst read */
-	memcpy(data, rowbufs[rank][bank].buf + col, BURST_LEN);
+	memcpy(data, rowbufs[rank][bank].buf + col, BURST_LEN);	//数据data类型为void*
 }
 
 static void ddr3_write(hwaddr_t addr, void *data, uint8_t *mask) {
