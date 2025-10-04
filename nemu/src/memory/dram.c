@@ -49,7 +49,7 @@ void init_ddr3() {
 			rowbufs[i][j].valid = false;
 		}
 	}
-}//初始化行缓冲区,valid为false表示缓冲区还未占用
+}//初始化行缓冲区,valid为false表示缓冲区均无效
 
 static void ddr3_read(hwaddr_t addr, void *data) {
 	Assert(addr < HW_MEM_SIZE, "physical address %x is outside of the physical memory!", addr);
