@@ -70,6 +70,7 @@ static void ddr3_read(hwaddr_t addr, void *data) {
 
 	/* burst read */
 	memcpy(data, rowbufs[rank][bank].buf + col, BURST_LEN);	//数据data类型为void*
+	// burst_len表示读取8个字节即一个dram块有8字节内存
 }
 
 static void ddr3_write(hwaddr_t addr, void *data, uint8_t *mask) {
@@ -97,8 +98,8 @@ static void ddr3_write(hwaddr_t addr, void *data, uint8_t *mask) {
 }
 
 uint32_t dram_read(hwaddr_t addr, size_t len) {
-	uint32_t offset = addr & BURST_MASK;
-	uint8_t temp[2 * BURST_LEN];
+	uint32_t offset = addr & BURST_MASK;	//取偏移量
+	uint8_t temp[2 * BURST_LEN];	//burst_len起什么作用？
 	
 	ddr3_read(addr, temp);
 
@@ -125,4 +126,9 @@ void dram_write(hwaddr_t addr, size_t len, uint32_t data) {
 		/* data cross the burst boundary */
 		ddr3_write(addr + BURST_LEN, temp + BURST_LEN, mask + BURST_LEN);
 	}
+}
+
+// 根据csdn上学长方法,制造外部可用函数
+void ddr3_read_external(hwaddr_t addr, void *data){
+	ddr3_read(addr,data);
 }
