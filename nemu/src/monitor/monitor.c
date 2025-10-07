@@ -1,4 +1,5 @@
 #include "nemu.h"
+#include "memory/cache.h"
 
 #define ENTRY_START 0x100000
 
@@ -98,6 +99,8 @@ void restart() {
 	/*We need to initial the Eflags*/
 	init_eflags();
 
+	/*加载缓存*/
+	init_cache();
 	/*尝试在这里加载elf*/
 	// load_elf_tables();//报错，失败
 }

@@ -1,64 +1,31 @@
-#include "common.h"
+#include "memory/cache.h"
 #include "burst.h"
-// 用于生成随机数
-#include <stdlib.h>
-#include <time.h>
-
-#define valid_bit 1 //有效位
-#define offset_size 6   //块内偏移索引
-#define set_num 7   //64*1024B/64*8B==2^(10-3)组索引
-#define tag_size (32-offset_size-set_num)   //19位
-
-
-#define line_num 8  //8组相联：每组有8块cache_block
-#define block_size 64
-#define NR_SET (1<<set_num)
-
-void ddr3_read_external(hwaddr_t addr, void *data);
-
-typedef struct{
-    uint32_t tag:tag_size;
-    uint32_t set_index:set_num;
-    uint32_t offset:offset_size;
-}CA;    //用于找cache块的地址:cache_addr
-
-typedef struct{
-    bool valid:valid_bit;   //如果valid==true，那么说明为有效数据；反之说明空数据
-    uint32_t tag:tag_size;
-    uint8_t block[block_size];
-}CB;   //cache块:cache_block
-
-CB cache_block[NR_SET][line_num];
 
 void init_cache(){
     int i,j;
-    for(i=0;i<NR_SET;i++){
+    for(i=0;i<CACHE_SET;i++){
         for(j=0;j<line_num;j++){
             cache_block[i][j].valid=false;
         }
     }
+    srand(time(0)); //种子
 }   //初始化cache
 
 //cache读操作
-void cache_read(hwaddr_t addr,void *data,size_t len){
-    CA cache_addr;
+void cache_read(hwaddr_t addr,void *data){
+    CACHE_ADDR cache_addr;
     cache_addr.tag=(addr>>(set_num+offset_size))&((1<<tag_size)-1);
-    cache_addr.set_index=(addr>>offset_size)&(NR_SET-1);
-    cache_addr.offset=addr&(block_size-1);
+    cache_addr.set_index=(addr>>offset_size)&(CACHE_SET-1);
     uint32_t tag=cache_addr.tag;
     uint32_t set_index=cache_addr.set_index;
-    uint32_t offset=cache_addr.offset;
-
-    // 清空块内偏移量
+    // 清空块内偏移量找到块的起始位置
     uint32_t block_start=((addr>>offset_size)<<offset_size);
-
-    srand(time(0)); //种子
-
     int i;
     for(i=0;i<line_num;i++){
         // 如果匹配成功
         if(cache_block[set_index][i].valid&&cache_block[set_index][i].tag==tag){
-            memcpy(data,cache_block[set_index][i].block+offset,len);
+            memcpy(data,cache_block[set_index][i].block,block_size);    
+            //在此处块内偏移量并不重要，具体应该在hwaddr_read中实现偏移量
             return ;
         }
     }
@@ -71,18 +38,52 @@ void cache_read(hwaddr_t addr,void *data,size_t len){
             break;
         }
     }
-
-    void*temp;
     if(!flag){
         int random_index=rand()%line_num;
         i=random_index;
     }
     // 很容易发现问题：读取长度不匹配！
     int j;
-    for(j=0;j<block_size/BURST_LEN;i++){    //solution:这里我最喜欢（block_size/BURST_LEN）这一神来之笔
+    for(j=0;j<block_size/BURST_LEN;j++){    //solution:这里我最喜欢（block_size/BURST_LEN）这一神来之笔
         ddr3_read_external(block_start+BURST_LEN*j,cache_block[set_index][i].block+BURST_LEN*j); 
         //一步到位
     }
+    // 当从dram中读取之后，我们还要写入data中，否则根本毫无作用
+    memcpy(data,cache_block[set_index][i].block,block_size);
     return ;
 }
 
+// cache写操作
+void cache_write(hwaddr_t addr,uint32_t data,size_t len){
+    CACHE_ADDR cache_addr;
+    cache_addr.tag=(addr>>(set_num+offset_size))&((1<<tag_size)-1);
+    cache_addr.set_index=(addr>>offset_size)&(CACHE_SET-1);
+    cache_addr.offset=addr&(block_size-1);
+    uint32_t tag=cache_addr.tag;
+    uint32_t set_index=cache_addr.set_index;
+    uint32_t offset=cache_addr.offset;  //写操作需要补充这段代码
+    int i;
+    bool hit=false;
+    for(i=0;i<line_num;i++){
+        // 如果匹配成功
+        if(cache_block[set_index][i].valid&&cache_block[set_index][i].tag==tag){
+            hit=true;
+            break;
+        }
+    }
+    // 如果命中
+    if(hit){
+        // 判断是否会出现跨越块的情况
+        if(offset+len>block_size){
+            int t=block_size-offset;
+            memcpy(cache_block[set_index][i].block+offset,&data,t);
+            cache_write(addr+t,data>>((4-(len-t))<<3),len-t);
+            return ;
+        }
+        else{
+            memcpy(cache_block[set_index][i].block+offset,&data,len);
+        }
+    }
+    // 未命中：采用非写分配,直接写入内存
+    dram_write(addr,len,data);
+}
