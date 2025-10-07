@@ -10,6 +10,6 @@
 #define concat4(x, y, z, w) concat3(concat(x, y), z, w)
 #define concat5(x, y, z, v, w) concat4(concat(x, y), z, v, w)
 
-#define unalign_rw(addr, len)	(((unalign *)(addr))->concat(_, len))
+#define unalign_rw(addr, len)	(((unalign *)(addr))->concat(_, len))   //读写不对齐内存区域
 
 #endif
