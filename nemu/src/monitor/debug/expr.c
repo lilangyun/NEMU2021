@@ -277,7 +277,7 @@ static int find_dominant_operation(int p,int q){
 				case MINUS:
 				case DEREF:{
 					current_priority=3;  //单目运算符
-					break;
+					break;  //这里注意：break指的是跳出switch循环，不要被误导成for|while
 				}
 				default:continue;
 			}
