@@ -29,7 +29,7 @@ typedef struct {
 		};
 	};
      swaddr_t eip;
-    //  这里涉及到c位域的知识，于内存位置和地址有关
+    //  这里涉及到c位域的知识，与内存位置和地址有关
      union {
 		// 有趣的是：这个union（也就是eflags这个寄存器）正好占据一个字节
 		struct {
@@ -51,7 +51,30 @@ typedef struct {
 			uint16_t pad4;
 		};
 		uint32_t val;
-	} eflags;
+	} eflags;  //标志位
+
+
+	// We need to add GDTR,CR0,and CS,ES,SS,CS(16bits)
+	struct{
+		uint32_t base;  //GDT基址，即段描述符表首地址
+		uint16_t lim;  //限界
+	}GDTR;  //段描述符表基址寄存器
+	
+	//控制寄存器
+	union{
+		struct{
+			uint32_t PG :1;
+			uint32_t RESERVED :26; 
+			uint32_t ET :1;
+			uint32_t TS :1;
+			uint32_t EM :1;
+			uint32_t MP :1;
+			uint32_t PE :1;
+		};
+		uint32_t val;
+	}cr0;
+	
+	uint16_t cs,ds,es,ss;  //段寄存器：储存段选择符
 
 } CPU_state;
 
