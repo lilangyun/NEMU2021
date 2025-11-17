@@ -357,7 +357,7 @@ static uint32_t eval(int p,int q){
 	}
 	else{
 		int op=find_dominant_operation(p,q);
-		if(tokens[op].type==MINUS||tokens[op].type==DEREF||tokens[op].type=='!'){
+		if(p==op||tokens[op].type==MINUS||tokens[op].type==DEREF||tokens[op].type=='!'){
 			switch(tokens[op].type){
 				case MINUS:{
 					return -eval(p+1,q);
