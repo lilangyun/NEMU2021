@@ -135,7 +135,7 @@ static bool make_token(char *e) {
 					case DEC_NUM:{
 						tokens[nr_token].type=DEC_NUM;
 						if(substr_len>=32){
-							assert(0&&"DEC_Number is too long.");
+							assert("DEC_Number is too long.");
 						}
 						strncpy(tokens[nr_token].str,substr_start,substr_len);
 						tokens[nr_token].str[substr_len]='\0';
@@ -145,7 +145,7 @@ static bool make_token(char *e) {
 					case HEX_NUM:{
 						tokens[nr_token].type=HEX_NUM;
 						if(substr_len>=32){
-							assert(0&&"HEX_Number is too long.");
+							assert("HEX_Number is too long.");
 						}
 						strncpy(tokens[nr_token].str,substr_start+2,substr_len-2);
 						tokens[nr_token].str[substr_len-2]='\0';
@@ -155,7 +155,7 @@ static bool make_token(char *e) {
 					case REG:{
 						tokens[nr_token].type=REG;
 						if(substr_len>=32){
-							assert(0&&"REG is too long.");
+							assert("REG is too long.");
 						}
 						strncpy(tokens[nr_token].str,substr_start+1,substr_len-1);
 						tokens[nr_token].str[substr_len-1]='\0';
@@ -165,7 +165,7 @@ static bool make_token(char *e) {
 					case VAR:{
 						tokens[nr_token].type=VAR;
 						if(substr_len>=32){
-							assert(0&&"VAR is too long.");
+							assert("VAR is too long.");
 						}
 						strncpy(tokens[nr_token].str,substr_start,substr_len);
 						tokens[nr_token].str[substr_len]='\0';
@@ -274,6 +274,10 @@ static int find_dominant_operation(int p,int q){
 					current_priority=2;
 					break;
 				}
+				case MINUS:
+				case DEREF:{
+					current_priority=3;  //单目运算符
+				}
 				default:continue;
 			}
 			if(current_priority<=min_priority){
@@ -288,7 +292,7 @@ static int find_dominant_operation(int p,int q){
 // evaluate:计算表达式的函数[递归求值]
 static uint32_t eval(int p,int q){
 	if(p>q){
-		assert(0&&"p>q:You are false.");
+		assert("p>q:You are false.");
 	}
 	else if(p==q){
 		if(tokens[p].type==DEC_NUM){
@@ -302,7 +306,7 @@ static uint32_t eval(int p,int q){
 			return ans;
 		}
 		else if(tokens[p].type==REG){
-			uint32_t ans;
+			uint32_t ans=-1;
 			if(strcmp(tokens[p].str,"eax")==0){
 				ans=cpu.eax;
 			}
@@ -331,20 +335,20 @@ static uint32_t eval(int p,int q){
 				ans=cpu.eip;
 			}
 			else{
-				assert(0&&"The reg doesn't exist in the register_list");
+				assert("The reg doesn't exist in the register_list");
 			}
 			return ans;
 		}
 		else if(tokens[p].type==VAR){
 			int ans=var_interface(tokens[p].str);
 			if(ans==-1){
-				assert(0&&"VAR is false!");
+				assert("VAR is false!");
 			}
 			return ans;
 		}
 		else{
 			printf("nihao,i'm %s ,type: %c\n",tokens[p].str,tokens[p].type);
-			assert(0&&"p==q is false");
+			assert("p==q is false");
 		}
 	}
 	else if(check_parentheses(p,q)==true){
@@ -352,46 +356,14 @@ static uint32_t eval(int p,int q){
 		return eval(p+1,q-1);
 	}
 	else if(tokens[p].type==MINUS){
-		int op=find_dominant_operation(p+1,q);
-		if(op==-1){
-			return -eval(p+1,q);
-		}
-		uint32_t val1=-eval(p+1,op-1);
-		uint32_t val2=eval(op+1,q);
-		switch(tokens[op].type){
-			case '+':return val1+val2;
-			case '-':return val1-val2;
-			case '*':return val1*val2;
-			case '/':return val1/val2;
-			case EQ:return val1==val2;
-			case NEQ:return val1!=val2;
-			case OR:return val1||val2;
-			case AND:return val1&&val2;
-			default :assert(0&&"MINUS is fasle!");
-		}
+		return -eval(p+1,q);
+		
 	}
 	else if(tokens[p].type==DEREF){
 		//这里要用内存读取
-		int op=find_dominant_operation(p+1,q);
-		if(op==-1){
-			uint32_t addr=eval(p+1,q);
-			uint32_t data=swaddr_read(addr,4);
-			return data;
-		}
-		uint32_t addr=eval(p+1,op-1);
-		uint32_t val1=swaddr_read(addr,4);
-		uint32_t val2=eval(op+1,q);
-		switch(tokens[op].type){
-			case '+':return val1+val2;
-			case '-':return val1-val2;
-			case '*':return val1*val2;
-			case '/':return val1/val2;
-			case EQ:return val1==val2;
-			case NEQ:return val1!=val2;
-			case OR:return val1||val2;
-			case AND:return val1&&val2;
-			default :assert(0&&"DEREF is fasle!");
-		}
+		uint32_t addr=eval(p+1,q);
+		uint32_t data=swaddr_read(addr,4);
+		return data;
 	}
 	else if(tokens[p].type=='!'){
 		return !eval(p+1,q);
@@ -412,6 +384,7 @@ static uint32_t eval(int p,int q){
 			default :assert(0&&"Op is fasle!");
 		}
 	}
+	return -1;
 }
 
 
