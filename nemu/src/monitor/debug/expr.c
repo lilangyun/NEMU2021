@@ -357,17 +357,20 @@ static uint32_t eval(int p,int q){
 	}
 	else{
 		int op=find_dominant_operation(p,q);
-		if(tokens[op].type==MINUS){
-			return -eval(p+1,q);
-		}
-		if(tokens[op].type==DEREF){
-			//这里要用内存读取
-			uint32_t addr=eval(p+1,q);
-			uint32_t data=swaddr_read(addr,4);
-			return data;
-		}
-		if(tokens[op].type=='!'){
-			return !eval(p+1,q);
+		if(tokens[op].type==MINUS||tokens[op].type==DEREF||tokens[op].type=='!'){
+			switch(tokens[op].type){
+				case MINUS:{
+					return -eval(p+1,q);
+				}
+				case DEREF:{
+					uint32_t addr=eval(p+1,q);
+					uint32_t data=swaddr_read(addr,4);
+					return data;
+				}
+				case '!':{
+					return !eval(p+1,q);
+				}
+			}
 		}
 		uint32_t val1=eval(p,op-1);
 		uint32_t val2=eval(op+1,q);
