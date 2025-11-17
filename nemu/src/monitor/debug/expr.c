@@ -277,7 +277,6 @@ static int find_dominant_operation(int p,int q){
 				case MINUS:
 				case DEREF:{
 					current_priority=3;  //单目运算符
-					break;
 				}
 				default:continue;
 			}
@@ -356,21 +355,20 @@ static uint32_t eval(int p,int q){
 		// Log("check_parentheses is false!!");//检查错误时使用的
 		return eval(p+1,q-1);
 	}
-	else if(tokens[p].type==MINUS){
-		return -eval(p+1,q);
-		
-	}
-	else if(tokens[p].type==DEREF){
-		//这里要用内存读取
-		uint32_t addr=eval(p+1,q);
-		uint32_t data=swaddr_read(addr,4);
-		return data;
-	}
-	else if(tokens[p].type=='!'){
-		return !eval(p+1,q);
-	}
 	else{
 		int op=find_dominant_operation(p,q);
+		if(tokens[op].type==MINUS){
+			return -eval(p+1,q);
+		}
+		if(tokens[op].type==DEREF){
+			//这里要用内存读取
+			uint32_t addr=eval(p+1,q);
+			uint32_t data=swaddr_read(addr,4);
+			return data;
+		}
+		if(tokens[op].type=='!'){
+			return !eval(p+1,q);
+		}
 		uint32_t val1=eval(p,op-1);
 		uint32_t val2=eval(op+1,q);
 		switch(tokens[op].type){
