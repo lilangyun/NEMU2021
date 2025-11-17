@@ -79,6 +79,12 @@ static void init_eflags(){
 	cpu.eflags.val=0x00000002;
 }
 
+static void init_cr0(){  //static可确保外部文件不可调用本文件内部函数去修改状态等
+	cpu.cr0.val=0x0001;
+	// 将PE置为1
+}
+
+
 void restart() {
 	/* Perform some initialization to restart a program */
 #ifdef USE_RAMDISK
@@ -103,4 +109,8 @@ void restart() {
 	init_cache();
 	/*尝试在这里加载elf*/
 	// load_elf_tables();//报错，失败
+
+	/*Initialize the CR0 to assure we run in real-ilfe mode*/
+	init_cr0();
+
 }

@@ -14,12 +14,12 @@ make_instr_helper(r2rm)
 make_instr_helper(rm2r)
 
 make_helper(concat(mov_a2moffs_, SUFFIX)) {
-	swaddr_t addr = instr_fetch(eip + 1, 4);
-	MEM_W(addr, REG(R_EAX));
+	swaddr_t addr = instr_fetch(eip + 1, 4);  //这是取操作数，即译码
+	MEM_W(addr, REG(R_EAX));  //内存写，即执行
 
 	print_asm("mov" str(SUFFIX) " %%%s,0x%x", REG_NAME(R_EAX), addr);
-	return 5;
-}
+	return 5;  //这里返回指令长度
+}  //这就是自己编译码函数+执行的操作
 
 make_helper(concat(mov_moffs2a_, SUFFIX)) {
 	swaddr_t addr = instr_fetch(eip + 1, 4);
