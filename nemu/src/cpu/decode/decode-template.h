@@ -70,8 +70,8 @@ static int concat3(decode_r_, SUFFIX, _internal) (swaddr_t eip, Operand *op) {
 
 static int concat3(decode_rm_, SUFFIX, _internal) (swaddr_t eip, Operand *rm, Operand *reg) {
 	rm->size = DATA_BYTE;
-	int len = read_ModR_M(eip, rm, reg);
-	reg->val = REG(reg->reg);
+	int len = read_ModR_M(eip, rm, reg);  //这个是读取ModR/M字节的函数
+	reg->val = REG(reg->reg);  //读取寄存器的值
 
 #ifdef DEBUG
 	snprintf(reg->str, OP_STR_SIZE, "%%%s", REG_NAME(reg->reg));
@@ -83,7 +83,7 @@ static int concat3(decode_rm_, SUFFIX, _internal) (swaddr_t eip, Operand *rm, Op
  * Ev <- Gv
  */
 make_helper(concat(decode_r2rm_, SUFFIX)) {
-	return decode_rm_internal(eip, op_dest, op_src);
+	return decode_rm_internal(eip, op_dest, op_src);  //src为reg，dest为rm
 }
 
 /* Gb <- Eb
@@ -183,6 +183,7 @@ make_helper(concat(decode_rm_imm_, SUFFIX)) {
 	len += decode_i_b(eip + len);
 	return len;
 }
+
 
 void concat(write_operand_, SUFFIX) (Operand *op, DATA_TYPE src) {
 	if(op->type == OP_TYPE_REG) { REG(op->reg) = src; }

@@ -76,11 +76,11 @@ static void load_entry() {
 }
 
 static void init_eflags(){
-	cpu.eflags.val=0x00000002;
+	cpu.eflags.val=0x2;  //这里我为了简洁，将0x00000002改为0x2
 }
 
 static void init_cr0(){  //static可确保外部文件不可调用本文件内部函数去修改状态等
-	cpu.cr0.val=0x0001;
+	cpu.cr0.val=0x1;
 	// 将PE置为1
 }
 
