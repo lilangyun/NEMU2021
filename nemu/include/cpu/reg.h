@@ -2,8 +2,9 @@
 #define __REG_H__
 
 #include "common.h"
+#include "cpu.h"
 
-enum { R_EAX, R_ECX, R_EDX, R_EBX, R_ESP, R_EBP, R_ESI, R_EDI };
+enum { R_EAX, R_ECX, R_EDX, R_EBX, R_ESP, R_EBP, R_ESI, R_EDI};  //这里补充cr0
 enum { R_AX, R_CX, R_DX, R_BX, R_SP, R_BP, R_SI, R_DI };
 enum { R_AL, R_CL, R_DL, R_BL, R_AH, R_CH, R_DH, R_BH };
 
@@ -61,18 +62,7 @@ typedef struct {
 	}GDTR;  //段描述符表基址寄存器
 	
 	//控制寄存器
-	union{
-		struct{
-			uint32_t PG :1;
-			uint32_t RESERVED :26; 
-			uint32_t ET :1;
-			uint32_t TS :1;
-			uint32_t EM :1;
-			uint32_t MP :1;
-			uint32_t PE :1;
-		};
-		uint32_t val;
-	}cr0;
+	CR0 cr0;
 	
 	uint16_t cs,ds,es,ss;  //段寄存器：储存段选择符
 

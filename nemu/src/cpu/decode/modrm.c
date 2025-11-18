@@ -105,7 +105,7 @@ int read_ModR_M(swaddr_t eip, Operand *rm, Operand *reg) {
 			case 4: sprintf(rm->str, "%%%s", regsl[m.R_M]); break;
 		}
 #endif
-		return 1;
+		return 1;  //如果是寄存器类型，返回1
 	}
 	else {
 		int instr_len = load_addr(eip, &m, rm);
