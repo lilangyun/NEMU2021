@@ -80,7 +80,7 @@ static void init_eflags(){
 }
 
 static void init_cr0(){  //static可确保外部文件不可调用本文件内部函数去修改状态等
-	cpu.cr0.val=0x1;
+	cpu.cr0.val=0x0;
 	// 将PE置为1
 }
 
