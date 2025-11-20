@@ -2,11 +2,12 @@
 #define __REG_H__
 
 #include "common.h"
-#include "cpu.h"
+#include "../../../lib-common/x86-inc/cpu.h"
 
-enum { R_EAX, R_ECX, R_EDX, R_EBX, R_ESP, R_EBP, R_ESI, R_EDI};  //这里补充cr0
+enum { R_EAX, R_ECX, R_EDX, R_EBX, R_ESP, R_EBP, R_ESI, R_EDI};
 enum { R_AX, R_CX, R_DX, R_BX, R_SP, R_BP, R_SI, R_DI };
 enum { R_AL, R_CL, R_DL, R_BL, R_AH, R_CH, R_DH, R_BH };
+enum { S_CS, S_SS, S_DS, S_ES};  //段寄存器编码
 
 /* TODO: Re-organize the `CPU_state' structure to match the register
  * encoding scheme in i386 instruction format. For example, if we
@@ -55,16 +56,29 @@ typedef struct {
 	} eflags;  //标志位
 
 
-	// We need to add GDTR,CR0,and CS,ES,SS,CS(16bits)
+	// We need to add GDTR,CR0,and CS,SS,DS,ES(16bits)
 	struct{
 		uint32_t base;  //GDT基址，即段描述符表首地址
-		uint16_t lim;  //限界
+		uint16_t lim;  //GDT长度
 	}GDTR;  //段描述符表基址寄存器
 	
 	//控制寄存器
 	CR0 cr0;
-	
-	uint16_t cs,ds,es,ss;  //段寄存器：储存段选择符
+
+	struct{
+		union{
+			struct{
+				uint16_t RPL:3;
+				uint16_t TI:1;
+				uint16_t INDEX:12;
+			};
+			uint16_t val;
+		};
+		
+		uint16_t attribute;
+		uint32_t limit;
+		uint32_t base; 
+	}sreg[4];
 
 } CPU_state;
 
@@ -75,9 +89,16 @@ static inline int check_reg_index(int index) {
 	return index;
 }
 
+static inline int check_sreg_index(int index) {
+	assert(index >= 0 && index < 4);
+	return index;
+}
+
 #define reg_l(index) (cpu.gpr[check_reg_index(index)]._32)
 #define reg_w(index) (cpu.gpr[check_reg_index(index)]._16)
 #define reg_b(index) (cpu.gpr[check_reg_index(index) & 0x3]._8[index >> 2])
+
+#define sreg_w(index) (cpu.sr[check_reg_index(index)].s_16)
 
 extern const char* regsl[];
 extern const char* regsw[];

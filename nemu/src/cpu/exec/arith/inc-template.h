@@ -4,7 +4,7 @@
 
 static void do_execute () {
 	DATA_TYPE result = op_src->val + 1;
-	OPERAND_W(op_src, result);
+	OPERAND_W(op_src, result,1);
 
         update_eflags_pf_zf_sf((DATA_TYPE_S)result);
 	cpu.eflags.OF = (result == 0x80000000);

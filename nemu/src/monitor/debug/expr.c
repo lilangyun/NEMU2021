@@ -365,7 +365,7 @@ static uint32_t eval(int p,int q){
 				}
 				case DEREF:{
 					uint32_t addr=eval(p+1,q);
-					uint32_t data=swaddr_read(addr,4);
+					uint32_t data=swaddr_read(addr,4,2);  //1表示ds,data_segement
 					return data;
 				}
 				case '!':{

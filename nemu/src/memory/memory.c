@@ -1,5 +1,6 @@
 #include "common.h"
 #include "memory/cache.h"
+#include "../../../NEMU2021/nemu/include/cpu/reg.h"
 
 uint32_t dram_read(hwaddr_t, size_t);
 void dram_write(hwaddr_t, size_t, uint32_t);
@@ -34,17 +35,30 @@ void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
 	hwaddr_write(addr, len, data);
 }
 
-uint32_t swaddr_read(swaddr_t addr, size_t len) {
-#ifdef DEBUG
-	assert(len == 1 || len == 2 || len == 4);
-#endif
-	return lnaddr_read(addr, len);
+lnaddr_t seg_translate(swaddr_t addr, uint8_t sreg){
+	if(!cpu.cr0.protect_enable){
+		return addr;
+	}  //未进入保护模式
+	uint16_t index=cpu.sreg[sreg].INDEX;
+	lnaddr_t descriptor_lnaddr=(cpu.GDTR.base+8*index);
+	lnaddr_t d0=lnaddr_read(descriptor_lnaddr,4);  //描述符的低位
+	lnaddr_t d1=lnaddr_read(descriptor_lnaddr+4,4);  //描述符的高位
+	lnaddr_t base = ((d1>>8)&(0x1<<8)<<24)+((d1&(0x1<<8))<<16)+((d0>>16)&(0x1<<16));
+	return base+addr;  //进入保护模式才需要地址翻译
 }
 
-void swaddr_write(swaddr_t addr, size_t len, uint32_t data) {
+uint32_t swaddr_read(swaddr_t addr, size_t len,uint8_t sreg) {
 #ifdef DEBUG
-	assert(len == 1 || len == 2 || len == 4);
+	assert(len == 1 || len == 2 || len == 4);  //在未开启分段机制之前，虚拟地址可以直接看作是线性地址
+	lnaddr_t lnaddr=seg_translate(addr,sreg);  //也就是添加将虚拟地址先转成线性地址
 #endif
-	lnaddr_write(addr, len, data);
+	return lnaddr_read(lnaddr, len);
 }
 
+void swaddr_write(swaddr_t addr, size_t len, uint32_t data, uint8_t sreg) {
+#ifdef DEBUG
+	assert(len == 1 || len == 2 || len == 4);
+	lnaddr_t lnaddr=seg_translate(addr,sreg);
+#endif
+	lnaddr_write(lnaddr, len, data);
+}

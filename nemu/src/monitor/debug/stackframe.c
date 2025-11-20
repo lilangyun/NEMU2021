@@ -22,10 +22,10 @@ void backstack(){
         // 添加链表元素
         PartofStackFrame frame;  //当前栈帧节点
         int i;
-        frame.prev_ebp=swaddr_read(addr+0,4);
-        frame.ret_addr=swaddr_read(addr+4,4);
+        frame.prev_ebp=swaddr_read(addr+0,4,1);
+        frame.ret_addr=swaddr_read(addr+4,4,1);  //ss表示1
         for(i=0;i<4;i++){
-            frame.args[i]=swaddr_read(addr+8+4*i,4);
+            frame.args[i]=swaddr_read(addr+8+4*i,4,1);
         }
         // 栈帧结束
         // 根据返回地址,获取函数名

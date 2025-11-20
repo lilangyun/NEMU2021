@@ -84,6 +84,11 @@ static void init_cr0(){  //static可确保外部文件不可调用本文件内�
 	// 将PE置为1
 }
 
+static void init_cs(){
+	cpu.sreg[0].base=0x0;
+	cpu.sreg[0].limit=0xffffffff;
+}
+
 
 void restart() {
 	/* Perform some initialization to restart a program */
@@ -112,5 +117,7 @@ void restart() {
 
 	/*Initialize the CR0 to assure we run in real-ilfe mode*/
 	init_cr0();
+
+	init_cs();
 
 }
