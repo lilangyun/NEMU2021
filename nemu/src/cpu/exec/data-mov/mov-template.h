@@ -59,7 +59,7 @@ make_helper(mov_cr2r_l) {
 	op_dest->size = 4;
 	int len = read_ModR_M(cpu.eip+1, op_src2, op_dest);  //这个是读取ModR/M字节的函数
 	op_dest->val=cpu.cr0.val;
-	print_asm("mov" str(SUFFIX) " %%%s,%%%s", "cr0", REG_NAME(op_dest->reg));
+	print_asm("movl cr0,%%%s", REG_NAME(op_dest->reg));
 	return len;  //  /r：长度值为1
 }
 
@@ -69,7 +69,7 @@ make_helper(mov_r2cr_l){
 	print_asm_template1();
 	int len=read_ModR_M(cpu.eip+1,op_src2,op_src);
 	cpu.cr0.val=op_src->val;
-	print_asm("mov" str(SUFFIX) " %%%s,%%%s", REG_NAME(op_dest->reg),"cr0");
+	print_asm("movl %%%s,cr0", REG_NAME(op_dest->reg));
 	return len;
 }
 #endif
