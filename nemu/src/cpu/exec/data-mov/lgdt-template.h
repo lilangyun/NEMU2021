@@ -10,7 +10,7 @@ make_helper(concat(lgdt_, SUFFIX)) {
 
     cpu.GDTR.lim=lim;
     #if DATA_BYTE==2
-        cpu.GDTR.base=base&(0x0FFF);  //确保只提取低3字节数据
+        cpu.GDTR.base=base&(0x0FFFFFF);  //确保只提取低3字节数据
     #else
         cpu.GDTR.base=base;
     #endif
