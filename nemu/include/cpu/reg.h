@@ -58,8 +58,8 @@ typedef struct {
 
 	// We need to add GDTR,CR0,and CS,SS,DS,ES(16bits)
 	struct{
-		uint32_t base;  //GDT基址，即段描述符表首地址
 		uint16_t lim;  //GDT长度
+		uint32_t base;  //GDT基址，即段描述符表首地址
 	}GDTR;  //段描述符表基址寄存器
 	
 	//控制寄存器
