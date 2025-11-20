@@ -43,7 +43,7 @@ lnaddr_t seg_translate(swaddr_t addr, uint8_t sreg){
 	lnaddr_t descriptor_lnaddr=(cpu.GDTR.base+8*index);
 	lnaddr_t d0=lnaddr_read(descriptor_lnaddr,4);  //描述符的低位
 	lnaddr_t d1=lnaddr_read(descriptor_lnaddr+4,4);  //描述符的高位
-	lnaddr_t base = (((d1>>24)&(0x1<<8))<<24)|((d1&(0x1<<8))<<16)|((d0>>16)&(0x1<<16));
+	lnaddr_t base = (((d1>>24)&0xFF)<<24)|((d1&0xFF)<<16)|((d0>>16)&0xFFFF);
 	return base+addr;  //进入保护模式才需要地址翻译
 }
 
