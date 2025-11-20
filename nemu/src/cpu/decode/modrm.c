@@ -87,7 +87,7 @@ int read_ModR_M(swaddr_t eip, Operand *rm, Operand *reg) {
 	ModR_M m;
 	m.val = instr_fetch(eip, 1);
 	reg->type = OP_TYPE_REG;
-	reg->reg = m.reg;
+	reg->reg = m.reg;  //这个很有趣，这似乎是为某种/r特殊情况量身定制的！
 
 	if(m.mod == 3) {
 		rm->type = OP_TYPE_REG;
@@ -109,7 +109,8 @@ int read_ModR_M(swaddr_t eip, Operand *rm, Operand *reg) {
 	}
 	else {
 		int instr_len = load_addr(eip, &m, rm);
-		rm->val = swaddr_read(rm->addr, rm->size);
+		rm->sreg=m.reg;
+		rm->val = swaddr_read(rm->addr, rm->size,rm->sreg);
 		return instr_len;
 	}
 }

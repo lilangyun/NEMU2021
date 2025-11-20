@@ -83,7 +83,7 @@ static int cmd_x(char *args){
 	sscanf(args1,"%d",&n);
 	sscanf(args2,"%x",&addr);
 	for(i=0;i<n;i++){
-		uint32_t data=swaddr_read(addr+4*i, 4);
+		uint32_t data=swaddr_read(addr+4*i, 4,2);  //2表示ds
 		// printf("0x%08x : 0x%08x\n",data);	不符合样例格式
 		printf("0x%08x ",data);
 	}

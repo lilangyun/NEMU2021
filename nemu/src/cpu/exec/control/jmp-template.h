@@ -17,5 +17,12 @@ make_helper(jmp_rm_l) {
 	print_asm(str(instr) " *%s", op_src->str);
 	return len + 1;
 }
+
+make_helper(ljmp){
+	swaddr_t addr=swaddr_read(cpu.eip,4,0);
+	cpu.sreg[0].val=swaddr_read(cpu.eip+4,2,0);
+	return addr-cpu.eip-1;
+}
 #endif
+
 #include "cpu/exec/template-end.h"
