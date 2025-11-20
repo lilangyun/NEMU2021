@@ -31,29 +31,6 @@ make_helper(concat(mov_moffs2a_, SUFFIX)) {
 	return 5;
 }
 
-// #if DATA_BYTE==4
-make_helper(concat(mov_cr2r_,SUFFIX)) {
-	// assert(0);
-	op_src->val=cpu.cr0.val;
-	op_dest->size = 4;
-	int len = read_ModR_M(cpu.eip, op_src2, op_dest);  //这个是读取ModR/M字节的函数
-	do_execute();
-	print_asm("mov" str(SUFFIX) " %%%s,%%%s", "cr0", REG_NAME(op_dest->reg));
-	return len;  //  /r：长度值为1
-}
-
-make_helper(concat(mov_r2cr_,SUFFIX)){
-	// assert(0);
-	op_src->size=4;
-	print_asm_template1();
-	int len=read_ModR_M(cpu.eip,op_src2,op_src);
-	cpu.cr0.val=op_src->val;
-	print_asm("mov" str(SUFFIX) " %%%s,%%%s", REG_NAME(op_dest->reg),"cr0");
-	return len;
-}
-
-// #endif
-
 #if DATA_BYTE==2
 // 设置寄存器
 make_helper(mov_rm2sr_w){
@@ -75,5 +52,26 @@ make_helper(mov_rm2sr_w){
 }
 #endif
 
+#if DATA_BYTE==4
+make_helper(mov_cr2r_l) {
+	// assert(0);
+	op_src->val=cpu.cr0.val;
+	op_dest->size = 4;
+	int len = read_ModR_M(cpu.eip+1, op_src2, op_dest);  //这个是读取ModR/M字节的函数
+	do_execute();
+	print_asm("mov" str(SUFFIX) " %%%s,%%%s", "cr0", REG_NAME(op_dest->reg));
+	return len;  //  /r：长度值为1
+}
+
+make_helper(mov_r2cr_l){
+	// assert(0);
+	op_src->size=4;
+	print_asm_template1();
+	int len=read_ModR_M(cpu.eip+1,op_src2,op_src);
+	cpu.cr0.val=op_src->val;
+	print_asm("mov" str(SUFFIX) " %%%s,%%%s", REG_NAME(op_dest->reg),"cr0");
+	return len;
+}
+#endif
 
 #include "cpu/exec/template-end.h"
