@@ -55,10 +55,10 @@ make_helper(mov_rm2sr_w){
 #if DATA_BYTE==4
 make_helper(mov_cr2r_l) {
 	// assert(0);
-	op_src->val=cpu.cr0.val;
+	// op_src->val=cpu.cr0.val;
 	op_dest->size = 4;
 	int len = read_ModR_M(cpu.eip+1, op_src2, op_dest);  //这个是读取ModR/M字节的函数
-	do_execute();
+	op_dest->val=cpu.cr0.val;
 	print_asm("mov" str(SUFFIX) " %%%s,%%%s", "cr0", REG_NAME(op_dest->reg));
 	return len;  //  /r：长度值为1
 }
