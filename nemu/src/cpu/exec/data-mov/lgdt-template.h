@@ -17,7 +17,7 @@ make_helper(concat(lgdt_, SUFFIX)){
         cpu.GDTR.base=base;
     #endif
 	print_asm("lgdt" str(SUFFIX) " 0x%x", gdt_addr);
-	return 7;
+	return 6;
 }
 #endif
 
