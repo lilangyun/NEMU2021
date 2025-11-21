@@ -34,6 +34,7 @@ make_helper(concat(mov_moffs2a_, SUFFIX)) {
 #if DATA_BYTE==2
 // 设置寄存器
 make_helper(mov_rm2sr_w){
+	assert(0);
 	op_src->size=DATA_BYTE;
 	int len=read_ModR_M(cpu.eip,op_src,op_dest);
 	// 此时op_dest->reg表示segment register的编码
