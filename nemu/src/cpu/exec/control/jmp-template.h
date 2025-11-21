@@ -20,10 +20,10 @@ make_helper(jmp_rm_l) {
 
 make_helper(ljmp){
 	swaddr_t addr=swaddr_read(cpu.eip+1,4,0);
-	assert(0);
-	cpu.sreg[0].val=swaddr_read(cpu.eip+4,2,0);
-	// cpu.eip=
-	return addr-cpu.eip-1;
+	cpu.eip=swaddr_read(addr+2,4,1)-6;
+	cpu.sreg[0].val=swaddr_read(addr,2,1);
+	print_asm("ljmp *0x%x", addr);
+	return 6;
 }
 #endif
 
