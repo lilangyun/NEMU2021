@@ -61,7 +61,7 @@ make_helper(mov_cr2r_l) {
 	// op_src->reg=cpu.cr0.val;
 	OPERAND_W(op_src, cpu.cr0.val,1);
 	print_asm("movl cr0,%%%s", REG_NAME(op_dest->reg));
-	return len+3;  //  /r：长度值为1
+	return len+2;  //  /r：长度值为1
 }
 
 make_helper(mov_r2cr_l){
