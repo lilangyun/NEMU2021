@@ -61,11 +61,11 @@ make_helper(mov_cr2r_l) {
 	// op_src->reg=cpu.cr0.val;
 	OPERAND_W(op_src, cpu.cr0.val,1);
 	print_asm("movl cr0,%%%s", REG_NAME(op_dest->reg));
-	return len+1;  //  /r：长度值为1
+	return len+3;  //  /r：长度值为1
 }
 
 make_helper(mov_r2cr_l){
-	// assert(0);
+	assert(0);
 	op_src->size=4;
 	print_asm_template1();
 	int len=read_ModR_M(cpu.eip+1,op_src2,op_src);
