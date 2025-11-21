@@ -70,7 +70,7 @@ make_helper(mov_r2cr_l){
 	int len = decode_r_l(cpu.eip+1);
 	cpu.cr0.val=op_src->val;
 	print_asm("movl %%%s,cr0", REG_NAME(op_dest->reg));
-	return len+1;
+	return len+2;
 }
 #endif
 
