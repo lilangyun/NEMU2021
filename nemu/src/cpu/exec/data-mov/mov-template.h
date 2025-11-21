@@ -58,8 +58,8 @@ make_helper(mov_cr2r_l) {
 	// op_src->val=cpu.cr0.val;
 	int len = decode_r_l(cpu.eip+1);
 	//这个是读取ModR/M字节的函数
-	assert(0);
-	op_dest->val=cpu.cr0.val;
+	// op_src->reg=cpu.cr0.val;
+	OPERAND_W(op_src, cpu.cr0.val,1);
 	print_asm("movl cr0,%%%s", REG_NAME(op_dest->reg));
 	return len;  //  /r：长度值为1
 }
