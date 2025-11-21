@@ -56,7 +56,6 @@ make_helper(mov_rm2sr_w){
 make_helper(mov_cr2r_l) {
 	// assert(0);
 	// op_src->val=cpu.cr0.val;
-	op_dest->size = DATA_BYTE;
 	int len = read_ModR_M(cpu.eip+1, op_src2, op_dest);  //这个是读取ModR/M字节的函数
 	assert(0);
 	op_dest->val=cpu.cr0.val;
