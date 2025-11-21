@@ -34,22 +34,22 @@ make_helper(concat(mov_moffs2a_, SUFFIX)) {
 #if DATA_BYTE==2
 // 设置寄存器
 make_helper(mov_rm2sr_w){
-	assert(0);
+	// assert(0);
 	op_src->size=DATA_BYTE;
-	int len=read_ModR_M(cpu.eip,op_src,op_dest);
+	int len=decode_rm_w(cpu.eip+1);
 	// 此时op_dest->reg表示segment register的编码
 	cpu.sreg[op_dest->reg].val=op_src->val;
 
 	uint16_t index=cpu.sreg[op_dest->reg].INDEX;
-	lnaddr_t descriptor_lnaddr=cpu.GDTR.base+8*index;
+	lnaddr_t descriptor_lnaddr=(cpu.GDTR.base+8*index);
 	lnaddr_t d0=lnaddr_read(descriptor_lnaddr,4);  //描述符的低位
 	lnaddr_t d1=lnaddr_read(descriptor_lnaddr+4,4);  //描述符的高位
-	lnaddr_t base = ((d1>>8)&(0x1<<8)<<24)+((d1&(0x1<<8))<<16)+((d0>>16)&(0x1<<16));
-	uint32_t limit=(d0&(0x1<<16))+((d1>>16)&(0x1<<3)<<16);
+	lnaddr_t base = (((d1>>24)&0xFF)<<24)|((d1&0xFF)<<16)|((d0>>16)&0xFFFF);
+	lnaddr_t limit=(d0&0xFFFF)|(((d1>>16)&0x7)<<16);
 	cpu.sreg[op_dest->reg].base=base;
 	cpu.sreg[op_dest->reg].limit=limit;
 	
-	return len;
+	return len+1;
 }
 #endif
 
