@@ -7,6 +7,7 @@ make_helper(concat(lgdt_, SUFFIX)){
     // assert(0);
 
     uint16_t lim=swaddr_read(gd_addr,2,1);
+    assert(0);
     uint32_t base=swaddr_read(gd_addr+2,4,1);  //取6位数据
 
     cpu.GDTR.lim=lim;
