@@ -54,7 +54,7 @@ make_helper(mov_rm2sr_w){
 
 #if DATA_BYTE==4
 make_helper(mov_cr2r_l) {
-	// assert(0);
+	assert(0);
 	// op_src->val=cpu.cr0.val;
 	op_dest->size = 4;
 	int len = read_ModR_M(cpu.eip+1, op_src2, op_dest);  //这个是读取ModR/M字节的函数
@@ -64,7 +64,7 @@ make_helper(mov_cr2r_l) {
 }
 
 make_helper(mov_r2cr_l){
-	// assert(0);
+	assert(0);
 	op_src->size=4;
 	print_asm_template1();
 	int len=read_ModR_M(cpu.eip+1,op_src2,op_src);
