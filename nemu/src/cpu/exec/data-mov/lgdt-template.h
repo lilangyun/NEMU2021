@@ -3,8 +3,7 @@
 // 直接编写decode+execute函数即可
 #if DATA_BYTE == 2 || DATA_BYTE  == 4
 make_helper(concat(lgdt_, SUFFIX)){
-    int len=decode_rm_l(cpu.eip+2);
-    uint32_t gdt_addr=op_src->addr;
+    uint32_t gdt_addr=swaddr_read(cpu.eip+3,4,1);
     // assert(0);
 
     uint16_t lim=swaddr_read(gdt_addr,2,1);
@@ -18,7 +17,7 @@ make_helper(concat(lgdt_, SUFFIX)){
         cpu.GDTR.base=base;
     #endif
 	print_asm("lgdt" str(SUFFIX) " 0x%x", gdt_addr);
-	return len;
+	return 7;
 }
 #endif
 
