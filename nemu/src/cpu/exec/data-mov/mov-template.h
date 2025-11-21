@@ -65,13 +65,12 @@ make_helper(mov_cr2r_l) {
 }
 
 make_helper(mov_r2cr_l){
-	assert(0);
-	op_src->size=4;
-	print_asm_template1();
-	int len=read_ModR_M(cpu.eip+1,op_src2,op_src);
+	// op_src->size=4;
+	// int len=read_ModR_M(cpu.eip+1,op_src2,op_src);
+	int len = decode_r_l(cpu.eip+1);
 	cpu.cr0.val=op_src->val;
 	print_asm("movl %%%s,cr0", REG_NAME(op_dest->reg));
-	return len;
+	return len+1;
 }
 #endif
 
