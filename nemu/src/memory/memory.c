@@ -5,7 +5,7 @@
 uint32_t dram_read(hwaddr_t, size_t);
 void dram_write(hwaddr_t, size_t, uint32_t);
 
-#define pagesize 4048
+#define pagesize 4096
 
 /* Memory accessing interfaces */
 // 访问内存的接口函数：sw(虚拟)，ln(线性)，hw(物理地址);一般用swaddr_访问模拟地址
