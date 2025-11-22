@@ -81,6 +81,7 @@ lnaddr_t seg_translate(swaddr_t addr, uint8_t sreg){
 		// assert(0);
 		return addr;
 	}  //未进入保护模式
+	assert(0);
 	uint16_t index=cpu.sreg[sreg].INDEX;
 	lnaddr_t descriptor_lnaddr=(cpu.GDTR.base+8*index);
 	lnaddr_t d0=lnaddr_read(descriptor_lnaddr,4);  //描述符的低位
