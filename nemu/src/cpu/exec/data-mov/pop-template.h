@@ -19,7 +19,7 @@ make_helper(concat(pop_m_, SUFFIX)){
 	print_asm("pop" str(SUFFIX) " 0x%x, 0x%x", data, addr);
 	cpu.esp+=4;
 	// assert(0);
-	return 1+DATA_BYTE;
+	return 2+DATA_BYTE;
 }
 #endif
 
