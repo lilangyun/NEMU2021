@@ -58,10 +58,9 @@ make_helper(mov_rm2sr_w){
 #if DATA_BYTE==4
 make_helper(mov_cr2r_l) {
 	// assert(0);
-	// op_src->val=cpu.cr0.val;
-	int len = decode_r_l(cpu.eip+1);
+	int len = read_ModR_M(cpu.eip+1,op_src,op_dest);
 	//这个是读取ModR/M字节的函数
-	// op_src->reg=cpu.cr0.val;
+	// op_src->reg=cpu.cr0.val
 	OPERAND_W(op_src, cpu.cr0.val,1);
 	print_asm("movl cr0,%%%s", REG_NAME(op_dest->reg));
 	return len+2;  //  /r：长度值为1
@@ -69,10 +68,17 @@ make_helper(mov_cr2r_l) {
 
 make_helper(mov_r2cr_l){
 	// op_src->size=4;
-	// int len=read_ModR_M(cpu.eip+1,op_src2,op_src);
-	int len = decode_r_l(cpu.eip+1);
-	cpu.cr0.val=op_src->val;
-	// cpu.cr3.val=op_src->val;
+	int len=read_ModR_M(cpu.eip+1,op_src,op_dest);
+	// int len = decode_r_l(cpu.eip+1);
+	if(op_dest->reg==0){
+		cpu.cr0.val=op_src->val;
+	}
+	else if(op_dest->reg==3){
+		cpu.cr3.val=op_src->val;
+	}
+	else{
+		assert(0);
+	}
 	print_asm("movl %%%s,cr0", REG_NAME(op_dest->reg));
 	return len+2;
 }
