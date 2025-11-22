@@ -12,4 +12,4 @@
 #include "pop-template.h"
 #undef DATA_BYTE
 
-make_helper_v(pop_m)
+make_helper_v(pop_m);
