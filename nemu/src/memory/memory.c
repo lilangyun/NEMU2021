@@ -52,6 +52,7 @@ uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
 			return hwaddr_read(hwaddr,len);
 		}
 	}
+	assert(0);
 	return hwaddr_read(addr, len);
 }
 
@@ -74,7 +75,7 @@ void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
 lnaddr_t seg_translate(swaddr_t addr, uint8_t sreg){
 	// assert(0);
 	if(!cpu.cr0.protect_enable){
-		assert(0);
+		// assert(0);
 		return addr;
 	}  //未进入保护模式
 	uint16_t index=cpu.sreg[sreg].INDEX;
