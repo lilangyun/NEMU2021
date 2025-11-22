@@ -84,14 +84,15 @@ make_helper(mov_r2cr_l){
 	// int len = decode_r_l(cpu.eip+1);
 	if(op_dest->reg==0){
 		cpu.cr0.val=op_src->val;
+		print_asm("movl %%%s,cr0", REG_NAME(op_dest->reg));
 	}
 	else if(op_dest->reg==3){
 		cpu.cr3.val=op_src->val;
+		print_asm("movl %%%s,cr3", REG_NAME(op_dest->reg));
 	}
 	else{
 		assert(0);
 	}
-	print_asm("movl %%%s,cr0", REG_NAME(op_dest->reg));
 	return len+1;
 }
 #endif
