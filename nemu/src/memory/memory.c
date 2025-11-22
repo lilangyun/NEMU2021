@@ -61,7 +61,7 @@ void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
 	// assert(0);
 	if(cpu.cr0.protect_enable){  //开启分页机制
 		uint32_t offset=addr&(pagesize-1);
-		// assert(0);
+		assert(0);
 		if(offset+len>pagesize){  //if data cross boundrary
 			assert(0);
 		}
@@ -76,12 +76,11 @@ void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
 }
 
 lnaddr_t seg_translate(swaddr_t addr, uint8_t sreg){
-	// assert(0);
 	if(!cpu.cr0.protect_enable){
 		// assert(0);
 		return addr;
 	}  //未进入保护模式
-	assert(0);
+	// assert(0);
 	uint16_t index=cpu.sreg[sreg].INDEX;
 	lnaddr_t descriptor_lnaddr=(cpu.GDTR.base+8*index);
 	lnaddr_t d0=lnaddr_read(descriptor_lnaddr,4);  //描述符的低位
