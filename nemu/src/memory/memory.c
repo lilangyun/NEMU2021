@@ -32,9 +32,9 @@ hwaddr_t page_translate(addr){
 	uint32_t offset=addr&0xFFF;
 	uint32_t page=(addr>>12)&0x3FF;
 	uint32_t dir=(addr>>22)&0x3FF;
-	// if(!(page&0x1)){  //检查present位
-	// 	assert(0);
-	// }
+	if(!(page&0x1)){  //检查present位
+		assert(0);
+	}
 	hwaddr_t dir_base=cpu.cr3.page_directory_base;
 	hwaddr_t ptb_base=hwaddr_read(dir_base+dir*4,4);
 	hwaddr_t page_base=hwaddr_read(ptb_base+page*4,4);
@@ -42,7 +42,7 @@ hwaddr_t page_translate(addr){
 }
 
 uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
-	if(cpu.cr0.protect_enable){  //开启分页机制
+	if(cpu.cr0.protect_enable&&cpu.cr0.paging){  //开启分页机制
 		uint32_t offset=addr&(pagesize-1);
 		if(offset+len>pagesize){  //if data cross boundrary
 			assert(0);
@@ -58,7 +58,7 @@ uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
 
 void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
 	// assert(0);
-	if(cpu.cr0.protect_enable){  //开启分页机制
+	if(cpu.cr0.protect_enable&&cpu.cr0.paging){  //开启分页机制
 		uint32_t offset=addr&(pagesize-1);
 		assert(0);
 		if(offset+len>pagesize){  //if data cross boundrary
