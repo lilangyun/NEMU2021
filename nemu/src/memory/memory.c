@@ -42,7 +42,6 @@ hwaddr_t page_translate(addr){
 }
 
 uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
-	assert(0);
 	if(cpu.cr0.protect_enable&&cpu.cr0.paging){  //开启分页机制
 		assert(0);
 		uint32_t offset=addr&(pagesize-1);
