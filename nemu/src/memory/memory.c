@@ -34,9 +34,18 @@ hwaddr_t page_translate(lnaddr_t addr){
 	uint32_t page=(addr>>12)&0x3FF;
 	uint32_t dir=(addr>>22)&0x3FF;
 	hwaddr_t dir_base=cpu.cr3.page_directory_base;
-	hwaddr_t ptb_base=hwaddr_read(dir_base+dir*4,4);
-	hwaddr_t page_base=hwaddr_read(ptb_base+page*4,4);
-	return page_base+offset;
+	// hwaddr_t ptb_base=hwaddr_read(dir_base+dir*4,4);
+	PDE pde;
+	PTE pte;
+	pde.val=hwaddr_read(dir_base+dir*4,4);
+	if(!pde.present){
+		assert(0);
+	}
+	pte.val=hwaddr_read(pde.page_frame+page*4,4);
+	if(!pte.present){
+		assert(0);
+	}
+	return pte.page_frame+offset;
 }
 
 uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
