@@ -1,6 +1,7 @@
 #include "common.h"
 #include "memory/cache.h"
 #include "../../../NEMU2021/nemu/include/cpu/reg.h"
+#include "../../../lib-common/x86-inc/mmu.h"
 
 uint32_t dram_read(hwaddr_t, size_t);
 void dram_write(hwaddr_t, size_t, uint32_t);
@@ -32,9 +33,6 @@ hwaddr_t page_translate(addr){
 	uint32_t offset=addr&0xFFF;
 	uint32_t page=(addr>>12)&0x3FF;
 	uint32_t dir=(addr>>22)&0x3FF;
-	if(!(page&0x1)){  //检查present位
-		assert(0);
-	}
 	hwaddr_t dir_base=cpu.cr3.page_directory_base;
 	hwaddr_t ptb_base=hwaddr_read(dir_base+dir*4,4);
 	hwaddr_t page_base=hwaddr_read(ptb_base+page*4,4);
