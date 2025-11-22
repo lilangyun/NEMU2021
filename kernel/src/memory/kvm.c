@@ -57,7 +57,6 @@ void init_page(void) {
 
 	/* make CR3 to be the entry of page directory */
 	cr3.val = 0;
-	// assert(0);
 	cr3.page_directory_base = ((uint32_t)pdir) >> 12;
 	write_cr3(cr3.val);
 
