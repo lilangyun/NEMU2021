@@ -75,7 +75,7 @@ make_helper(mov_cr2r_l) {
 		assert(0);
 	}
 	// print_asm("movl cr0,%%%s", REG_NAME(op_dest->reg));
-	return len+2;  //  /r：长度值为1
+	return len+1;  //  /r：长度值为1
 }
 
 make_helper(mov_r2cr_l){
@@ -92,7 +92,7 @@ make_helper(mov_r2cr_l){
 		assert(0);
 	}
 	print_asm("movl %%%s,cr0", REG_NAME(op_dest->reg));
-	return len+2;
+	return len+1;
 }
 #endif
 
