@@ -33,7 +33,7 @@ hwaddr_t page_translate(lnaddr_t addr){
 	uint32_t offset=addr&0xFFF;
 	uint32_t page=(addr>>12)&0x3FF;
 	uint32_t dir=(addr>>22)&0x3FF;
-	hwaddr_t dir_base=cpu.cr3.page_directory_base;
+	hwaddr_t dir_base=(cpu.cr3.page_directory_base<<12);
 	// hwaddr_t ptb_base=hwaddr_read(dir_base+dir*4,4);
 	PDE pde;
 	PTE pte;
@@ -41,11 +41,11 @@ hwaddr_t page_translate(lnaddr_t addr){
 	if(!pde.present){
 		assert(0);
 	}
-	pte.val=hwaddr_read(pde.page_frame+page*4,4);
-	// if(!pte.present){
-	// 	assert(0);
-	// }
-	return pte.page_frame+offset;
+	pte.val=hwaddr_read((pde.page_frame<<12)+page*4,4);
+	if(!pte.present){
+		assert(0);
+	}
+	return (pte.page_frame<<12)+offset;
 }
 
 uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
