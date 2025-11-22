@@ -53,7 +53,7 @@ uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
 			return hwaddr_read(hwaddr,len);
 		}
 	}
-	assert(0);
+	// assert(0);
 	return hwaddr_read(addr, len);
 }
 
