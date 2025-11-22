@@ -38,13 +38,13 @@ hwaddr_t page_translate(lnaddr_t addr){
 	PDE pde;
 	PTE pte;
 	pde.val=hwaddr_read(dir_base+dir*4,4);
-	// if(!pde.present){
-	// 	assert(0);
-	// }
-	pte.val=hwaddr_read(pde.page_frame+page*4,4);
-	if(!pte.present){
+	if(!pde.present){
 		assert(0);
 	}
+	pte.val=hwaddr_read(pde.page_frame+page*4,4);
+	// if(!pte.present){
+	// 	assert(0);
+	// }
 	return pte.page_frame+offset;
 }
 
