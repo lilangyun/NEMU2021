@@ -19,7 +19,7 @@ make_helper(jmp_rm_l) {
 }
 
 make_helper(ljmp){
-	assert(0);
+	// assert(0);
 	swaddr_t addr=swaddr_read(cpu.eip+1,4,0);
 	cpu.eip=addr-5;
 	cpu.sreg[0].val=swaddr_read(cpu.eip+5,2,1);
