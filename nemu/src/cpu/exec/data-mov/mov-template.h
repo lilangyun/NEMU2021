@@ -59,7 +59,7 @@ make_helper(mov_rm2sr_w){
 make_helper(mov_cr2r_l) {
 	// assert(0);
 	op_src->size=4;
-	int len = read_ModR_M(cpu.eip+1,op_src,op_dest);
+	int len = read_ModR_M(cpu.eip+1,op_dest,op_src);
 	//这个是读取ModR/M字节的函数
 	// op_src->reg=cpu.cr0.val
 	OPERAND_W(op_src, cpu.cr0.val,1);
