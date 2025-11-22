@@ -59,7 +59,7 @@ uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
 
 void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
 	// assert(0);
-	if(cpu.cr0.protect_enable&&cpu.cr0.paging){  //开启分页机制
+	if(cpu.cr0.protect_enable){  //开启分页机制
 		uint32_t offset=addr&(pagesize-1);
 		assert(0);
 		if(offset+len>pagesize){  //if data cross boundrary
