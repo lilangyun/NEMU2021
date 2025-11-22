@@ -11,4 +11,15 @@ static void do_execute() {
 
 make_instr_helper(r);
 
+#if DATA_BYTE == 2 || DATA_BYTE  == 4
+make_helper(concat(pop_m_, SUFFIX)){
+   	swaddr_t addr=instr_fetch(cpu.eip+2,DATA_BYTE);
+   	uint32_t data=MEM_R(cpu.esp,1);
+   	swaddr_write(addr,DATA_BYTE,data,2);
+	print_asm("pop" str(SUFFIX) " 0x%x, 0x%x", data, addr);
+	cpu.esp+=4;
+	return 2+DATA_BYTE;
+}
+#endif
+
 #include "cpu/exec/template-end.h"
