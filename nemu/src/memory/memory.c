@@ -36,7 +36,7 @@ hwaddr_t page_translate(addr){
 	hwaddr_t dir_base=cpu.cr3.page_directory_base;
 	hwaddr_t ptb_base=hwaddr_read(dir_base+dir*4,4);
 	hwaddr_t page_base=hwaddr_read(ptb_base+page*4,4);
-	return page_base+offset;
+	return page_base+offset*4;
 }
 
 uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
