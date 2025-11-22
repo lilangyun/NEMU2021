@@ -13,7 +13,6 @@ make_instr_helper(r);
 
 #if DATA_BYTE == 2 || DATA_BYTE  == 4
 make_helper(concat(pop_m_, SUFFIX)){
-	assert(0);
    	swaddr_t addr=instr_fetch(cpu.eip+2,DATA_BYTE);
    	uint32_t data=MEM_R(cpu.esp,1);
    	swaddr_write(addr,DATA_BYTE,data,2);
