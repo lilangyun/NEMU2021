@@ -64,6 +64,7 @@ typedef struct {
 	
 	//控制寄存器
 	CR0 cr0;
+	CR3 cr3;
 
 	struct{
 		union{

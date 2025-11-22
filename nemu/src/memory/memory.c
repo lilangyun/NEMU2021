@@ -5,6 +5,7 @@
 uint32_t dram_read(hwaddr_t, size_t);
 void dram_write(hwaddr_t, size_t, uint32_t);
 
+#define pagesize 4048
 
 /* Memory accessing interfaces */
 // 访问内存的接口函数：sw(虚拟)，ln(线性)，hw(物理地址);一般用swaddr_访问模拟地址
@@ -27,12 +28,47 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
 	cache_write(addr, data, len);
 }
 
+hwaddr_t page_translate(addr){
+	uint32_t offset=addr&0xFFF;
+	uint32_t page=(addr>>12)&0x3FF;
+	uint32_t dir=(addr>>22)&0x3FF;
+	if(!(page&0x1)){  //检查present位
+		assert(0);
+	}
+	hwaddr_t dir_base=cpu.cr3.page_directory_base;
+	hwaddr_t ptb_base=hwaddr_read(dir_base+dir*4,4);
+	hwaddr_t page_base=hwaddr_read(ptb_base+page*4,4);
+	return page_base+offset;
+}
+
 uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
+	if(cpu.cr0.protect_enable&&cpu.cr0.paging){  //开启分页机制
+		uint32_t offset=addr&(pagesize-1);
+		if(offset+len>pagesize){  //if data cross boundrary
+			assert(0);
+		}
+		else{
+			hwaddr_t hwaddr=page_translate(addr);
+			return hwaddr_read(hwaddr,len);
+		}
+	}
 	return hwaddr_read(addr, len);
 }
 
 void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
-	hwaddr_write(addr, len, data);
+	if(cpu.cr0.protect_enable&&cpu.cr0.paging){  //开启分页机制
+		uint32_t offset=addr&(pagesize-1);
+		if(offset+len>pagesize){  //if data cross boundrary
+			assert(0);
+		}
+		else{
+			hwaddr_t hwaddr=page_translate(addr);
+			hwaddr_write(hwaddr,len,data);
+		}
+	}
+	else{
+		hwaddr_write(addr, len, data);
+	}
 }
 
 lnaddr_t seg_translate(swaddr_t addr, uint8_t sreg){

@@ -82,6 +82,7 @@ static void init_eflags(){
 static void init_cr0(){  //static可确保外部文件不可调用本文件内部函数去修改状态等
 	cpu.cr0.protect_enable=0;
 	// 将PE置为0，确保初始时为实模式运行
+	cpu.cr0.paging=0;
 }
 
 static void init_cs(){
