@@ -1,7 +1,6 @@
 #include "common.h"
 #include "memory.h"
 #include <string.h>
-#include "mm.h"
 
 #define VMEM_ADDR 0xa0000
 #define SCR_SIZE (320 * 200)
@@ -16,7 +15,7 @@ void create_video_mapping() {
 	 * some page tables to create this mapping.
 	 */
 	assert(0);
-	mm_malloc(max_brk, new_brk - max_brk);
+	// mm_malloc(max_brk, new_brk - max_brk);
 	panic("please implement me");
 }
 
