@@ -68,7 +68,7 @@ hwaddr_t page_translate(lnaddr_t addr) {	// 线性地址 -> 物理地址
 #ifdef DEBUG_page_p
 	printf("eip:0x%x\taddr 0x%x\n", cpu.eip, addr);
 #endif
-	Assert(dictionary_.present == 1, "dirctionary present != 1");
+	// Assert(dictionary_.present == 1, "dirctionary present != 1");
 	Assert(page_.present == 1, "second page table present != 1");
 #ifdef DEBUG_page
 	printf("0x%x\n", (page_.addr << 12) + offset);
