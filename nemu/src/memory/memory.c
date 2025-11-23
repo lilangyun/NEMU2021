@@ -43,7 +43,7 @@ hwaddr_t page_translate(lnaddr_t addr){
 	PTE pte;
 	pde.val=hwaddr_read(dir_base+4*dir,4);
 
-	Log("[page_translate] pde = %d",dir_base+4*dir);
+	Log("[page_translate] pde = 0x%x",dir_base+4*dir);
 
 	if(!pde.present){
 		assert(0);
