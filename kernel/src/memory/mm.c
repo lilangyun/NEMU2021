@@ -6,17 +6,7 @@ static PDE updir[NR_PDE] align_to_page;
 static CR3 ucr3;
 
 PDE* get_updir() { return updir; }
-uint32_t get_ucr3() { 
-	uint32_t pdir_pa = (uint32_t)va_to_pa(ucr3.val);
-
-    // 2. 设置 CR3 的控制位。最低位 (P) 必须为 1。
-    //    其他常用位还有 PWT (Bit 3) 和 PCD (Bit 4)，通常设为 0。
-    pdir_pa |= 0x1; 
-
-    // 3. 返回最终的值
-    return pdir_pa;
-	// return ucr3.val; 
-}
+uint32_t get_ucr3() { return ucr3.val; }
 
 PDE* get_kpdir();
 
