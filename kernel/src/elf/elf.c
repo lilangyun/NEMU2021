@@ -19,7 +19,7 @@ uint32_t get_ucr3();
 
 uint32_t loader() {
 	Elf32_Ehdr *elf;
-	Elf32_Phdr *ph = NULL;	//程序头表
+	Elf32_Phdr *ph = NULL;	//程序头表，指向物理内存为0的位置
 
 	uint8_t buf[4096];	//缓冲区
 	// 4096/4==1024
@@ -30,8 +30,9 @@ uint32_t loader() {
 #else
 	assert(0);
 	ramdisk_read(buf, ELF_OFFSET_IN_DISK, 4096);	//读出ramdisk中的内容
-	// assert(0);
+	// 读程序表头，但是这里之后竟然不执行，非常奇怪
 #endif
+	assert(0);
 
 	elf = (void*)buf;	//elf文件应从虚拟地址0处开始
 
@@ -40,7 +41,7 @@ uint32_t loader() {
 	const uint32_t elf_magic = 0x464c457f;	//如何修改?ans:在elf.h文件中竟然有关于魔数的信息！神奇
 	uint32_t *p_magic = (void *)buf;
 	//按照个人理解这里需要判断elf_magic是否等于*buf，那怎么知道buf前4字节是什么呢？ 
-	assert(*p_magic == elf_magic);
+	nemu_assert(*p_magic == elf_magic);
 
 	/* Load each program segment */
 	// panic("please implement me");

@@ -2,7 +2,7 @@
 #include <string.h>
 
 #define RAMDISK_START ((void *)0)
-#define RAMDISK_SIZE 0xa0000
+#define RAMDISK_SIZE 0xa0000  //1010 0000 0000 0000 0000，大小不到1MB
 
 /* The kernel is monolithic, therefore we do not need to
  * translate the address `buf' from the user process to
@@ -13,7 +13,7 @@
 void ramdisk_read(uint8_t *buf, uint32_t offset, uint32_t len) {
 	nemu_assert(offset + len < RAMDISK_SIZE);
 	memcpy(buf, RAMDISK_START + offset, len);
-}
+}  //读物理内存
 
 /* write `len' bytes starting from `buf' into the `offset' of ramdisk */
 void ramdisk_write(uint8_t *buf, uint32_t offset, uint32_t len) {
