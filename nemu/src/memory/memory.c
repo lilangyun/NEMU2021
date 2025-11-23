@@ -37,7 +37,7 @@ hwaddr_t page_translate(lnaddr_t addr){
 	// Log("CR3.page_directory_base=0x%x, dir_base=0x%x", 
     //     cpu.cr3.page_directory_base, (cpu.cr3.page_directory_base << 12));
 
-	hwaddr_t dir_base=(cpu.cr3.val);
+	hwaddr_t dir_base=(cpu.cr3.page_directory_base<<12);
 	// hwaddr_t ptb_base=hwaddr_read(dir_base+dir*4,4);
 	PDE pde;
 	PTE pte;
