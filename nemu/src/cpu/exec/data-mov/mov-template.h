@@ -63,6 +63,7 @@ make_helper(mov_cr2r_l) {
 	}
 	case 3:{
 		cpu.gpr[mrm]._32=cpu.cr3.val;
+		Log("movl %%cr%d, %%%s",mreg,REG_NAME(mrm));
 		break;
 	}
 	default:{
