@@ -42,9 +42,9 @@ hwaddr_t page_translate(lnaddr_t addr){
 	PDE pde;
 	PTE pte;
 	pde.val=hwaddr_read(dir_base+(dir<<2),4);
-	if(!pde.present){
-		assert(0);
-	}
+	// if(!pde.present){
+	// 	assert(0);
+	// }
 	pte.val=hwaddr_read((pde.page_frame<<12)+(page<<2),4);
 	// if(!pte.present){
 	// 	assert(0);
