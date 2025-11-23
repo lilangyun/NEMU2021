@@ -57,9 +57,6 @@ void init_page(void) {
 		}
 	*/
 
-	// 打印即将写入CR3的值（应是kpdir_pa >> 12 = 0x800）
-  	Log("[Kernel] CR3 to set: 0x%x\n", ((uint32_t)pdir) >> 12);
-
 	/* make CR3 to be the entry of page directory */
 	cr3.val = 0;
 	cr3.page_directory_base = ((uint32_t)pdir) >> 12;

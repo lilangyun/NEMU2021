@@ -48,43 +48,57 @@ make_helper(mov_rm2sr_w){
 
 #if DATA_BYTE==4
 make_helper(mov_cr2r_l) {
-	// assert(0);
-	op_src->size=4;
-	op_dest->size=4;
-	int len = read_ModR_M(cpu.eip+2,op_dest,op_src);
-	//这个是读取ModR/M字节的函数
-	// op_src->reg=cpu.cr0.val
-	if(op_src->reg==0){
-		OPERAND_W(op_dest, cpu.cr0.val,1);
-		print_asm("movl cr0,%%%s", REG_NAME(op_dest->reg));
+	uint8_t modrm=instr_fetch(cpu.eip+2,1);
+	uint8_t mrm=modrm&0x7;  //rm类型为寄存器，这里储存的是寄存器编码
+	uint8_t mreg=(modrm>>3)&0x7;  //这里reg指的是control register的编码
+	uint8_t mop=(modrm>>6)&0x3;
+	if (mop != 3) {
+        assert(0);
+    }
+	switch (mreg)
+	{
+	case 0:{
+		cpu.gpr[mrm]._32=cpu.cr0.val;
+		break;
 	}
-	else if(op_src->reg==3){
-		OPERAND_W(op_dest, cpu.cr3.val,1);
-		print_asm("movl cr3,%%%s", REG_NAME(op_dest->reg));
+	case 3:{
+		cpu.gpr[mrm]._32=cpu.cr3.val;
+		break;
 	}
-	else{
+	default:{
 		assert(0);
+		break;
 	}
-	// print_asm("movl cr0,%%%s", REG_NAME(op_dest->reg));
-	return len+1;  //  /r：长度值为1
+	}
+	print_asm("movl %%cr%d, %%%s",mreg,REG_NAME(mrm));
+	return 2;
 }
 
 make_helper(mov_r2cr_l){
-	op_src->size=4;
-	int len=read_ModR_M(cpu.eip+2,op_src,op_dest);
-	// int len = decode_r_l(cpu.eip+1);
-	if(op_dest->reg==0){
-		cpu.cr0.val=op_src->val;
-		print_asm("movl %%%s,cr0", REG_NAME(op_src->reg));
+	uint8_t modrm=instr_fetch(cpu.eip+2,1);
+	uint8_t mrm=modrm&0x7;  //rm类型为寄存器，这里储存的是寄存器编码
+	uint8_t mreg=(modrm>>3)&0x7;  //这里reg指的是control register的编码
+	uint8_t mop=(modrm>>6)&0x3;
+	if (mop != 3) {
+        assert(0);
+    }
+	switch (mreg)
+	{
+	case 0:{
+		cpu.cr0.val=cpu.gpr[mrm]._32;
+		break;
 	}
-	else if(op_dest->reg==3){
-		cpu.cr3.val=op_src->val;
-		print_asm("movl %%%s,cr3", REG_NAME(op_src->reg));
+	case 3:{
+		cpu.cr3.val=cpu.gpr[mrm]._32;
+		break;
 	}
-	else{
+	default:{
 		assert(0);
+		break;
 	}
-	return len+1;
+	}
+	print_asm("movl %%%s, %%cr%d",REG_NAME(mrm),mreg);
+	return 2;
 }
 #endif
 
