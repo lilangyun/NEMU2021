@@ -33,6 +33,10 @@ hwaddr_t page_translate(lnaddr_t addr){
 	uint32_t offset=addr&0xFFF;
 	uint32_t page=(addr>>12)&0x3FF;
 	uint32_t dir=(addr>>22);
+
+	Log("CR3.page_directory_base=0x%x, dir_base=0x%x", 
+        cpu.cr3.page_directory_base, (cpu.cr3.page_directory_base << 12));
+
 	hwaddr_t dir_base=(cpu.cr3.page_directory_base<<12);
 	// hwaddr_t ptb_base=hwaddr_read(dir_base+dir*4,4);
 	PDE pde;
