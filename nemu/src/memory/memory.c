@@ -29,53 +29,27 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
 	cache_write(addr, data, len);
 }
 
-// hwaddr_t page_translate(lnaddr_t addr){
-// 	uint32_t offset=addr&0xFFF;
-// 	uint32_t page=(addr>>12)&0x3FF;
-// 	uint32_t dir=(addr>>22);
+hwaddr_t page_translate(lnaddr_t addr){
+	uint32_t offset=addr&0xFFF;
+	uint32_t page=(addr>>12)&0x3FF;
+	uint32_t dir=(addr>>22);
 
-// 	// Log("CR3.page_directory_base=0x%x, dir_base=0x%x", 
-//     //     cpu.cr3.page_directory_base, (cpu.cr3.page_directory_base << 12));
+	// Log("CR3.page_directory_base=0x%x, dir_base=0x%x", 
+    //     cpu.cr3.page_directory_base, (cpu.cr3.page_directory_base << 12));
 
-// 	hwaddr_t dir_base=(cpu.cr3.page_directory_base<<12);
-// 	// hwaddr_t ptb_base=hwaddr_read(dir_base+dir*4,4);
-// 	PDE pde;
-// 	PTE pte;
-// 	pde.val=hwaddr_read(dir_base+(dir<<2),4);
-// 	// if(!pde.present){
-// 	// 	assert(0);
-// 	// }
-// 	pte.val=hwaddr_read((pde.page_frame<<12)+(page<<2),4);
-// 	// if(!pte.present){
-// 	// 	assert(0);
-// 	// }
-// 	return (pte.page_frame<<12)+offset;
-// }
-
-hwaddr_t page_translate(lnaddr_t addr) {	// 线性地址 -> 物理地址
-	if(!cpu.cr0.protect_enable || !cpu.cr0.paging) return addr;
-	/* addr = 10 dictionary + 10 page + 12 offset */
-	uint32_t dictionary = addr >> 22, page = (addr >> 12) & 0x3ff, offset = addr & 0xfff;
-	/* 先看TLB */
-	// int index = read_tlb(addr);
-	// if (index != -1) return (tlb[index].data << 12) + offset;
-	/* 读取页表信息 */
-	uint32_t tmp = (cpu.cr3.page_directory_base << 12) + dictionary * 4;		// 页目录基地址 + 页目录号 * 页表项大小
-	PTE dictionary_, page_;
-	dictionary_.val = hwaddr_read(tmp, 4);
-	tmp = (dictionary_.page_frame << 12) + page * 4;									// 二级页表基地址 + 页号 + 页表项大小
-	page_.val = hwaddr_read(tmp, 4);
-#ifdef DEBUG_page_p
-	printf("eip:0x%x\taddr 0x%x\n", cpu.eip, addr);
-#endif
-	// Assert(dictionary_.present == 1, "dirctionary present != 1");
-	// Assert(page_.present == 1, "second page table present != 1");
-#ifdef DEBUG_page
-	printf("0x%x\n", (page_.addr << 12) + offset);
-#endif
-	hwaddr_t addr_ = (page_.page_frame << 12) + offset;
-	// write_tlb(addr, addr_);
-	return addr_;
+	hwaddr_t dir_base=(cpu.cr3.page_directory_base<<12);
+	// hwaddr_t ptb_base=hwaddr_read(dir_base+dir*4,4);
+	PDE pde;
+	PTE pte;
+	pde.val=hwaddr_read(dir_base+(dir<<2),4);
+	if(!pde.present){
+		assert(0);
+	}
+	pte.val=hwaddr_read((pde.page_frame<<12)+(page<<2),4);
+	if(!pte.present){
+		assert(0);
+	}
+	return (pte.page_frame<<12)+offset;
 }
 
 uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
