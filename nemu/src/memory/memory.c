@@ -37,11 +37,11 @@ hwaddr_t page_translate(lnaddr_t addr){
 	// hwaddr_t ptb_base=hwaddr_read(dir_base+dir*4,4);
 	PDE pde;
 	PTE pte;
-	pde.val=dram_read(dir_base+(dir<<2),4);
+	pde.val=hwaddr_read(dir_base+(dir<<2),4);
 	// if(!pde.present){
 	// 	assert(0);
 	// }
-	pte.val=dram_read((pde.page_frame<<12)+(page<<2),4);
+	pte.val=hwaddr_read((pde.page_frame<<12)+(page<<2),4);
 	// if(!pte.present){
 	// 	assert(0);
 	// }
