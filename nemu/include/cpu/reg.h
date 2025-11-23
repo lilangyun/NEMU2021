@@ -76,9 +76,9 @@ typedef struct {
 			uint16_t val;
 		};
 		
-		uint16_t attribute;
-		uint32_t limit;
 		uint32_t base; 
+		uint32_t limit;
+		uint16_t attribute;
 	}sreg[4];
 
 } CPU_state;
