@@ -22,6 +22,7 @@ uint32_t mm_brk(uint32_t new_brk) {
 			assert(0);
 			mm_malloc(max_brk, new_brk - max_brk);
 #endif
+			mm_malloc(max_brk,new_brk - max_brk);
 			max_brk = new_brk;
 		}
 
