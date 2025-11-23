@@ -91,6 +91,7 @@ make_helper(mov_r2cr_l){
 	}
 	case 3:{
 		cpu.cr3.val=cpu.gpr[mrm]._32;
+		Log("[NEMU] mov_r2cr_l: eax value = 0x%x (to be written to CR3)\n", cpu.gpr[0]._32);
 		Log("movl %%%s, %%cr%d",REG_NAME(mrm),mreg);
 		break;
 	}
