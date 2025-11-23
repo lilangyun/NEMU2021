@@ -1,7 +1,7 @@
 #include "common.h"
 #include "memory/cache.h"
-#include "../../../NEMU2021/nemu/include/cpu/reg.h"
-#include "../../../lib-common/x86-inc/mmu.h"
+#include "cpu/reg.h"
+#include "cpu/mmu.h"
 
 uint32_t dram_read(hwaddr_t, size_t);
 void dram_write(hwaddr_t, size_t, uint32_t);
