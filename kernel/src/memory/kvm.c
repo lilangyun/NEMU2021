@@ -19,9 +19,6 @@ void init_page(void) {
 	/* make all PDEs invalid */
 	memset(pdir, 0, NR_PDE * sizeof(PDE));
 
-	Log("[Kernel] kpdir va=0x%x, pa=0x%x\n", kpdir, ((uint32_t)pdir));
-
-
 	/* fill PDEs */
 	for (pdir_idx = 0; pdir_idx < PHY_MEM / PT_SIZE; pdir_idx ++) {
 		pdir[pdir_idx].val = make_pde(ptable);
