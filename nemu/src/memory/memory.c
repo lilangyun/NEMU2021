@@ -41,7 +41,7 @@ hwaddr_t page_translate(lnaddr_t addr){
 	if(!pde.present){
 		assert(0);
 	}
-	pte.val=hwaddr_read((pde.page_frame<<12)+(page<<2),4);
+	pte.val=dram_read((pde.page_frame<<12)+(page<<2),4);
 	if(!pte.present){
 		assert(0);
 	}
