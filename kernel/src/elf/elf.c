@@ -23,12 +23,13 @@ uint32_t loader() {
 
 	uint8_t buf[4096];	//缓冲区
 	// 4096/4==1024
-	assert(0);
+	// assert(0);
 
 #ifdef HAS_DEVICE
 	ide_read(buf, ELF_OFFSET_IN_DISK, 4096);
 #else
 	ramdisk_read(buf, ELF_OFFSET_IN_DISK, 4096);	//读出ramdisk中的内容
+	assert(0);
 #endif
 
 	elf = (void*)buf;	//elf文件应从虚拟地址0处开始
