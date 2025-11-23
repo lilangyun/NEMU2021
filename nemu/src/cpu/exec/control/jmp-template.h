@@ -24,7 +24,7 @@ make_helper(ljmp){
 	cpu.eip=addr-7;
 	cpu.sreg[0].val=swaddr_read(cpu.eip+5,2,0);
 
-	uint16_t index=cpu.sreg[0].INDEX;
+	uint16_t index=cpu.sreg[0].val;  //这里val应该就是selector
 	lnaddr_t descriptor_lnaddr=(cpu.GDTR.base+8*index);
 	lnaddr_t d0=lnaddr_read(descriptor_lnaddr,4);  //描述符的低位
 	lnaddr_t d1=lnaddr_read(descriptor_lnaddr+4,4);  //描述符的高位
