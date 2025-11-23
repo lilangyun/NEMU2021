@@ -38,13 +38,13 @@ hwaddr_t page_translate(lnaddr_t addr){
 	PDE pde;
 	PTE pte;
 	pde.val=hwaddr_read(dir_base+(dir<<2),4);
-	// if(!pde.present){
-	// 	assert(0);
-	// }
+	if(!pde.present){
+		assert(0);
+	}
 	pte.val=hwaddr_read((pde.page_frame<<12)+(page<<2),4);
-	// if(!pte.present){
-	// 	assert(0);
-	// }
+	if(!pte.present){
+		assert(0);
+	}
 	return (pte.page_frame<<12)+offset;
 }
 
@@ -87,13 +87,13 @@ lnaddr_t seg_translate(swaddr_t addr, uint8_t sreg){
 		// assert(0);
 		return addr;
 	}  //未进入保护模式
-	// assert(0);
-	// uint16_t index=cpu.sreg[sreg].INDEX;
-	// lnaddr_t descriptor_lnaddr=(cpu.GDTR.base+8*index);
-	// lnaddr_t d0=lnaddr_read(descriptor_lnaddr,4);  //描述符的低位
-	// lnaddr_t d1=lnaddr_read(descriptor_lnaddr+4,4);  //描述符的高位
-	// lnaddr_t base = (((d1>>24)&0xFF)<<24)|((d1&0xFF)<<16)|((d0>>16)&0xFFFF);
-	return cpu.sreg->base+addr;  //进入保护模式才需要地址翻译
+	assert(0);
+	uint16_t index=cpu.sreg[sreg].INDEX;
+	lnaddr_t descriptor_lnaddr=(cpu.GDTR.base+8*index);
+	lnaddr_t d0=lnaddr_read(descriptor_lnaddr,4);  //描述符的低位
+	lnaddr_t d1=lnaddr_read(descriptor_lnaddr+4,4);  //描述符的高位
+	lnaddr_t base = (((d1>>24)&0xFF)<<24)|((d1&0xFF)<<16)|((d0>>16)&0xFFFF);
+	return base+addr;  //进入保护模式才需要地址翻译
 }
 
 uint32_t swaddr_read(swaddr_t addr, size_t len,uint8_t sreg) {
