@@ -19,6 +19,9 @@ void init_page(void) {
 	/* make all PDEs invalid */
 	memset(pdir, 0, NR_PDE * sizeof(PDE));
 
+	printk("[Kernel] kpdir va=0x%x, pa=0x%x\n", kpdir, pdir);
+
+
 	/* fill PDEs */
 	for (pdir_idx = 0; pdir_idx < PHY_MEM / PT_SIZE; pdir_idx ++) {
 		pdir[pdir_idx].val = make_pde(ptable);
@@ -54,6 +57,8 @@ void init_page(void) {
 		}
 	*/
 
+	// 打印即将写入CR3的值（应是kpdir_pa >> 12 = 0x800）
+  	printk("[Kernel] CR3 to set: 0x%x\n", pdir >> 12);
 
 	/* make CR3 to be the entry of page directory */
 	cr3.val = 0;
