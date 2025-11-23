@@ -97,18 +97,39 @@ static void ddr3_write(hwaddr_t addr, void *data, uint8_t *mask) {
 	memcpy(dram[rank][bank][row], rowbufs[rank][bank].buf, NR_COL);
 }
 
-uint32_t dram_read(hwaddr_t addr, size_t len) {
-	uint32_t offset = addr & BURST_MASK;	//取偏移量
-	uint8_t temp[2 * BURST_LEN];	//burst_len起什么作用？
+// uint32_t dram_read(hwaddr_t addr, size_t len) {
+// 	uint32_t offset = addr & BURST_MASK;	//取偏移量
+// 	uint8_t temp[2 * BURST_LEN];	//burst_len起什么作用？
 	
-	ddr3_read(addr, temp);
+// 	ddr3_read(addr, temp);
 
-	if(offset + len > BURST_LEN) {
-		/* data cross the burst boundary */
-		ddr3_read(addr + BURST_LEN, temp + BURST_LEN);
-	}
+// 	if(offset + len > BURST_LEN) {
+// 		/* data cross the burst boundary */
+// 		ddr3_read(addr + BURST_LEN, temp + BURST_LEN);
+// 	}
 
-	return (unalign_rw(temp + offset, 4))&(~0u >> ((4 - len) << 3));
+// 	return (unalign_rw(temp + offset, 4))&(~0u >> ((4 - len) << 3));
+// }
+uint32_t dram_read(hwaddr_t addr, size_t len) {
+  Assert(len == 1 || len == 2 || len == 4, "dram_read: invalid len %ld", len);
+  uint32_t offset = addr & BURST_MASK;  // burst块内偏移（0~7）
+  uint8_t temp[2 * BURST_LEN];          // 暂存2个burst块（16字节）
+  memset(temp, 0, sizeof(temp));        // 初始化，避免脏数据干扰
+
+  // 1. 读第一个burst块（按对齐地址读）
+  hwaddr_t align_addr = addr & ~BURST_MASK;  // burst对齐地址（低3位置0）
+  ddr3_read(align_addr, temp);
+
+  // 2. 若跨burst块，读第二个burst块
+  if (offset + len > BURST_LEN) {
+    ddr3_read(align_addr + BURST_LEN, temp + BURST_LEN);
+  }
+
+  // 3. 关键修复：按实际len读取数据，并截取有效部分
+  uint32_t full_data = unalign_rw(temp + offset, 4);  // 先读4字节
+  // 按len截取有效数据（如len=1取低8位，len=2取低16位，len=4取完整32位）
+  uint32_t mask = ~0u >> ((4 - len) << 3);
+  return full_data & mask;
 }
 
 void dram_write(hwaddr_t addr, size_t len, uint32_t data) {
