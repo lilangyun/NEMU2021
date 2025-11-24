@@ -51,9 +51,9 @@ hwaddr_t page_translate(lnaddr_t addr){
 	pte.val=hwaddr_read((pde.page_frame<<12)+(page<<2),4);
 
 	Log("[page_translate] pde = 0x%x",pte.val);
-	// if(!pte.present){
-	// 	assert(0);
-	// }
+	if(!pte.present){
+		assert(0);
+	}
 	return (pte.page_frame<<12)+offset;
 }
 
