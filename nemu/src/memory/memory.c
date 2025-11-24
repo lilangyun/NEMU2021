@@ -83,7 +83,7 @@ hwaddr_t page_translate(lnaddr_t addr) {
 
     if (!pde.present) {
         Log("ERROR: PDE not present for address 0x%08x, it's pde:0x%08x", addr,pde.val);
-        return 0;
+        // return 0;
     }
     
     // 添加PTE调试
