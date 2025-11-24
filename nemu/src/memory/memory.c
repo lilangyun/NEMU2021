@@ -90,7 +90,7 @@ uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
 	assert(len == 1 || len == 2 || len ==4);
 	uint32_t offset = addr & 0xfff;
 	if((int64_t)(offset + len) > 0x1000) {	// 跨页
-		// assert(0);
+		assert(0);
 		size_t l = 0xfff - offset + 1;		// 低位最多几个字节同页
 		uint32_t down_val = lnaddr_read(addr, l);			// 低位
 		uint32_t up_val = lnaddr_read(addr + l, len - l);	//高位
