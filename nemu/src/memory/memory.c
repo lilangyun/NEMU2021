@@ -66,6 +66,14 @@ hwaddr_t page_translate(lnaddr_t addr) {
     uint32_t page = (addr >> 12) & 0x3FF;
     uint32_t dir = (addr >> 22);
 
+	if (addr == 0x114e0fb5) {
+        printf("=== CALL STACK TRACE ===\n");
+        
+        // 获取当前EIP
+        uint32_t current_eip = cpu.eip;
+        printf("[0] EIP = 0x%08x\n", current_eip);
+	}
+
     hwaddr_t dir_base = (cpu.cr3.page_directory_base << 12);
     PDE pde;
     PTE pte;
