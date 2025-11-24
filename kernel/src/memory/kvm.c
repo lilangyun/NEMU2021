@@ -33,13 +33,12 @@ void init_page(void) {
 	 * If you do not understand it, refer to the C code below.
 	 */
 
-	/*asm volatile ("std;\
+	asm volatile ("std;\
 	 1: stosl;\
 		subl %0, %%eax;\
 		jge 1b;\
 		cld" : :
 		"i"(PAGE_SIZE), "a"((PHY_MEM - PAGE_SIZE) | 0x7), "D"(ptable - 1));
-		*/
 
 
 	
@@ -54,15 +53,6 @@ void init_page(void) {
 			ptable --;
 		}
 		*/
-
-	ptable = (PTE *)va_to_pa(kptable);  // 重置到起始位置
-	// uint32_t pframe_addr = PHY_MEM - PAGE_SIZE;
-
-	// 正向填充所有PTE（更简单可靠）
-	int i = 0;
-	for (i = 0; i < PHY_MEM / PAGE_SIZE; i++) {
-    	ptable[i].val = make_pte(i * PAGE_SIZE);
-	}
 	
 
 	/* make CR3 to be the entry of page directory */
