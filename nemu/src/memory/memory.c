@@ -62,7 +62,7 @@ uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
 		// assert(0);
 		uint32_t offset=addr&(pagesize-1);
 		if(offset+len>pagesize){  //if data cross boundrary
-			// assert(0);
+			assert(0);
 		}
 		else{
 			hwaddr_t hwaddr=page_translate(addr);
