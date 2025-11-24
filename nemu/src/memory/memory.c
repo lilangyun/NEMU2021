@@ -29,36 +29,67 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
 	cache_write(addr, data, len);
 }
 
-hwaddr_t page_translate(lnaddr_t addr){
-	uint32_t offset=addr&0xFFF;
-	uint32_t page=(addr>>12)&0x3FF;
-	uint32_t dir=(addr>>22);
+// hwaddr_t page_translate(lnaddr_t addr){
+// 	uint32_t offset=addr&0xFFF;
+// 	uint32_t page=(addr>>12)&0x3FF;
+// 	uint32_t dir=(addr>>22);
 
-	// Log("CR3.page_directory_base=0x%x, dir_base=0x%x", 
-    //     cpu.cr3.page_directory_base, (cpu.cr3.page_directory_base << 12));
+// 	// Log("CR3.page_directory_base=0x%x, dir_base=0x%x", 
+//     //     cpu.cr3.page_directory_base, (cpu.cr3.page_directory_base << 12));
 
-	hwaddr_t dir_base=(cpu.cr3.page_directory_base<<12);
-	// hwaddr_t ptb_base=hwaddr_read(dir_base+dir*4,4);
-	PDE pde;
-	PTE pte;
-	pde.val=hwaddr_read(dir_base+4*dir,4);
+// 	hwaddr_t dir_base=(cpu.cr3.page_directory_base<<12);
+// 	// hwaddr_t ptb_base=hwaddr_read(dir_base+dir*4,4);
+// 	PDE pde;
+// 	PTE pte;
+// 	pde.val=hwaddr_read(dir_base+4*dir,4);
 
-	Log("[page_translate] pde = 0x%x",pde.val);
-	if (cpu.eip == 0xc01011da) {
-    Log("Stack operation: esp = 0x%08x, accessing 0x%08x\n", 
-           cpu.esp, cpu.esp + 0x4);
-}
+// 	Log("[page_translate] pde = 0x%x",pde.val);
+// 	if (cpu.eip == 0xc01011da) {
+//     Log("Stack operation: esp = 0x%08x, accessing 0x%08x\n", 
+//            cpu.esp, cpu.esp + 0x4);
+// }
 
-	if(!pde.present){
-		assert(0);
-	}
-	pte.val=hwaddr_read((pde.page_frame<<12)+(page<<2),4);
+// 	if(!pde.present){
+// 		assert(0);
+// 	}
+// 	pte.val=hwaddr_read((pde.page_frame<<12)+(page<<2),4);
 
-	// Log("[page_translate] pte = 0x%x",pte.val);
-	if(!pte.present){
-		assert(0);
-	}
-	return (pte.page_frame<<12)+offset;
+// 	// Log("[page_translate] pte = 0x%x",pte.val);
+// 	if(!pte.present){
+// 		assert(0);
+// 	}
+// 	return (pte.page_frame<<12)+offset;
+// }
+
+hwaddr_t page_translate(lnaddr_t addr) {
+    uint32_t offset = addr & 0xFFF;
+    uint32_t page = (addr >> 12) & 0x3FF;
+    uint32_t dir = (addr >> 22);
+
+    hwaddr_t dir_base = (cpu.cr3.page_directory_base << 12);
+    PDE pde;
+    PTE pte;
+    
+    pde.val = hwaddr_read(dir_base + 4 * dir, 4);
+    Log("[page_translate] pde = 0x%x, dir_index = %d", pde.val, dir);
+
+    if (!pde.present) {
+        Log("ERROR: PDE not present for address 0x%08x", addr);
+        assert(0);
+    }
+    
+    // 添加PTE调试
+    uint32_t pte_addr = (pde.page_frame << 12) + page * 4;
+    pte.val = hwaddr_read(pte_addr, 4);
+    Log("[page_translate] pte = 0x%x, pte_index = %d, pte_addr = 0x%08x", 
+         pte.val, page, pte_addr);
+
+    if (!pte.present) {
+        Log("ERROR: PTE not present for address 0x%08x", addr);
+        assert(0);
+    }
+    
+    return (pte.page_frame << 12) + offset;
 }
 
 uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
