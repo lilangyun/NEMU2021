@@ -61,76 +61,58 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
 // 	return (pte.page_frame<<12)+offset;
 // }
 
-hwaddr_t page_translate(lnaddr_t addr) {
-    uint32_t offset = addr & 0xFFF;
-    uint32_t page = (addr >> 12) & 0x3FF;
-    uint32_t dir = (addr >> 22);
-
-	// if (addr == 0x114e0fb5) {
-    //     printf("=== CALL STACK TRACE ===\n");
-        
-    //     // 获取当前EIP
-    //     uint32_t current_eip = cpu.eip;
-    //     printf("[0] EIP = 0x%08x\n", current_eip);
-	// }
-
-    hwaddr_t dir_base = (cpu.cr3.page_directory_base << 12);
-    PDE pde;
-    PTE pte;
-    
-    pde.val = hwaddr_read(dir_base + 4 * dir, 4);
-    // Log("[page_translate] pde = 0x%x, dir_index = %d", pde.page_frame, dir);
-
-    if (!pde.present) {
-        Log("ERROR: PDE not present for address 0x%08x, it's pde:0x%08x", addr,pde.val);
-        // return 0;
-    }
-    
-    // 添加PTE调试
-    uint32_t pte_addr = (pde.page_frame << 12) + page * 4;
-    pte.val = hwaddr_read(pte_addr, 4);
-    // Log("[page_translate] pte = 0x%x, pte_index = %d, pte_addr = 0x%08x", 
-    //      pte.val, page, pte_addr);
-
-    // if (!pte.present) {
-    //     Log("ERROR: PTE not present for address 0x%08x", addr);
-    //     assert(0);
-    // }
-    
-    return (pte.page_frame << 12) + offset;
+hwaddr_t page_translate(lnaddr_t addr) {	// 线性地址 -> 物理地址
+	if(!cpu.cr0.protect_enable || !cpu.cr0.paging) return addr;
+	/* addr = 10 dictionary + 10 page + 12 offset */
+	uint32_t dictionary = addr >> 22, page = (addr >> 12) & 0x3ff, offset = addr & 0xfff;
+	/* 先看TLB */
+	// int index = read_tlb(addr);
+	// if (index != -1) return (tlb[index].data << 12) + offset;
+	/* 读取页表信息 */
+	uint32_t tmp = (cpu.cr3.page_directory_base << 12) + dictionary * 4;		// 页目录基地址 + 页目录号 * 页表项大小
+	PTE dictionary_, page_;
+	dictionary_.val = hwaddr_read(tmp, 4);
+	tmp = (dictionary_.page_frame << 12) + page * 4;									// 二级页表基地址 + 页号 + 页表项大小
+	page_.val = hwaddr_read(tmp, 4);
+#ifdef DEBUG_page_p
+	printf("eip:0x%x\taddr 0x%x\n", cpu.eip, addr);
+#endif
+	Assert(dictionary_.present == 1, "dirctionary present != 1");
+	Assert(page_.present == 1, "second page table present != 1");
+#ifdef DEBUG_page
+	printf("0x%x\n", (page_. << 12) + offset);
+#endif
+	hwaddr_t addr_ = (page_.page_frame << 12) + offset;
+	// write_tlb(addr, addr_);
+	return addr_;
 }
-
 uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
-	if(cpu.cr0.protect_enable&&cpu.cr0.paging){  //开启分页机制
+	assert(len == 1 || len == 2 || len ==4);
+	uint32_t offset = addr & 0xfff;
+	if((int64_t)(offset + len) > 0x1000) {	// 跨页
 		// assert(0);
-		uint32_t offset=addr&(pagesize-1);
-		if(offset+len>pagesize){  //if data cross boundrary
-			assert(0);
-		}
-		else{
-			hwaddr_t hwaddr=page_translate(addr);
-			return hwaddr_read(hwaddr,len);
-		}
+		size_t l = 0xfff - offset + 1;		// 低位最多几个字节同页
+		uint32_t down_val = lnaddr_read(addr, l);			// 低位
+		uint32_t up_val = lnaddr_read(addr + l, len - l);	//高位
+		return (up_val << (l * 8)) | down_val;
 	}
-	// assert(0);
-	return hwaddr_read(addr, len);
+	else {
+		hwaddr_t hwaddr = page_translate(addr);
+		return hwaddr_read(hwaddr, len);
+	}
 }
-
 void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
-	// assert(0);
-	if(cpu.cr0.protect_enable&&cpu.cr0.paging){  //开启分页机制
-		uint32_t offset=addr&(pagesize-1);
+	assert(len == 1 || len == 2 || len ==4);
+	uint32_t offset = addr & 0xfff;
+	if((int64_t)(offset + len) > 0x1000) {	// 跨页
 		// assert(0);
-		if(offset+len>pagesize){  //if data cross boundrary
-			assert(0);
-		}
-		else{
-			hwaddr_t hwaddr=page_translate(addr);
-			hwaddr_write(hwaddr,len,data);
-		}
+		size_t l = 0xfff - offset + 1;		// 低位最多几个字节同页
+		lnaddr_write(addr, l, data & ((1 << (l * 8)) - 1) );			// 低位
+		lnaddr_write(addr + l, len - l, data >> (l * 8));				//高位
 	}
-	else{
-		hwaddr_write(addr, len, data);
+	else {
+		hwaddr_t hwaddr = page_translate(addr);
+		hwaddr_write(hwaddr, len, data);
 	}
 }
 
