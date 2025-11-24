@@ -66,36 +66,36 @@ hwaddr_t page_translate(lnaddr_t addr) {
     uint32_t page = (addr >> 12) & 0x3FF;
     uint32_t dir = (addr >> 22);
 
-	if (addr == 0x114e0fb5) {
-        printf("=== CALL STACK TRACE ===\n");
+	// if (addr == 0x114e0fb5) {
+    //     printf("=== CALL STACK TRACE ===\n");
         
-        // 获取当前EIP
-        uint32_t current_eip = cpu.eip;
-        printf("[0] EIP = 0x%08x\n", current_eip);
-	}
+    //     // 获取当前EIP
+    //     uint32_t current_eip = cpu.eip;
+    //     printf("[0] EIP = 0x%08x\n", current_eip);
+	// }
 
     hwaddr_t dir_base = (cpu.cr3.page_directory_base << 12);
     PDE pde;
     PTE pte;
     
     pde.val = hwaddr_read(dir_base + 4 * dir, 4);
-    Log("[page_translate] pde = 0x%x, dir_index = %d", pde.val, dir);
+    // Log("[page_translate] pde = 0x%x, dir_index = %d", pde.val, dir);
 
-    if (!pde.present) {
-        Log("ERROR: PDE not present for address 0x%08x", addr);
-        assert(0);
-    }
+    // if (!pde.present) {
+    //     Log("ERROR: PDE not present for address 0x%08x", addr);
+    //     assert(0);
+    // }
     
     // 添加PTE调试
     uint32_t pte_addr = (pde.page_frame << 12) + page * 4;
     pte.val = hwaddr_read(pte_addr, 4);
-    Log("[page_translate] pte = 0x%x, pte_index = %d, pte_addr = 0x%08x", 
-         pte.val, page, pte_addr);
+    // Log("[page_translate] pte = 0x%x, pte_index = %d, pte_addr = 0x%08x", 
+    //      pte.val, page, pte_addr);
 
-    if (!pte.present) {
-        Log("ERROR: PTE not present for address 0x%08x", addr);
-        assert(0);
-    }
+    // if (!pte.present) {
+    //     Log("ERROR: PTE not present for address 0x%08x", addr);
+    //     assert(0);
+    // }
     
     return (pte.page_frame << 12) + offset;
 }
