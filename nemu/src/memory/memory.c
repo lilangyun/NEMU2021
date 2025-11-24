@@ -44,13 +44,17 @@ hwaddr_t page_translate(lnaddr_t addr){
 	pde.val=hwaddr_read(dir_base+4*dir,4);
 
 	Log("[page_translate] pde = 0x%x",pde.val);
+	if (cpu.eip == 0xc01011da) {
+    Log("Stack operation: esp = 0x%08x, accessing 0x%08x\n", 
+           cpu.esp, cpu.esp + 0x4);
+}
 
 	if(!pde.present){
 		assert(0);
 	}
 	pte.val=hwaddr_read((pde.page_frame<<12)+(page<<2),4);
 
-	Log("[page_translate] pte = 0x%x",pte.val);
+	// Log("[page_translate] pte = 0x%x",pte.val);
 	if(!pte.present){
 		assert(0);
 	}
