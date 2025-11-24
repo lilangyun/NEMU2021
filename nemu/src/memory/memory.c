@@ -79,10 +79,10 @@ hwaddr_t page_translate(lnaddr_t addr) {
     PTE pte;
     
     pde.val = hwaddr_read(dir_base + 4 * dir, 4);
-    Log("[page_translate] pde = 0x%x, dir_index = %d", pde.page_frame, dir);
+    // Log("[page_translate] pde = 0x%x, dir_index = %d", pde.page_frame, dir);
 
     if (!pde.present) {
-        Log("ERROR: PDE not present for address 0x%08x", addr);
+        Log("ERROR: PDE not present for address 0x%08x, it's pde:0x%08x", addr,pde.val);
         return 0;
     }
     
