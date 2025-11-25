@@ -16,7 +16,7 @@ void init_page(void) {
 	PDE *pdir = (PDE *)va_to_pa(kpdir);
 	PTE *ptable = (PTE *)va_to_pa(kptable);
 
-	printf("NEMU configured physical memory size: 0x%x\n", PMEM_SIZE);
+	printf("NEMU configured physical memory size: 0x%x\n", PHY_MEM);
     // 打印你计算的页目录物理地址
 	printf("Page directory physical address (va_to_pa(kpdir)): 0x%x\n", (uint32_t)va_to_pa(kpdir));
 
