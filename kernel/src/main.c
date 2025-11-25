@@ -80,7 +80,7 @@ void init_cond() {
 #endif
 
 	/* Load the program. */
-	// assert(0);
+	assert(0);
 	uint32_t eip = loader();
 	
 #if defined(IA32_PAGE) && defined(HAS_DEVICE)
@@ -107,7 +107,7 @@ void init_cond() {
 
 	/* Here we go! */
 
-	assert(0);
+	assert(0);  //说明程序还没执行到这里
 
 	((void(*)(void))eip)();
 
