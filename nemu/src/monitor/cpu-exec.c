@@ -52,7 +52,7 @@ void cpu_exec(volatile uint32_t n) {
 
 	for(; n > 0; n --) {
 #ifdef DEBUG
-		swaddr_t eip_temp = cpu.eip;
+		swaddr_t eip_temp = cpu.eip;  //eip_temp是NEMU虚拟地址，也就是说我们所看到的c0开头的地址就是虚拟地址，说明开启分页机制
 		if((n & 0xffff) == 0) {
 			/* Output some dots while executing the program. */
 			fputc('.', stderr);

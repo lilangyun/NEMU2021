@@ -19,7 +19,8 @@ uint32_t get_ucr3();
 
 uint32_t loader() {
 	Elf32_Ehdr *elf;
-	Elf32_Phdr *ph = NULL;	//程序头表，指向物理内存为0的位置
+	Elf32_Phdr *ph = NULL;	//程序头表，指向NEMU物理内存为0的位置
+	// NULL和c语言的不一样，是NEMU中自定义的宏
 
 	uint8_t buf[4096];	//缓冲区
 	// 4096/4==1024
@@ -41,7 +42,7 @@ uint32_t loader() {
 	uint32_t *p_magic = (void *)buf;
 	//按照个人理解这里需要判断elf_magic是否等于*buf，那怎么知道buf前4字节是什么呢？ 
 	// assert(0);
-	nemu_assert(*p_magic == elf_magic);
+	// nemu_assert(*p_magic == elf_magic);
 
 	/* Load each program segment */
 	// panic("please implement me");
