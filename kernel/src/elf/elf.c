@@ -28,7 +28,7 @@ uint32_t loader() {
 #ifdef HAS_DEVICE
 	ide_read(buf, ELF_OFFSET_IN_DISK, 4096);
 #else
-	// assert(0);
+	assert(0);
 	ramdisk_read(buf, ELF_OFFSET_IN_DISK, 4096);	//读出ramdisk中的内容
 	// 读程序表头，但是这里之后竟然不执行，非常奇怪
 #endif
@@ -52,26 +52,26 @@ uint32_t loader() {
 	for(; i<elf->e_phnum; i++,ph++) {
 		/* Scan the program header table, load each segment into memory */
 		if(ph->p_type == PT_LOAD) {
-    // 保存虚拟地址
-    uint32_t va = ph->p_vaddr;
-    
-    // 获取对应的物理地址
-    uint32_t pa = mm_malloc(va, ph->p_memsz);
-    
-    // 将物理地址转换为内核虚拟地址用于加载
-    uint32_t kernel_va = (uint32_t)pa_to_va(pa);
-    
-    // 使用内核虚拟地址加载数据
-    ramdisk_read((void*)kernel_va, ph->p_offset, ph->p_filesz);
-    memset((void*)(kernel_va + ph->p_filesz), 0, ph->p_memsz - ph->p_filesz);
+			ph->p_vaddr=mm_malloc(ph -> p_vaddr, ph -> p_memsz);  //为进程的一个段分配虚拟空间
+			/* TODO: read the content of the segment from the ELF file 
+			 * to the memory region [VirtAddr, VirtAddr + FileSiz)
+			 
+			 */
+			// 从ELF文件的segment到内存区域读内容:即from起始虚拟地址to(起始虚拟地址+文件大小）
+			ramdisk_read((void*)ph->p_vaddr, ph->p_offset, ph->p_filesz);	//读出ramdisk中的内容
+			/* TODO: zero the memory region 
+			 * [VirtAddr + FileSiz, VirtAddr + MemSiz)
+			 */
+			// 清空内存区域：即from（起始虚拟地址+文件大小）to（起始虚拟地址+内存大小）
+			memset ((void *)(ph->p_vaddr+ph->p_filesz), 0, ph->p_memsz-ph->p_filesz);
 
 #ifdef IA32_PAGE
-    /* Record the program break for future use. */
-    extern uint32_t cur_brk, max_brk;
-    uint32_t new_brk = va + ph->p_memsz - 1;  // 使用原始的虚拟地址
-    if(cur_brk < new_brk) { max_brk = cur_brk = new_brk; }
+			/* Record the program break for future use. */
+			extern uint32_t cur_brk, max_brk;
+			uint32_t new_brk = ph->p_vaddr + ph->p_memsz - 1;
+			if(cur_brk < new_brk) { max_brk = cur_brk = new_brk; }
 #endif
-}
+		}
 	}
 
 	volatile uint32_t entry = elf->e_entry;
