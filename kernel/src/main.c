@@ -110,8 +110,6 @@ void init_cond() {
 
 	/* Here we go! */
 
-	assert(0);  //说明程序还没执行到这里
-
 	((void(*)(void))eip)();
 
 	HIT_GOOD_TRAP;
