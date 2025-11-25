@@ -28,11 +28,11 @@ uint32_t loader() {
 #ifdef HAS_DEVICE
 	ide_read(buf, ELF_OFFSET_IN_DISK, 4096);
 #else
-	assert(0);
+	// assert(0);
 	ramdisk_read(buf, ELF_OFFSET_IN_DISK, 4096);	//读出ramdisk中的内容
 	// 读程序表头，但是这里之后竟然不执行，非常奇怪
 #endif
-	// assert(0);
+	assert(0);
 
 	elf = (void*)buf;	//elf文件应从虚拟地址0处开始
 
