@@ -104,7 +104,7 @@ void init_cond() {
 #endif
 
 	/* Keep the `bt' command happy. */
-	assert(0);
+	// assert(0);
 	asm volatile("movl $0, %ebp");
 	asm volatile("subl $16, %esp");
 
