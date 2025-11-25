@@ -22,7 +22,7 @@ uint32_t loader() {
 	Elf32_Phdr *ph = NULL;	//程序头表，指向NEMU物理内存为0的位置
 	// NULL和c语言的不一样，是NEMU中自定义的宏
 
-	uint8_t buf[1024];	//缓冲区
+	uint8_t buf[4096];	//缓冲区
 	// 4096/4==1024
 	// assert(0);
 
@@ -30,7 +30,7 @@ uint32_t loader() {
 	ide_read(buf, ELF_OFFSET_IN_DISK, 4096);
 #else
 	// assert(0);
-	ramdisk_read(buf, ELF_OFFSET_IN_DISK, 1024);	//读出ramdisk中的内容
+	ramdisk_read(buf, ELF_OFFSET_IN_DISK, 4096);	//读出ramdisk中的内容
 #endif
 
 	elf = (void*)buf;	//elf文件应从虚拟地址0处开始
