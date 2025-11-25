@@ -100,7 +100,6 @@ void init_cond() {
 	 * convention of the "advanced" runtime environment. */
 	// assert(0);
 	asm volatile("movl %0, %%esp" : : "i"(KOFFSET));
-	assert(0);
 #endif
 
 	/* Keep the `bt' command happy. */
