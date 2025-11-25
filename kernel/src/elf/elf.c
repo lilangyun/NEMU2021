@@ -51,10 +51,9 @@ uint32_t loader() {
 	for(; i<elf->e_phnum; i++,ph++) {
 		/* Scan the program header table, load each segment into memory */
 		if(ph->p_type==PT_LOAD) {
-			ph->p_vaddr=mm_malloc(ph->p_vaddr, ph->p_memsz);  //为进程的一个段分配虚拟空间
+			// ph->p_vaddr=mm_malloc(ph->p_vaddr, ph->p_memsz);  //为进程的一个段分配虚拟空间
 			/* TODO: read the content of the segment from the ELF file 
 			 * to the memory region [VirtAddr, VirtAddr + FileSiz)
-			 
 			 */
 			// 从ELF文件的segment到内存区域读内容:即from起始虚拟地址to(起始虚拟地址+文件大小）
 			ramdisk_read((void*)ph->p_vaddr, ph->p_offset, ph->p_filesz);	//读出ramdisk中的内容
