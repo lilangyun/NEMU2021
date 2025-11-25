@@ -106,9 +106,10 @@ void init_cond() {
 	asm volatile("subl $16, %esp");
 
 	/* Here we go! */
-	((void(*)(void))eip)();
 
 	assert(0);
+
+	((void(*)(void))eip)();
 
 	HIT_GOOD_TRAP;
 
