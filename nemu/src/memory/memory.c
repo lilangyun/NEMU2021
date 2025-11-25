@@ -76,9 +76,9 @@ hwaddr_t page_translate(lnaddr_t addr) {
     // Log("[page_translate] pde = 0x%x, dir_index = %d", pde.page_frame, dir);
 
     if (!pde.present) {
-		Log("cr3=0x%08x",cpu.cr3.val);
+		// Log("cr3=0x%08x",cpu.cr3.val);  //cr3正确
 		Log("esp=0x%08x",cpu.esp);
-		Log("ssreg=0x%08x",cpu.sreg[1].val);
+		Log("ssreg=0x%08x",cpu.sreg[0].val);  //sreg正确
         Log("ERROR: PDE not present for address 0x%08x, it's pde:0x%08x", addr,pde.val);
         // assert(0);
     }
