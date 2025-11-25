@@ -31,6 +31,7 @@ uint32_t loader() {
 #else
 	// assert(0);
 	ramdisk_read(buf, ELF_OFFSET_IN_DISK, 4096);	//读出ramdisk中的内容
+	// 现在可以笃定就是ramdisk这里出现了问题
 #endif
 
 	elf = (void*)buf;	//elf文件应从虚拟地址0处开始
@@ -40,7 +41,7 @@ uint32_t loader() {
 	const uint32_t elf_magic = 0x464c457f;	//如何修改?ans:在elf.h文件中竟然有关于魔数的信息！神奇
 	uint32_t *p_magic = (void *)buf;
 	//按照个人理解这里需要判断elf_magic是否等于*buf，那怎么知道buf前4字节是什么呢？ 
-	nemu_assert(*p_magic != elf_magic);
+	nemu_assert(*p_magic == elf_magic);
 
 	/* Load each program segment */
 	// panic("please implement me");
