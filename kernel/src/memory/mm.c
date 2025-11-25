@@ -44,6 +44,6 @@ void init_mm() {
 	memcpy(&updir[KOFFSET / PT_SIZE], &kpdir[KOFFSET / PT_SIZE], 
 			(PHY_MEM / PT_SIZE) * sizeof(PDE));
 
-	ucr3.val = (uint32_t)va_to_pa((uint32_t)updir) & ~0xfff;
+	ucr3.val = (uint32_t)va_to_pa((uint32_t)updir) & ~0xfff;  //cr3的值为用户进程页目录的物理地址
 }
 
