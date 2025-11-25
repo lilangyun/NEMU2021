@@ -76,7 +76,7 @@ hwaddr_t page_translate(lnaddr_t addr) {
     // Log("[page_translate] pde = 0x%x, dir_index = %d", pde.page_frame, dir);
 
     if (!pde.present) {
-		Log("eip=0x%08x",cpu.eip);
+		Log("esp=0x%08x",cpu.esp);
         Log("ERROR: PDE not present for address 0x%08x, it's pde:0x%08x", addr,pde.val);
         assert(0);
     }
