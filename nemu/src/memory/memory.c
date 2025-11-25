@@ -71,25 +71,22 @@ hwaddr_t page_translate(lnaddr_t addr) {
     PTE pte;
     
     pde.val = hwaddr_read(dir_base + 4 * dir, 4);
-    // Log("[page_translate] pde = 0x%x, dir_index = %d", pde.page_frame, dir);
 
     if (!pde.present) {
-		// Log("cr3=0x%08x",cpu.cr3.val);  //cr3正确
-		Log("esp=0x%08x",cpu.esp);
-		Log("edi=0x%08x",cpu.edi);
-		Log("esi=0x%08x",cpu.esi);
-        Log("ERROR: PDE not present for address 0x%08x, it's pde:0x%08x", addr,pde.val);
-        // assert(0);
+        Log("esp=0x%08x",cpu.esp);
+        Log("edi=0x%08x",cpu.edi);
+        Log("esi=0x%08x",cpu.esi);
+        Log("ERROR: PDE not present for address 0x%08x, it's pde:0x%08x", addr, pde.val);
+        assert(0); // 缺页直接中止，避免继续错误访问
     }
+
     uint32_t pte_addr = (pde.page_frame << 12) + page * 4;
     pte.val = hwaddr_read(pte_addr, 4);
-    // Log("[page_translate] pte = 0x%x, pte_index = %d, pte_addr = 0x%08x", 
-    //      pte.val, page, pte_addr);
 
-    // if (!pte.present) {
-    //     Log("ERROR: PTE not present for address 0x%08x", addr);
-    //     assert(0);
-    // }
+    if (!pte.present) {
+        Log("ERROR: PTE not present for address 0x%08x, pte_addr=0x%08x, pte=0x%08x", addr, pte_addr, pte.val);
+        assert(0); // 同样严格校验 PTE
+    }
     
     return (pte.page_frame << 12) + offset;
 }
