@@ -63,7 +63,7 @@ static void init_ramdisk() {
 
 static void load_entry() {
 	int ret;
-	FILE *fp = fopen("entry", "rb");
+	FILE *fp = fopen("entry", "rb");  //即kernel可执行文件
 	Assert(fp, "Can not open 'entry'");
 
 	fseek(fp, 0, SEEK_END);
