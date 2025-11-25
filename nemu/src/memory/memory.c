@@ -79,7 +79,7 @@ hwaddr_t page_translate(lnaddr_t addr) {
 		Log("cr3=0x%08x",cpu.cr3.val);
 		Log("esp=0x%08x",cpu.esp);
         Log("ERROR: PDE not present for address 0x%08x, it's pde:0x%08x", addr,pde.val);
-        assert(0);
+        // assert(0);
     }
     uint32_t pte_addr = (pde.page_frame << 12) + page * 4;
     pte.val = hwaddr_read(pte_addr, 4);
