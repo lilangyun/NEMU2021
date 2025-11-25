@@ -22,7 +22,7 @@ void init_page(void) {
 	memset(pdir, 0, NR_PDE * sizeof(PDE));
 
 	/* fill PDEs */
-	for (pdir_idx = 0; pdir_idx < 69; pdir_idx ++) {
+	for (pdir_idx = 0; pdir_idx < PHY_MEM / PT_SIZE; pdir_idx ++) {
 		pdir[pdir_idx].val = make_pde(ptable);
 		pdir[pdir_idx + KOFFSET / PT_SIZE].val = make_pde(ptable);
 
@@ -61,8 +61,6 @@ void init_page(void) {
 	cr3.val = 0;
 	cr3.page_directory_base = ((uint32_t)pdir) >> 12;
 	write_cr3(cr3.val);
-
-	 asm volatile ("jmp 1f; 1:"); // 跳转到下一条指令，CPU会重新加载地址翻译
 
 	/* set PG bit in CR0 to enable paging */
 	cr0.val = read_cr0();
