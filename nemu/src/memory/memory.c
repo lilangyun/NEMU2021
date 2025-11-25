@@ -61,8 +61,6 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
 // 	return (pte.page_frame<<12)+offset;
 // }
 
-uint32_t swaddr_read(swaddr_t addr, size_t len,uint8_t sreg);
-
 hwaddr_t page_translate(lnaddr_t addr) {
     uint32_t offset = addr & 0xFFF;
     uint32_t page = (addr >> 12) & 0x3FF;
@@ -78,7 +76,8 @@ hwaddr_t page_translate(lnaddr_t addr) {
     if (!pde.present) {
 		// Log("cr3=0x%08x",cpu.cr3.val);  //cr3正确
 		Log("esp=0x%08x",cpu.esp);
-		// Log("ssreg=0x%08x",cpu.sreg[2].val);  //sreg正确
+		Log("edi=0x%08x",cpu.edi);
+		Log("esi=0x%08x",cpu.esi);
         Log("ERROR: PDE not present for address 0x%08x, it's pde:0x%08x", addr,pde.val);
         // assert(0);
     }
