@@ -41,7 +41,7 @@ uint32_t loader() {
 	uint32_t *p_magic = (void *)buf;
 	//按照个人理解这里需要判断elf_magic是否等于*buf，那怎么知道buf前4字节是什么呢？ 
 	nemu_assert(*p_magic == elf_magic);
-	assert(0);
+	// assert(0);
 
 	/* Load each program segment */
 	// panic("please implement me");
