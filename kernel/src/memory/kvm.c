@@ -2,6 +2,7 @@
 #include "x86.h"
 #include "memory.h"
 #include <string.h>
+#include <stdio.h>
 
 static PDE kpdir[NR_PDE] align_to_page;						// kernel page directory
 static PTE kptable[PHY_MEM / PAGE_SIZE] align_to_page;		// kernel page tables
@@ -14,6 +15,11 @@ void init_page(void) {
 	CR3 cr3;
 	PDE *pdir = (PDE *)va_to_pa(kpdir);
 	PTE *ptable = (PTE *)va_to_pa(kptable);
+
+	printf("NEMU configured physical memory size: 0x%x\n", PMEM_SIZE);
+    // 打印你计算的页目录物理地址
+	printf("Page directory physical address (va_to_pa(kpdir)): 0x%x\n", (uint32_t)va_to_pa(kpdir));
+
 	uint32_t pdir_idx;
 
 	/* make all PDEs invalid */
