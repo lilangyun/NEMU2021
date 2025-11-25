@@ -54,6 +54,7 @@
 	# Set up a stack for C code.
 		movl $0, %ebp
 		movl $(128 << 20), %esp
+		call va_to_pa(init_page) 
 		jmp init				# never return
 
 	# GDT
