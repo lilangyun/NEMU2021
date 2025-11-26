@@ -8,3 +8,4 @@
 #include "jcc/ja.h"
 #include "jcc/js.h"
 #include "jcc/jns.h"
+#include "jcc/jnb.h"
