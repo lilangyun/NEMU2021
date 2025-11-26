@@ -12,4 +12,4 @@
 #include "jne-template.h"
 #undef DATA_BYTE
 // 没有make_helper_v函数
-make_helper_v(jne_si)
+make_helper_v(jne_i)
