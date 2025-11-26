@@ -30,6 +30,6 @@
 #define MEM_R(addr,sreg) swaddr_read(addr, DATA_BYTE,sreg)
 #define MEM_W(addr, data,sreg) swaddr_write(addr, DATA_BYTE, data,sreg)
 
-#define OPERAND_W(op, src,sreg) concat(write_operand_, SUFFIX) (op, src,sreg)
+#define OPERAND_W(op, src) concat(write_operand_, SUFFIX) (op, src)
 
 #define MSB(n) ((DATA_TYPE)(n) >> ((DATA_BYTE << 3) - 1))

@@ -4,7 +4,7 @@
 
 make_helper(concat(lods_, SUFFIX)) {
     // 第一步
-    cpu.eax=swaddr_read(cpu.esi,DATA_BYTE,2);  //2表示ds
+    cpu.eax=swaddr_read(cpu.esi,DATA_BYTE,3);  //3表示ds
     // 这里我直接粘贴movs代码，觉得差不多
 	cpu.esi += (cpu.eflags.DF ? -DATA_BYTE : DATA_BYTE);
     // 最后一步打印

@@ -3,7 +3,7 @@
 #define instr pop
 
 static void do_execute() {
-    reg_l(op_src->reg) = MEM_R(cpu.esp,1);  //1表示栈段ss
+    reg_l(op_src->reg) = MEM_R(cpu.esp,2);  //2表示栈段ss
 	reg_l(R_ESP) += DATA_BYTE;
 	print_asm_template1();
 }
