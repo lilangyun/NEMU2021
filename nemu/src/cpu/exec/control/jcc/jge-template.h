@@ -3,7 +3,6 @@
 #define instr jge
 
 static void do_execute() {
-	// 这里deepseek说是隐式更新
     DATA_TYPE_S imm=op_src->val;
     if(cpu.eflags.ZF==1||cpu.eflags.SF==cpu.eflags.OF){
         cpu.eip += imm;
