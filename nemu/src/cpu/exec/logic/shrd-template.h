@@ -16,7 +16,7 @@ static void do_execute () {
 		count --;
 	}
 
-	OPERAND_W(op_src2, out,1);
+	OPERAND_W(op_src2, out);
 
 	print_asm("shrd" str(SUFFIX) " %s,%s,%s", op_src->str, op_dest->str, op_src2->str);
 }

@@ -6,7 +6,7 @@
 
 static void do_execute() {
 	DATA_TYPE result = op_dest->val + op_src->val;
-	OPERAND_W(op_dest, result,1);
+	OPERAND_W(op_dest, result);
 
 	/* TODO: Update EFLAGS. */
 	update_eflags_pf_zf_sf((DATA_TYPE_S)result);

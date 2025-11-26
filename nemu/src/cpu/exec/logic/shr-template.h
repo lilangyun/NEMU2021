@@ -8,8 +8,8 @@ static void do_execute () {
 
 	uint8_t count = src & 0x1f;
 	dest >>= count;
-	OPERAND_W(op_dest, dest,1);
-        update_eflags_pf_zf_sf(dest);
+	OPERAND_W(op_dest, dest);
+    update_eflags_pf_zf_sf(dest);
 
 	print_asm_template2();
 }
