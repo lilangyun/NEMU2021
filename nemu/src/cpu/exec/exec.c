@@ -123,7 +123,7 @@ helper_fun opcode_table [256] = {
 /* 0x68 */	push_i_v, imul_i_rm2r_v, push_i_b, imul_si_rm2r_v,
 /* 0x6c */	inv, inv, inv, inv,
 /* 0x70 */	inv, inv, inv, inv,
-/* 0x74 */	je_i_b, jne_si_b, jbe_i_b, ja_i_b,
+/* 0x74 */	je_i_b, jne_i_b, jbe_i_b, ja_i_b,
 /* 0x78 */	js_si_b, jns_si_b, inv, inv,
 /* 0x7c */	jl_si_b, jge_i_b, jle_si_b, jg_i_b,
 /* 0x80 */	group1_b, group1_v, inv, group1_sx_v, 
@@ -152,7 +152,7 @@ helper_fun opcode_table [256] = {
 /* 0xdc */	inv, inv, inv, inv,
 /* 0xe0 */	inv, inv, inv, inv,
 /* 0xe4 */	inv, inv, inv, inv,
-/* 0xe8 */	call_i_v, jmp_si_l, ljmp, jmp_si_b,//0xE8是call指令的操作数，我仿照jmp指令添加进table中
+/* 0xe8 */	call_i_v, jmp_i_l, ljmp, jmp_i_b,//0xE8是call指令的操作数，我仿照jmp指令添加进table中
 /* 0xec */	inv, inv, inv, inv,
 /* 0xf0 */	inv, inv, repnz, rep,
 /* 0xf4 */	inv, inv, group3_b, group3_v,
@@ -194,7 +194,7 @@ helper_fun _2byte_opcode_table [256] = {
 /* 0x78 */	inv, inv, inv, inv, 
 /* 0x7c */	inv, inv, inv, inv, 
 /* 0x80 */	inv, inv, inv, inv,
-/* 0x84 */	je_i_v, jne_si_v, jbe_i_v, ja_i_v,
+/* 0x84 */	je_i_v, jne_i_v, jbe_i_v, ja_i_v,
 /* 0x88 */	js_si_v, jns_si_v, inv, inv, 
 /* 0x8c */	jl_si_v, jge_i_v, jle_si_v, jg_i_v, 
 /* 0x90 */	inv, inv, inv, inv,
