@@ -52,7 +52,7 @@ uint32_t loader() {
 		if (ph->p_type != PT_LOAD) continue;
 
 		// 为 [p_vaddr, p_vaddr + p_memsz) 建立页映射（不要改写 p_vaddr 本身）
-		mm_malloc(ph->p_vaddr, ph->p_memsz);
+		ph->p_vaddr=mm_malloc(ph->p_vaddr, ph->p_memsz);
 
 		// 安全校验
 		nemu_assert(ph->p_memsz >= ph->p_filesz);
