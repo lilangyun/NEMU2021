@@ -16,4 +16,4 @@
 /* for instruction encoding overloading */
 
 // 所有helper_v函数的定义
-make_helper_v(jg_si)
+make_helper_v(jg_i)
