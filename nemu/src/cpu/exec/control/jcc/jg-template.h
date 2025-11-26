@@ -3,8 +3,9 @@
 #define instr jg
 
 static void do_execute() {
+    DATA_TYPE_S imm=op_src->val;
     if(cpu.eflags.ZF==0&&(cpu.eflags.SF==cpu.eflags.OF)){
-        cpu.eip+=op_src->imm;
+        cpu.eip+=imm;
     }
     print_asm_template1();
 }
