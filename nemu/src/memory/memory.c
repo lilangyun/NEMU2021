@@ -76,7 +76,7 @@ hwaddr_t page_translate(lnaddr_t addr) {
         // Log("esp=0x%08x",cpu.esp);
         // Log("edi=0x%08x",cpu.edi);
         // Log("esi=0x%08x",cpu.esi);
-        // Log("ERROR: PDE not present for address 0x%08x, it's pde:0x%08x", addr, pde.val);
+        Log("ERROR: PDE not present for address 0x%08x, it's pde:0x%08x", addr, pde.val);
         assert(0); // 缺页直接中止，避免继续错误访问
     }
 
