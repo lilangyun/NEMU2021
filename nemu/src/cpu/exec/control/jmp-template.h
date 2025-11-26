@@ -35,7 +35,7 @@ make_helper(ljmp){
 	Log("base:0x%x",base);
 	lnaddr_t limit=(d0&0xFFFF)|(((d1>>16)&0x7)<<16);
 	Log("limit:0x%x",limit);
-	cpu.sreg[1].base=0;
+	cpu.sreg[1].base=base;
 	cpu.sreg[1].limit=limit;
 
 	print_asm("ljmp 0x%x", addr);
