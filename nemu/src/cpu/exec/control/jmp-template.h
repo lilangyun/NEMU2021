@@ -28,7 +28,9 @@ make_helper(ljmp){
 	uint16_t index=cpu.sreg[1].val;  //这里val应该就是selector
 	lnaddr_t descriptor_lnaddr=(cpu.GDTR.base+8*index);
 	lnaddr_t d0=lnaddr_read(descriptor_lnaddr,4);  //描述符的低位
+	Log("d0:%x",d0);
 	lnaddr_t d1=lnaddr_read(descriptor_lnaddr+4,4);  //描述符的高位
+	Log("d1:%x",d1);
 	lnaddr_t base = (((d1>>24)&0xFF)<<24)|((d1&0xFF)<<16)|((d0>>16)&0xFFFF);
 	Log("base:0x%x",base);
 	lnaddr_t limit=(d0&0xFFFF)|(((d1>>16)&0x7)<<16);
