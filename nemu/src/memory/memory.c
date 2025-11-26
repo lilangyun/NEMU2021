@@ -88,7 +88,7 @@ hwaddr_t page_translate(lnaddr_t addr) {
         assert(0); // 同样严格校验 PTE
     }
     
-	Log("The address is : %x",(pte.page_frame << 12));
+	// Log("The address is : %x",(pte.page_frame << 12));
 
 
     return (pte.page_frame << 12) + offset;
