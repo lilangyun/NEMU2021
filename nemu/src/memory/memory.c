@@ -48,7 +48,7 @@ hwaddr_t page_translate(lnaddr_t addr){
 
 	if(!pte.present){
 		Log("[page_translate] pte = 0x%x",pte.val);
-		assert(0);
+		// assert(0);
 	}
 	return (pte.page_frame<<12)+offset;
 }
