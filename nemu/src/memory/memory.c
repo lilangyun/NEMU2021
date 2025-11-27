@@ -140,6 +140,9 @@ lnaddr_t seg_translate(swaddr_t addr, uint8_t sreg){
 	lnaddr_t d1=lnaddr_read(descriptor_lnaddr+4,4);  //描述符的高位
 	Log("d0=0x%x,d1=0x%x",d0,d1);
 	lnaddr_t base = (((d1>>24)&0xFF)<<24)|((d1&0xFF)<<16)|((d0>>16)&0xFFFF);
+	Log("base:0x%x",base);
+	lnaddr_t limit=(d0&0xFFFF)|(((d1>>16)&0x7)<<16);
+	Log("limit:0x%x",limit);
 	return base+addr;  //进入保护模式才需要地址翻译
 }
 
