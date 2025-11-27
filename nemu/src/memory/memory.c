@@ -41,14 +41,12 @@ hwaddr_t page_translate(lnaddr_t addr){
 	pde.val=hwaddr_read(dir_base+4*dir,4);
 
 	if(!pde.present){
-		Log("[page_translate] pde = 0x%x",pde.val);
-		// assert(0);
+		assert(0);
 	}
 	pte.val=hwaddr_read((pde.page_frame<<12)+4*page,4);
 
 	if(!pte.present){
-		Log("[page_translate] pte = 0x%x",pte.val);
-		// assert(0);
+		assert(0);
 	}
 	return (pte.page_frame<<12)+offset;
 }
@@ -92,8 +90,10 @@ lnaddr_t seg_translate(swaddr_t addr, uint8_t sreg){
 		// assert(0);
 		return addr;
 	}  //未进入保护模式
-	Log("sreg[%d].base=0x%x",sreg,cpu.sreg[sreg].base);
-	return cpu.sreg[sreg].base+addr;  //进入保护模式才需要地址翻译
+	if(sreg>=0&&sreg<4){
+		return cpu.sreg[sreg].base+addr;  //进入保护模式才需要地址翻译
+	}
+	return addr;  //被迫之举
 }
 
 uint32_t swaddr_read(swaddr_t addr, size_t len,uint8_t sreg) {
