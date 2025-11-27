@@ -93,8 +93,8 @@ lnaddr_t seg_translate(swaddr_t addr, uint8_t sreg){
 	if(sreg>=0&&sreg<4){
 		return cpu.sreg[sreg].base+addr;  //进入保护模式才需要地址翻译
 	}
-	Log("invalid sreg=0x%x",sreg);
-	return addr;  //被迫之举
+	// Log("invalid sreg=0x%x",sreg);  
+	return addr;
 }
 
 uint32_t swaddr_read(swaddr_t addr, size_t len,uint8_t sreg) {
