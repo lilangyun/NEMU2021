@@ -86,8 +86,8 @@ static void init_cr0(){  //static可确保外部文件不可调用本文件内�
 }
 
 static void init_cs(){
-	cpu.sreg[0].base=0x0;
-	cpu.sreg[0].limit=0xffffffff;
+	cpu.sreg[1].base=0x0;  //1表示cs寄存器，取指要用，所以在初始化时就进行设置
+	cpu.sreg[1].limit=0xffffffff;
 }
 
 
