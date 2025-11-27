@@ -48,6 +48,8 @@ make_helper(mov_rm2sr_w){
 	lnaddr_t limit=(d0&0xFFFF)|(((d1>>16)&0x7)<<16);
 	cpu.sreg[op_dest->reg].base=base;
 	cpu.sreg[op_dest->reg].limit=limit;
+	Log("base=:0x%x",base);
+	Log("limit=:0x%x",limit);
 
 	print_asm("movw 0x%x,%%sreg[%x]",op_src->val,op_dest->reg);
 	
