@@ -40,7 +40,7 @@ make_helper(mov_rm2sr_w){
 	// 此时op_dest->reg表示segment register的编码
 	cpu.sreg[op_dest->reg].val=op_src->val;
 
-	uint16_t index=cpu.sreg[op_dest->reg].val;  //这里val应该就是selector
+	uint16_t index=cpu.sreg[op_dest->reg].INDEX;  //这里val应该就是selector
 	lnaddr_t descriptor_lnaddr=(cpu.GDTR.base+8*index);
 	lnaddr_t d0=lnaddr_read(descriptor_lnaddr,4);  //描述符的低位
 	lnaddr_t d1=lnaddr_read(descriptor_lnaddr+4,4);  //描述符的高位
