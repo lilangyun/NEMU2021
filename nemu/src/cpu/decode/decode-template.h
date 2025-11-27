@@ -187,7 +187,7 @@ make_helper(concat(decode_rm_imm_, SUFFIX)) {
 
 void concat(write_operand_, SUFFIX) (Operand *op, DATA_TYPE src) {
 	if(op->type == OP_TYPE_REG) { REG(op->reg) = src; }
-	else if(op->type == OP_TYPE_MEM) { swaddr_write(op->addr, op->size, src,3); }  //3表示DS寄存器
+	else if(op->type == OP_TYPE_MEM) { swaddr_write(op->addr, op->size, src,op->sreg); }
 	// else if(op->type==OP_TYPE_CR){}
 	else { assert(0); }
 }
