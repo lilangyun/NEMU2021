@@ -93,6 +93,7 @@ lnaddr_t seg_translate(swaddr_t addr, uint8_t sreg){
 	if(sreg>=0&&sreg<4){
 		return cpu.sreg[sreg].base+addr;  //进入保护模式才需要地址翻译
 	}
+	assert(0);
 	return addr;  //被迫之举
 }
 
