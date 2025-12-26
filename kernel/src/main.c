@@ -80,7 +80,7 @@ void init_cond() {
 #endif
 
 	/* Load the program. */
-	// assert(0);
+	assert(0);
 	uint32_t eip = loader();
 
 	// assert(0);
