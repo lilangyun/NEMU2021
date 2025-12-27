@@ -19,7 +19,7 @@ void init_page(void) {
 	uint32_t pdir_idx;
 
 	/* make all PDEs invalid */
-	memset(pdir, 0, NR_PDE * sizeof(PDE));
+	memset(pdir, 0, NR_PDE * sizeof(PDE)); 
 
 	/* fill PDEs */
 	for (pdir_idx = 0; pdir_idx < PHY_MEM / PT_SIZE; pdir_idx ++) {
